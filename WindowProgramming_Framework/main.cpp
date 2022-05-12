@@ -22,8 +22,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-    hInst = hInstance;
-
+    g_hInst = hInstance;
     //MainWnd
     hwnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         550, 300, 400, 300, nullptr, nullptr, hInstance, nullptr);
@@ -73,13 +72,33 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    PAINTSTRUCT ps;
+    HDC hDC;
+    static int size = 300;
+    static int speed = 10;
+    static POINT p;
+
+    static HBITMAP hBitMap;
+    HDC memdc;
     switch (message)
     {
     case WM_CREATE:
+        hBitMap = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP4));
         gFramework.Init(hwnd);
         gFramework.InitUI(hwndUI);
         gFramework.InitBackGround(hwndBG);
         break;
+
+    case WM_MOUSEMOVE:
+        /*
+        p.left = LOWORD(lParam);
+        p.right = HIWORD(lParam);
+
+
+        SetWindowPos(hWnd, NULL, p.left, p.top, size, size, NULL);
+        */
+        break;
+
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);
@@ -87,7 +106,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         switch (wmId)
         {
         case IDM_ABOUT:
-            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            DialogBox(g_hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
             break;
         case IDM_EXIT:
             DestroyWindow(hwnd);
@@ -103,6 +122,50 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
     }
     break;
+
+    case WM_CHAR:
+        switch (wParam)
+        {
+        case 'w':
+            if (p.y > 0)
+            {
+                p.y -= speed;
+            }
+            break;
+
+        case 'a':
+            if (p.x > 0)
+            {
+                p.x -= speed;
+            }
+            break;
+
+        case 's':
+            if (p.y + size < 720)
+            {
+                p.y += speed;
+            }
+            break;
+
+        case 'd':
+            if (p.x + size < 1280)
+            {
+                p.x += speed;
+            }
+            break;
+
+
+        case 'q':
+            PostQuitMessage(0);
+            break;
+        }
+        SetWindowPos(hWnd, NULL, p.x, p.y, size, size, NULL);
+        // SetWindowPos(hWnd, NULL,x,y, width, height, NULL);
+
+        InvalidateRect(hWnd, NULL, TRUE);
+
+        break;
+
     case WM_KEYDOWN:
     case WM_KEYUP:
     {
@@ -113,6 +176,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
+        memdc = CreateCompatibleDC(hdc);
+        SelectObject(memdc, hBitMap);
+        StretchBlt(hdc, 0, 0, 1000, 1000, memdc, p.x, p.y, 1280, 720, SRCCOPY);
+        DeleteDC(memdc);
         gFramework.Draw(hdc);
         EndPaint(hWnd, &ps);
     }
@@ -129,37 +196,73 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR    lpCmdLine, _In_ int nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+    //UNREFERENCED_PARAMETER(hPrevInstance);
+    //UNREFERENCED_PARAMETER(lpCmdLine);
 
     // TODO: 여기에 코드를 입력합니다.
 
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_WINDOWPROGRAMMINGFRAMEWORK, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
+    //LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+    //LoadStringW(hInstance, IDC_WINDOWPROGRAMMINGFRAMEWORK, szWindowClass, MAX_LOADSTRING);
+    //MyRegisterClass(hInstance);
 
-    if (!InitInstance(hInstance, nCmdShow))
-    {
-        return FALSE;
-    }
+    //if (!InitInstance(hInstance, nCmdShow))
+    //{
+        //return FALSE;
+    //}
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWPROGRAMMINGFRAMEWORK));
 
-    MSG msg;
+    //MSG msg;
+
+    //CTRL + C
+    HWND hWnd;
+    HWND MainhWnd;
+    MSG Message;
+    WNDCLASSEX WndClass;
+    g_hInst = hInstance;
+
+
+    // 이하 12개는 필요한 요소
+    WndClass.cbSize = sizeof(WndClass);
+    WndClass.style = CS_HREDRAW | CS_VREDRAW;
+    WndClass.lpfnWndProc = (WNDPROC)WndProc;
+    WndClass.cbClsExtra = 0;
+    WndClass.cbWndExtra = 0;
+    WndClass.hInstance = hInstance;
+    WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    WndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    WndClass.lpszMenuName = NULL;
+    WndClass.lpszClassName = lpszClass;
+    WndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    RegisterClassEx(&WndClass);
+
+
+    hWnd = CreateWindow(lpszClass, lpszWindowName, NULL, 0, 0, 300, 300, NULL,
+        (HMENU)NULL, hInstance, NULL);
+    MainhWnd = CreateWindow(lpszClass, lpszWindowName, NULL, 0, 800, 1600, 200, NULL,
+        (HMENU)NULL, hInstance, NULL);
+
+    ShowWindow(MainhWnd, nCmdShow);
+    UpdateWindow(MainhWnd);
+    ShowWindow(hWnd, nCmdShow);
+    UpdateWindow(hWnd);
+
+    //CTRL + V
 
     // 기본 메시지 루프입니다:
     while (true)
     {
-        if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        if (::PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
         {
-            if (msg.message == WM_QUIT) break;
-            if (!::TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+            if (Message.message == WM_QUIT) break;
+            if (!::TranslateAccelerator(Message.hwnd, hAccelTable, &Message))
             {
-                ::TranslateMessage(&msg);
-                ::DispatchMessage(&msg);
+                ::TranslateMessage(&Message);
+                ::DispatchMessage(&Message);
             }
         }
     }
     gFramework.Reset();
-    return (int)msg.wParam;
+    return (int)Message.wParam;
 }
