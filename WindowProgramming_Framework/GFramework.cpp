@@ -11,17 +11,17 @@ GFramework::~GFramework()
 
 void GFramework::Init(HWND hwnd)
 {
-	m_hwnd = hwnd;
+	mhMainWnd = hwnd;
 }
 
 void GFramework::InitUI(HWND hwndUI)
 {
-	m_hwnd_UI = hwndUI;
+	mhMainWnd_UI = hwndUI;
 }
 
 void GFramework::InitBackGround(HWND hwndBG)
 {
-	m_hwnd_BackGround = hwndBG;
+	mhMainWnd_BackGround = hwndBG;
 }
 
 void GFramework::Update(const float fTime)
@@ -47,7 +47,7 @@ void GFramework::KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == VK_ESCAPE)
 		{
-			SendMessage(m_hwnd, WM_DESTROY, 0, 0);
+			SendMessage(mhMainWnd, WM_DESTROY, 0, 0);
 			return;
 		}
 	}

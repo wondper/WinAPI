@@ -3,9 +3,11 @@
 class GFramework
 {
 private:
-	HWND m_hwnd;
-	HWND m_hwnd_UI;
-	HWND m_hwnd_BackGround;
+	HWND mhMainWnd;
+	HWND mhUIWnd;
+	HWND mhPlayerWnd;
+	HWND mhMainWnd_UI;
+	HWND mhMainWnd_BackGround;
 	HBITMAP m_hBitmap;
 public:
 	GFramework();

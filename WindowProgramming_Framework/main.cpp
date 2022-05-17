@@ -12,7 +12,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hInstance = hInstance;
     wcex.hIcon = NULL;
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wcex.hbrBackground = NULL;
     wcex.lpszMenuName = NULL;
     wcex.lpszClassName = szWindowClass;
     wcex.hIconSm = NULL;
@@ -83,7 +83,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        hBitMap = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP4));
+        hBitMap = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP1));
         gFramework.Init(hwnd);
         gFramework.InitUI(hwndUI);
         gFramework.InitBackGround(hwndBG);
@@ -231,7 +231,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     WndClass.hInstance = hInstance;
     WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
     WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    WndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    WndClass.hbrBackground = NULL;
     WndClass.lpszMenuName = NULL;
     WndClass.lpszClassName = lpszClass;
     WndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
