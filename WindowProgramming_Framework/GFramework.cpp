@@ -133,7 +133,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 {
     HDC hDC, memdc;
     PAINTSTRUCT ps;
-    //static HBITMAP BG_MAP;
     switch (message)
     {
 
