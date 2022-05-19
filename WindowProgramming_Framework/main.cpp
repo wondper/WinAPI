@@ -84,7 +84,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
         hBitMap = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP1));
-        gFramework.Init(hwnd);
+        gFramework.Init(hwnd, g_hInst);
         gFramework.InitUI(hwndUI);
         gFramework.InitBackGround(hwndBG);
         break;
@@ -222,31 +222,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     g_hInst = hInstance;
 
 
-    // 이하 12개는 필요한 요소
-    WndClass.cbSize = sizeof(WndClass);
-    WndClass.style = CS_HREDRAW | CS_VREDRAW;
-    WndClass.lpfnWndProc = (WNDPROC)WndProc;
-    WndClass.cbClsExtra = 0;
-    WndClass.cbWndExtra = 0;
-    WndClass.hInstance = hInstance;
-    WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-    WndClass.hbrBackground = NULL;
-    WndClass.lpszMenuName = NULL;
-    WndClass.lpszClassName = lpszClass;
-    WndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-    RegisterClassEx(&WndClass);
+    gFramework.InitWCX(WINDOW::Main);
+    gFramework.InitWCX(WINDOW::UI);
+    //gFramework.InitWCX(WINDOW::BackGround);
 
-
-    hWnd = CreateWindow(lpszClass, lpszWindowName, NULL, 0, 0, 300, 300, NULL,
-        (HMENU)NULL, hInstance, NULL);
-    MainhWnd = CreateWindow(lpszClass, lpszWindowName, NULL, 0, 800, 1600, 200, NULL,
-        (HMENU)NULL, hInstance, NULL);
-
-    ShowWindow(MainhWnd, nCmdShow);
-    UpdateWindow(MainhWnd);
-    ShowWindow(hWnd, nCmdShow);
-    UpdateWindow(hWnd);
+    gFramework.RegisterWnd();
+    gFramework.ShowWnd(hInstance, nCmdShow);
 
     //CTRL + V
 
@@ -266,3 +247,5 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     gFramework.Reset();
     return (int)Message.wParam;
 }
+
+
