@@ -1,7 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include "Resource.h"
 
 static HBITMAP BG_MAP;
+extern HINSTANCE g_hInst;
 
 struct Player
 {
