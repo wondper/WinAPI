@@ -46,7 +46,7 @@ void GFramework::InitWCX(WINDOW wnd)
 		mwcxUI = wcex;
 		break;
 	case WINDOW::BackGround:
-		//wcex.lpfnWndProc = BackGroundWndProc;
+		wcex.lpfnWndProc = BackGroundWndProc;
 		wcex.lpszClassName = L"BackGroundWindow";
 		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		mwcxBackGround = wcex;
@@ -66,9 +66,13 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 	mhInstance = hInstance;
 	mhUIWnd = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
 	mhMainWnd = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
+    mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, 1200, 800, nullptr, nullptr, hInstance, nullptr);
 
 	ShowWindow(mhUIWnd, nCmdShow);
 	ShowWindow(mhMainWnd, nCmdShow);
+
+    SetLayeredWindowAttributes(mhBackGroundWnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
+    ShowWindow(mhBackGroundWnd, nCmdShow);
 
 }
 
@@ -190,6 +194,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
+        gFramework.Draw(hDC);
         memdc = CreateCompatibleDC(hDC);
         SelectObject(memdc, BG_MAP);
         StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.P.x, User.P.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CXSCREEN), SRCCOPY);
@@ -278,7 +283,26 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-//LRESULT CALLBACK BackGroundWndProc(HWND, UINT, WPARAM, LPARAM)
-//{
-//
-//}
+LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    HDC hDC;
+    PAINTSTRUCT ps;
+
+    switch (message)
+    {
+
+    case WM_CREATE:
+        //wndCount++;
+        return 0;
+
+
+    case WM_DESTROY:
+        //wndCount--;
+        //if (wndCount == 0) {
+            PostQuitMessage(0);
+        //}
+        return 0;
+
+    }
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}

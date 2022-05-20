@@ -25,7 +25,7 @@ HINSTANCE g_hInst;                                // 현재 인스턴스입니다.
 
 LPCTSTR lpszClass = L"Window Class Name";
 LPCTSTR lpszWindowName = L"Window Program";
-static GFramework gFramework;
+GFramework gFramework;
 
 HWND hwnd;
 HWND hwndUI;

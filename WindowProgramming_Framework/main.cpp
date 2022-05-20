@@ -32,7 +32,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     gFramework.InitWCX(WINDOW::Main);
     gFramework.InitWCX(WINDOW::UI);
-    //gFramework.InitWCX(WINDOW::BackGround);
+    gFramework.InitWCX(WINDOW::BackGround);
 
     gFramework.RegisterWnd();
     gFramework.ShowWnd(hInstance, nCmdShow);
