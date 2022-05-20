@@ -27,6 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     HWND MainhWnd;
     MSG Message;
     WNDCLASSEX WndClass;
+
     g_hInst = hInstance;
 
 
@@ -35,6 +36,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     gFramework.InitWCX(WINDOW::BackGround);
 
     gFramework.RegisterWnd();
+
     gFramework.ShowWnd(hInstance, nCmdShow);
 
     //CTRL + V

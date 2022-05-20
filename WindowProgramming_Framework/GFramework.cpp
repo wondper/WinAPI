@@ -52,6 +52,7 @@ void GFramework::InitWCX(WINDOW wnd)
 		mwcxBackGround = wcex;
 		break;
 	}
+    
 }
 
 void GFramework::RegisterWnd()
@@ -73,7 +74,6 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 
     SetLayeredWindowAttributes(mhBackGroundWnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(mhBackGroundWnd, nCmdShow);
-
 }
 
 void GFramework::InitUI(HWND hwndUI)
@@ -130,8 +130,6 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 
 }
-
-
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
