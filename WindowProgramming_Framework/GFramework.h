@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Resource.h"
+#define stage 3
 
 static HBITMAP BG_MAP;
 
@@ -8,7 +9,7 @@ extern HINSTANCE g_hInst;
 
 struct Player
 {
-	POINT P = { 0,0 };
+	POINT P = { 0,0 }; // Plaeyr의 x와 y좌표
 
 	int HP = 1000;
 	int Win_SizeX = 200;
@@ -27,8 +28,65 @@ struct Player
 	TCHAR str_Score[10];
 
 
+
+	bool Triger = false;
+	bool gameOver = false;
+
+
 };
 static Player User;
+
+struct Monster
+{
+	bool create = false;
+
+	int X = rand() % 3000;
+	int Y = 40;
+
+	int Win_SizeX = 200;
+	int Win_SizeY = 400;
+
+	int Hp = 3;
+
+	int skin = 0;
+	// 0 좀비
+	// 1 박쥐
+	// 2 숙주
+
+	int Stats = 0;
+	// 0 대기 상태
+	// 1 피격 상태
+	// 2 사망 상태
+
+
+	HBITMAP sprite[6];
+	HBITMAP sprite_mask[6];
+	HDC memDC= NULL;
+
+};
+Monster monster[stage][10]; // 스테이지별 적을 저장할 배열
+static int m_count[stage];// 스테이지별 적 수
+static int stage_count=0;
+
+
+struct Item
+{
+	int x= 0;
+	int y = 0;
+
+	int width;
+	int height;
+
+
+	int type = 0;
+	// 0 : 케이크 <-체력 회복
+	// 1 : 탄환 <-탄창 충천
+	// 2 : 스코프 <- 윈도우 크기 증가?
+
+	HBITMAP sprite[6];
+	HDC memDC = NULL;
+};
+
 
 enum class WINDOW {
 	Main = 0,
@@ -45,10 +103,16 @@ private:
 	HWND mhMainWnd;
 	HWND mhUIWnd;
 	HWND mhBackGroundWnd;
+
+	HWND mhMonsterWnd;
+
 	// 윈도우 클래스 변수
 	WNDCLASSEX mwcxMain;
 	WNDCLASSEX mwcxUI;
 	WNDCLASSEX mwcxBackGround;
+
+	WNDCLASSEX mwcxMonster;
+
 
 	HBITMAP m_hBitmap;
 public:

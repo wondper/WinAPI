@@ -1,5 +1,4 @@
 #include "GFramework.h"
-
 GFramework::GFramework()
 {
 	//mhInstance = g_hInst;
@@ -223,8 +222,9 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     switch (message) {
 
     case WM_CREATE:
-        //wndCount++;
-        return 0;
+        SetTimer(hWnd, 1, 10, NULL);
+
+        break;
     case WM_LBUTTONDOWN:
         User.Bullet -= 1;
 
@@ -232,6 +232,15 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         break;
 
 
+    case WM_TIMER:
+        switch (wParam)
+        {
+        case 1:
+            // UI ¾÷µ¥ÀÌÆ® Æ½
+            InvalidateRect(hWnd, NULL, TRUE);
+            break;
+        }
+        break;
 
     case WM_CHAR:
         switch (wParam)
