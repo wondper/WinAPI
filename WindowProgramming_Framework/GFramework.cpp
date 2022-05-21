@@ -49,6 +49,11 @@ void GFramework::InitWCX(WINDOW wnd)
 		wcex.lpszClassName = L"BackGroundWindow";
 		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		mwcxBackGround = wcex;
+    case WINDOW::Monster:
+        wcex.lpfnWndProc = MonsterWndProc;
+        wcex.lpszClassName = L"MonsterGroundWindow";
+        wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        mwcxBackGround = wcex;
 		break;
 	}
     
@@ -66,10 +71,12 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 	mhInstance = hInstance;
 	mhUIWnd = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
 	mhMainWnd = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
+    mhMonsterWnd = CreateWindow(L"MonsterGroundWindow", L"Monster", NULL, 0, 0, 0, 0, NULL, NULL, hInstance, NULL);
     mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, 1200, 800, nullptr, nullptr, hInstance, nullptr);
 
 	ShowWindow(mhUIWnd, nCmdShow);
 	ShowWindow(mhMainWnd, nCmdShow);
+    ShowWindow(mhMonsterWnd, nCmdShow);
 
     SetLayeredWindowAttributes(mhBackGroundWnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(mhBackGroundWnd, nCmdShow);
@@ -312,4 +319,44 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
+}
+LRESULT CALLBACK MonsterWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    HDC hDC, memdc;
+    PAINTSTRUCT ps;
+
+    switch (message)
+    {
+
+    case WM_CREATE:
+      
+        return 0;
+    case WM_CHAR:
+      
+        break;
+
+
+    case WM_LBUTTONDOWN:
+     
+        break;
+
+
+
+    case WM_PAINT:
+        hDC = BeginPaint(hWnd, &ps);
+       
+        EndPaint(hWnd, &ps);
+        return 0;
+
+
+    case WM_DESTROY:
+        //     wndCount--;
+       // if (wndCount == 0) {
+        PostQuitMessage(0);
+        // }
+        return 0;
+
+    }
+    return DefWindowProc(hWnd, message, wParam, lParam);
+
 }

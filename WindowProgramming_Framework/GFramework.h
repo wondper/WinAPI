@@ -58,13 +58,12 @@ struct Monster
 	// 1 피격 상태
 	// 2 사망 상태
 
-
 	HBITMAP sprite[6];
 	HBITMAP sprite_mask[6];
 	HDC memDC= NULL;
-
 };
-Monster monster[stage][10]; // 스테이지별 적을 저장할 배열
+
+static Monster monster[stage][10]; // 스테이지별 적을 저장할 배열
 static int m_count[stage];// 스테이지별 적 수
 static int stage_count=0;
 
@@ -91,7 +90,8 @@ struct Item
 enum class WINDOW {
 	Main = 0,
 	UI,
-	BackGround
+	BackGround,
+	Monster,
 };
 
 class GFramework
@@ -136,12 +136,14 @@ public:
 	HWND GetUIhwnd() const { return mhUIWnd; }
 	HWND GetMainhwnd() const { return mhMainWnd; }
 	HWND GetBackgroundWnd() const { return mhBackGroundWnd; }
+	HWND GetMonsterWnd() const { return mhMonsterWnd; }
 };
 
 extern GFramework gFramework;
 
 LRESULT CALLBACK MainWndProc(HWND, UINT, WPARAM, LPARAM); // 하단 UI 윈도우를 관리하는 윈도우 프로시저 입니다
 LRESULT CALLBACK UIWndProc(HWND, UINT, WPARAM, LPARAM); // 조준점 윈도우를 관리하는 윈도우 프로시저 입니다
+LRESULT CALLBACK MonsterWndProc(HWND, UINT, WPARAM, LPARAM); // 조준점 윈도우를 관리하는 윈도우 프로시저 입니다
 
 
 //Callback func
