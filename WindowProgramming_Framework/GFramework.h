@@ -1,7 +1,8 @@
 #pragma once
 #include "stdafx.h"
 #include "Resource.h"
-#define stage 3
+#define stage 3 // 스테이지 개수 입니다
+#define MAX_m 10 // 최대 몬스터 생성 갯수입니다.
 
 static HBITMAP BG_MAP;
 
@@ -27,9 +28,9 @@ struct Player
 	TCHAR str_Bullet[10];
 	TCHAR str_Score[10];
 
-
-
 	bool Triger = false;
+	int TrigerFrame = 0; // 발사 애니매이션 프레임 갯수입니다.
+
 	bool gameOver = false;
 
 
@@ -40,13 +41,14 @@ struct Monster
 {
 	bool create = false;
 
-	int X = rand() % 3000;
-	int Y = 40;
+	POINT P = { rand()%1200,rand()%200}; // Monster의 x와 y좌표
 
 	int Win_SizeX = 200;
 	int Win_SizeY = 400;
 
 	int Hp = 3;
+
+	bool Dead = false;
 
 	int skin = 0;
 	// 0 좀비
@@ -57,14 +59,16 @@ struct Monster
 	// 0 대기 상태
 	// 1 피격 상태
 	// 2 사망 상태
+	int ActionFrame = 0;
+
 
 	HBITMAP sprite[6];
 	HBITMAP sprite_mask[6];
 	HDC memDC= NULL;
 };
 
-static Monster monster[stage][10]; // 스테이지별 적을 저장할 배열
-static int m_count[stage];// 스테이지별 적 수
+static Monster monster[stage][MAX_m]; // 스테이지별 적을 저장할 배열
+static int m_count[stage] = {3,5,3};// 스테이지별 적 수
 static int stage_count=0;
 
 
@@ -104,7 +108,7 @@ private:
 	HWND mhUIWnd;
 	HWND mhBackGroundWnd;
 
-	HWND mhMonsterWnd;
+	HWND mhMonsterWnd[MAX_m];
 
 	// 윈도우 클래스 변수
 	WNDCLASSEX mwcxMain;
@@ -136,7 +140,9 @@ public:
 	HWND GetUIhwnd() const { return mhUIWnd; }
 	HWND GetMainhwnd() const { return mhMainWnd; }
 	HWND GetBackgroundWnd() const { return mhBackGroundWnd; }
-	HWND GetMonsterWnd() const { return mhMonsterWnd; }
+	
+	HWND GetMonsterWnd() const { return mhMonsterWnd[0]; }
+	// 하나만 선언해야하는 ??
 };
 
 extern GFramework gFramework;

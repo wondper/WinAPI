@@ -153,6 +153,8 @@
     <ResourceCompile Include="WindowProgramming_Framework.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="bitmap\bitmap2.bmp" />
+    <Image Include="bitmap\monster_.bmp" />
     <Image Include="Bitmap\Sample2.bmp" />
     <Image Include="small.ico" />
     <Image Include="WindowProgramming_Framework.ico" />
