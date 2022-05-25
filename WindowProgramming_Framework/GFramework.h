@@ -23,7 +23,11 @@ struct Player
 	int Weapon = 1;
 
 	HDC Player_memDC;
+
+	RECT Player_AimintZone;
 	HBITMAP Player_Aiming;
+	int Aming_sizeX = 40;
+	int Aming_sizeY = 40;
 
 	TCHAR str_Bullet[10];
 	TCHAR str_Score[10];
@@ -48,7 +52,7 @@ struct Monster
 
 	int Hp = 3;
 
-	bool Dead = false;
+	bool Dead = true;
 
 	int skin = 0;
 	// 0 Á»ºñ
