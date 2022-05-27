@@ -117,6 +117,8 @@ void GFramework::Draw(HDC hdc)
 
 }
 
+
+
 void GFramework::KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMessage)
@@ -145,6 +147,14 @@ void GFramework::KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 
+}
+
+bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int bottom)
+{
+    if (Mx<right && Mx > left &&
+        My<bottom && My > top)
+        return true;
+    return false;
 }
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
