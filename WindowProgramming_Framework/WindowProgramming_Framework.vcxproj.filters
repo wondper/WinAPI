@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="리소스 파일\ITEM">
+      <UniqueIdentifier>{19ea219b-4165-4d33-98b0-6298332b866d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\MONSTER">
+      <UniqueIdentifier>{82317dbd-c33f-4469-abbf-8f4e32be2a3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\MONSTER\BOSS">
+      <UniqueIdentifier>{db9e4917-e54c-4b76-8b0a-e3be5caa386a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -57,19 +66,34 @@
     <Image Include="bitmap\bitmap2.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="bitmap\monster_.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
     <Image Include="bitmap\bg_stage.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="bitmap\ITEM_BULLET.bmp">
+      <Filter>리소스 파일\ITEM</Filter>
+    </Image>
+    <Image Include="bitmap\ITEM_CAKE.bmp">
+      <Filter>리소스 파일\ITEM</Filter>
+    </Image>
+    <Image Include="bitmap\MONSTER_HORSE1.bmp">
+      <Filter>리소스 파일\MONSTER\BOSS</Filter>
+    </Image>
+    <Image Include="bitmap\MONSTER_HORSE2.bmp">
+      <Filter>리소스 파일\MONSTER\BOSS</Filter>
+    </Image>
+    <Image Include="bitmap\MONSTER_HORSE3.bmp">
+      <Filter>리소스 파일\MONSTER\BOSS</Filter>
+    </Image>
+    <Image Include="bitmap\MONSTER_HORSE4.bmp">
+      <Filter>리소스 파일\MONSTER\BOSS</Filter>
+    </Image>
+    <Image Include="bitmap\MONSTER_HORSE5.bmp">
+      <Filter>리소스 파일\MONSTER\BOSS</Filter>
+    </Image>
+    <Image Include="bitmap\MONSTER_HORSE6.bmp">
+      <Filter>리소스 파일\MONSTER\BOSS</Filter>
+    </Image>
     <Image Include="bitmap\bmp00001.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="bitmap\bitmap3.bmp">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="bitmap\item2.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

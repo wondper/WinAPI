@@ -155,10 +155,15 @@
   <ItemGroup>
     <Image Include="bitmap\bg_stage.bmp" />
     <Image Include="bitmap\bitmap2.bmp" />
-    <Image Include="bitmap\bitmap3.bmp" />
     <Image Include="bitmap\bmp00001.bmp" />
-    <Image Include="bitmap\item2.bmp" />
-    <Image Include="bitmap\monster_.bmp" />
+    <Image Include="bitmap\MONSTER_HORSE2.bmp" />
+    <Image Include="bitmap\MONSTER_HORSE3.bmp" />
+    <Image Include="bitmap\MONSTER_HORSE4.bmp" />
+    <Image Include="bitmap\MONSTER_HORSE5.bmp" />
+    <Image Include="bitmap\MONSTER_HORSE6.bmp" />
+    <Image Include="bitmap\ITEM_BULLET.bmp" />
+    <Image Include="bitmap\MONSTER_HORSE1.bmp" />
+    <Image Include="bitmap\ITEM_CAKE.bmp" />
     <Image Include="Bitmap\Sample2.bmp" />
     <Image Include="small.ico" />
     <Image Include="WindowProgramming_Framework.ico" />
