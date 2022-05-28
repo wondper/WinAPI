@@ -54,5 +54,23 @@
     <Image Include="Bitmap\Sample2.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="bitmap\bitmap2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\monster_.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bg_stage.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00001.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bitmap3.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\item2.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>

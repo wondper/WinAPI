@@ -1,5 +1,4 @@
 #include "GFramework.h"
-
 GFramework::GFramework()
 {
 	//mhInstance = g_hInst;
@@ -50,6 +49,11 @@ void GFramework::InitWCX(WINDOW wnd)
 		wcex.lpszClassName = L"BackGroundWindow";
 		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		mwcxBackGround = wcex;
+    case WINDOW::Monster:
+        wcex.lpfnWndProc = MonsterWndProc;
+        wcex.lpszClassName = L"MonsterGroundWindow";
+        wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        mwcxBackGround = wcex;
 		break;
 	}
     
@@ -66,14 +70,26 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 {
 	mhInstance = hInstance;
 	mhUIWnd = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
-	mhMainWnd = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
-    mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, 1200, 800, nullptr, nullptr, hInstance, nullptr);
+    for (size_t i = 0; i < m_count[stage_count]; i++)
+    {
+        mhMonsterWnd[i] = CreateWindow(L"MonsterGroundWindow", L"Monster", NULL, monster[stage_count][i].P.x, monster[stage_count][i].P.y, 
+            monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL, NULL, hInstance, NULL);
+    }
 
-	ShowWindow(mhUIWnd, nCmdShow);
-	ShowWindow(mhMainWnd, nCmdShow);
+    mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, hInstance, nullptr);
+
+    mhMainWnd = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
+
+
+    for (size_t i = 0; i < MAX_m; i++)
+    {
+        ShowWindow(mhMonsterWnd[i], nCmdShow);
+    }
 
     SetLayeredWindowAttributes(mhBackGroundWnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(mhBackGroundWnd, nCmdShow);
+    ShowWindow(mhUIWnd, nCmdShow);
+    ShowWindow(mhMainWnd, nCmdShow);
 }
 
 void GFramework::InitUI(HWND hwndUI)
@@ -100,6 +116,8 @@ void GFramework::Draw(HDC hdc)
 {
 
 }
+
+
 
 void GFramework::KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
@@ -129,6 +147,14 @@ void GFramework::KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 
+}
+
+bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int bottom)
+{
+    if (Mx<right && Mx > left &&
+        My<bottom && My > top)
+        return true;
+    return false;
 }
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -177,25 +203,84 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             InvalidateRect(hWnd, NULL, TRUE);
             break;
         }
+        User.Player_AimintZone = { User.P.x , User.P.y ,User.P.x + User.Aming_sizeX,User.P.y + User.Aming_sizeY };
         break;
 
 
     case WM_LBUTTONDOWN:
-        User.Bullet -= 1;
+        if (!User.Triger)
+        {
+            User.Bullet -= 1;
+            User.Triger = true;
+            SetTimer(hWnd, 3, 50, NULL);
 
+                for (size_t i = 0; i < m_count[stage_count]; i++)
+                {
+                    if (User.Player_AimintZone.left >= monster[stage_count][i].P.x && User.Player_AimintZone.right <= monster[stage_count][i].P.x + monster[stage_count][i].Win_SizeX)
+                    {
+                        if (User.Player_AimintZone.top >= monster[stage_count][i].P.y && User.Player_AimintZone.bottom <= monster[stage_count][i].P.y + monster[stage_count][i].Win_SizeY)
+                        {
+                            if (!monster[stage_count][i].Dead)
+                            {
+                                monster[stage_count][i].Hp--;
+                                monster[stage_count][i].Stats = 1;
+                            }
+                        }
+                    }
+                }
+
+        }
         InvalidateRect(hWnd, NULL, TRUE);
-
 
         break;
 
 
+    case WM_TIMER:
+        switch (wParam)
+        {
+        case 3:
+            if(User.Triger)
+            switch (User.TrigerFrame++)
+            {
+            case 0:
+                SetWindowPos(hWnd, NULL, User.P.x + 5, User.P.y -5, User.Win_SizeX, User.Win_SizeY, NULL);
+                break;
+            case 1:
+                SetWindowPos(hWnd, NULL, User.P.x - 5, User.P.y - 5, User.Win_SizeX, User.Win_SizeY, NULL);
+                break;
+            case 2:
+                SetWindowPos(hWnd, NULL, User.P.x + 5, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
+                break;
+            case 3:
+                SetWindowPos(hWnd, NULL, User.P.x + 5, User.P.y + 5, User.Win_SizeX, User.Win_SizeY, NULL);
+                break;
+            case 4:
+                SetWindowPos(hWnd, NULL, User.P.x - 5, User.P.y - 5, User.Win_SizeX, User.Win_SizeY, NULL);
+                break;
+            case 5:
+                SetWindowPos(hWnd, NULL, User.P.x - 5, User.P.y - 5, User.Win_SizeX, User.Win_SizeY, NULL);
+                break;
+            case 6:
+                SetWindowPos(hWnd, NULL, User.P.x, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
+                User.TrigerFrame = 0;
+                User.Triger = false;
+                KillTimer(hWnd, 3);
+                break;
+            }
 
+
+
+
+            break;
+        }
+
+        break;
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
         gFramework.Draw(hDC);
         memdc = CreateCompatibleDC(hDC);
         SelectObject(memdc, BG_MAP);
-        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.P.x, User.P.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CXSCREEN), SRCCOPY);
+        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN)*2, GetSystemMetrics(SM_CYSCREEN)*2, memdc, User.P.x, User.P.y, GetSystemMetrics(SM_CXSCREEN) , GetSystemMetrics(SM_CYSCREEN) , SRCCOPY);
 
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
@@ -223,15 +308,24 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     switch (message) {
 
     case WM_CREATE:
-        //wndCount++;
-        return 0;
+        SetTimer(hWnd, 1, 10, NULL);
+
+        break;
     case WM_LBUTTONDOWN:
-        User.Bullet -= 1;
 
         InvalidateRect(hWnd, NULL, TRUE);
         break;
 
 
+    case WM_TIMER:
+        switch (wParam)
+        {
+        case 1:
+            // UI 업데이트 틱
+            InvalidateRect(hWnd, NULL, TRUE);
+            break;
+        }
+        break;
 
     case WM_CHAR:
         switch (wParam)
@@ -303,4 +397,97 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+LRESULT CALLBACK MonsterWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    HDC hDC, memdc;
+    PAINTSTRUCT ps;
+
+    switch (message)
+    {
+    case WM_CREATE:
+        SetTimer(hWnd,1, 10, NULL); // 몬스터 프로시저 업데이트 타이머 입니다.
+        return 0;
+    case WM_CHAR:
+      
+        break;
+
+    case WM_TIMER:
+        switch (wParam)
+        {
+        case 1:
+            for (size_t i = 0; i < m_count[stage_count]; i++)
+            {
+                if (monster[stage_count][i].Stats == 1) SetTimer(hWnd, 3, 50, NULL);
+            }
+            break;
+
+        case 3:
+            for (size_t i = 0; i < m_count[stage_count]; i++)
+            {
+                switch (monster[stage_count][i].ActionFrame++)
+                {
+                case 0:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x + 5, monster[stage_count][i].P.y - 5, monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL);
+                    break;
+                case 1:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x - 5, monster[stage_count][i].P.y - 5, monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL);
+                    break;
+                case 2:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x + 5, monster[stage_count][i].P.y, monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL);
+                    break;
+                case 3:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x + 5, monster[stage_count][i].P.y + 5, monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL);
+                    break;
+                case 4:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x - 5, monster[stage_count][i].P.y - 5, monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL);
+                    break;
+                case 5:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x - 5, monster[stage_count][i].P.y - 5, monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL);
+                    break;
+                case 6:
+                    SetWindowPos(hWnd, NULL, monster[stage_count][i].P.x, monster[stage_count][i].P.y, monster[stage_count][i].Win_SizeX, User.Win_SizeY, NULL);
+                    monster[stage_count][i].ActionFrame = 0;
+                    monster[stage_count][i].Stats = 0;
+                    KillTimer(hWnd, 3);
+                    break;
+                }
+            }
+           
+            break;
+        
+        
+        }
+
+
+
+        break;
+
+
+
+
+    case WM_LBUTTONDOWN:
+     
+        break;
+
+
+
+    case WM_PAINT:
+        hDC = BeginPaint(hWnd, &ps);
+       
+        EndPaint(hWnd, &ps);
+        return 0;
+
+
+    case WM_DESTROY:
+        //     wndCount--;
+       // if (wndCount == 0) {
+        PostQuitMessage(0);
+        // }
+        return 0;
+
+    }
+    return DefWindowProc(hWnd, message, wParam, lParam);
+
 }
