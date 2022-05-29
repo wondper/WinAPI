@@ -96,5 +96,41 @@
     <Image Include="bitmap\bmp00001.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="bitmap\bmp00002.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\monster_.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00003.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00004.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00005.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00006.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00007.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00008.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00009.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00010.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00011.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="bitmap\bmp00012.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
