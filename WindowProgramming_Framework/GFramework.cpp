@@ -67,13 +67,16 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 	mhInstance = hInstance;
 	mhUIWnd = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
 	mhMainWnd = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
-    mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, 1200, 800, nullptr, nullptr, hInstance, nullptr);
-
-	ShowWindow(mhUIWnd, nCmdShow);
-	ShowWindow(mhMainWnd, nCmdShow);
+    mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED  | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1200, 800, nullptr, nullptr, hInstance, nullptr);
 
     SetLayeredWindowAttributes(mhBackGroundWnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(mhBackGroundWnd, nCmdShow);
+
+	ShowWindow(mhUIWnd, nCmdShow);
+
+	ShowWindow(mhMainWnd, nCmdShow);
+
+    
 }
 
 void GFramework::InitUI(HWND hwndUI)
@@ -271,8 +274,9 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    //HDC hDC;
-    //PAINTSTRUCT ps;
+    HDC hDC;
+    PAINTSTRUCT ps;
+    HBRUSH hBrush, oldhBrush;
 
     switch (message)
     {
@@ -280,15 +284,25 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     case WM_CREATE:
         //wndCount++;
         return 0;
+    break;
+    case WM_PAINT:
+        hDC = BeginPaint(hWnd, &ps);
+        hBrush = CreateSolidBrush(RGB(255, 255, 255));
+        oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
 
+        Rectangle(hDC, 0, 0, 1200, 800);
 
+        SelectObject(hDC, hBrush);
+        DeleteObject(hBrush);
+        EndPaint(hWnd, &ps);
+        break;
     case WM_DESTROY:
         //wndCount--;
         //if (wndCount == 0) {
             PostQuitMessage(0);
         //}
         return 0;
-
+    break;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }

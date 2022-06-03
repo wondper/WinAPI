@@ -3,5 +3,9 @@
 
 class Monster
 {
+private:
+
+public:
+
 };
 
