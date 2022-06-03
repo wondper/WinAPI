@@ -12,7 +12,6 @@ GFramework::~GFramework()
 
 void GFramework::Init(HWND hwnd, HINSTANCE gInst)
 {
-	//mhMainWnd = hwnd;
     hwndMain = hwnd;
     mhInstance = gInst;
 }
@@ -76,19 +75,8 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 	ShowWindow(hwndUI, nCmdShow);
 
 	ShowWindow(hwndMain, nCmdShow);
-
-    
 }
 
-void GFramework::InitUI(HWND hwndUI)
-{
-	//mhMainWnd_UI = hwndUI;
-}
-
-void GFramework::InitBackGround(HWND hwndBG)
-{
-	//mhMainWnd_BackGround = hwndBG;
-}
 
 void GFramework::Update(const float fTime)
 {
@@ -186,7 +174,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_LBUTTONDOWN:
     {
         User.DecreaseBulletCount();
-        InvalidateRect(hwndUI, NULL, TRUE);
+        InvalidateRect(hwndUI, NULL, TRUE); // UIÇÚµéÀ» º¸³¿.
         break;
     }
 
