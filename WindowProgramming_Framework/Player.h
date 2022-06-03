@@ -6,26 +6,26 @@ private:
 	POINT mPosition;
 
 	int mHP;
-	int mWin_SizeX = 200;
-	int mWin_SizeY = 200;
-	int mWinFrameSpeed = 20;
+	int mWinFrameSpeed ;
 
-	int mBullet = 8;
-	int mScore = 1000;
+	int mBullet;
+	int mScore;
 
-	int mWeapon = 1;
+	int mWeapon;
 
-	HDC mPlayer_memDC;
-	HBITMAP mPlayer_Aiming;
+	HDC mPlayerMemDC;
+	HBITMAP mPlayerAimBitmap;
 
-	TCHAR mstr_Bullet[10];
-	TCHAR mstr_Score[10];
+	std::wstring mBulletStr;
+	std::wstring mScoreStr;
 public:
-	Player() {}
+	Player();
 	virtual ~Player();
 
 	POINT GetPosition() const { return mPosition; }
 	void SetPosition(const LONG x, const LONG y) { mPosition.x = x; mPosition.y = y; }
+	void SetPositionX(const LONG x) { mPosition.x = x; }
+	void SetPositionY(const LONG y) { mPosition.y = y; }
 
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
@@ -39,7 +39,10 @@ public:
 	int GetWeapon() const { return mWeapon; }
 	void SetWeapon(int weapon) { mWeapon = weapon; }
 
+	const std::wstring GetBullerStr() const { return mBulletStr; }
 	void SetBulletstr();
+
+	const std::wstring GetScoreStr() const { return mScoreStr; }
 	void SetScorestr();
 };
 

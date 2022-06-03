@@ -154,26 +154,26 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case 'w':
-            User.P.y -= User.WinFrameSpeed;
-            SetWindowPos(hWnd, NULL, User.P.x, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
+            User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
+            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             break;
 
         case 'a':
-            User.P.x -= User.WinFrameSpeed;
-            SetWindowPos(hWnd, NULL, User.P.x, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
+            User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
+            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             break;
 
         case 's':
-            User.P.y += User.WinFrameSpeed;
-            SetWindowPos(hWnd, NULL, User.P.x, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
+            User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
+            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             break;
 
         case 'd':
-            User.P.x += User.WinFrameSpeed;
-            SetWindowPos(hWnd, NULL, User.P.x, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
+            User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
+            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
             InvalidateRect(hWnd, NULL, TRUE);
             break;
         }
@@ -181,13 +181,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
     case WM_LBUTTONDOWN:
-        User.Bullet -= 1;
-
+    {
+        int Bullet = User.GetBullet();
+        User.SetBullet(Bullet - 1);
         InvalidateRect(hWnd, NULL, TRUE);
-
-
-        break;
-
+    break;
+    }
 
 
     case WM_PAINT:
@@ -195,7 +194,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         gFramework.Draw(hDC);
         memdc = CreateCompatibleDC(hDC);
         SelectObject(memdc, BG_MAP);
-        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.P.x, User.P.y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CXSCREEN), SRCCOPY);
+        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.GetPosition().x, User.GetPosition().y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CXSCREEN), SRCCOPY);
 
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
@@ -226,13 +225,12 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         //wndCount++;
         return 0;
     case WM_LBUTTONDOWN:
-        User.Bullet -= 1;
-
+    {
+        int Bullet = User.GetBullet();
+        User.SetBullet(Bullet - 1);
         InvalidateRect(hWnd, NULL, TRUE);
         break;
-
-
-
+    }
     case WM_CHAR:
         switch (wParam)
         {
@@ -248,17 +246,15 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         hDC = BeginPaint(hWnd, &ps);
         hBrush = CreateSolidBrush(RGB(255, 0, 0));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
-        TextOut(hDC, 0, 30, L"SCORE : ", 8);
-        wsprintf(User.str_Score, L"%d", User.Score);
-        TextOut(hDC, 0, 50, User.str_Score, lstrlen(User.str_Score));
+        User.SetScorestr();
+        TextOut(hDC, 0, 50, User.GetScoreStr().c_str(), User.GetScoreStr().size());
 
 
-        TextOut(hDC, 0, 80, L"HandGun Bullet : ", 15);
-        wsprintf(User.str_Bullet, L"%d", User.Bullet);
-        TextOut(hDC, 0, 100, User.str_Bullet, lstrlen(User.str_Bullet));
+        User.SetBulletstr();
+        TextOut(hDC, 0, 100, User.GetBullerStr().c_str(), User.GetBullerStr().size());
 
 
-        Rectangle(hDC, 80, 0, User.HP, 20);
+        Rectangle(hDC, 80, 0, User.GetHP(), 20);
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);
 
