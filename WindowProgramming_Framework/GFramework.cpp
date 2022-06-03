@@ -145,7 +145,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_CHAR:
         switch (wParam)
         {
-
         case 'q':
             PostQuitMessage(0);
             break;
@@ -182,10 +181,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     case WM_LBUTTONDOWN:
     {
-        int Bullet = User.GetBullet();
-        User.SetBullet(Bullet - 1);
+        User.DecreaseBulletCount();
         InvalidateRect(hWnd, NULL, TRUE);
-    break;
+        break;
     }
 
 
@@ -226,8 +224,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         return 0;
     case WM_LBUTTONDOWN:
     {
-        int Bullet = User.GetBullet();
-        User.SetBullet(Bullet - 1);
+        User.DecreaseBulletCount();
         InvalidateRect(hWnd, NULL, TRUE);
         break;
     }
@@ -246,21 +243,16 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         hDC = BeginPaint(hWnd, &ps);
         hBrush = CreateSolidBrush(RGB(255, 0, 0));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
+        //Score Text Set, TextOut
         User.SetScorestr();
         TextOut(hDC, 0, 50, User.GetScoreStr().c_str(), User.GetScoreStr().size());
-
-
+        //BulletText Set, TextOut
         User.SetBulletstr();
         TextOut(hDC, 0, 100, User.GetBullerStr().c_str(), User.GetBullerStr().size());
-
 
         Rectangle(hDC, 80, 0, User.GetHP(), 20);
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);
-
-
-
-
 
         EndPaint(hWnd, &ps);
         return 0;

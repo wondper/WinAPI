@@ -1,5 +1,10 @@
 #pragma once
 #include "stdafx.h"
+
+constexpr int FRAME_SPEED = 20;
+constexpr int WINSIZEX = 200;
+constexpr int WINSIZEY = 200;
+
 class Player
 {
 private:
@@ -29,6 +34,8 @@ public:
 
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
+
+	void DecreaseBulletCount() { --mBullet; }
 
 	int GetBullet() const { return mBullet; }
 	void SetBullet(int bullet) { mBullet = bullet; }

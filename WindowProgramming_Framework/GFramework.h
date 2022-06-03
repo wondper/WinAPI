@@ -7,9 +7,7 @@ static HBITMAP BG_MAP;
 
 extern HINSTANCE g_hInst;
 
-constexpr int FRAME_SPEED = 20;
-constexpr int WINSIZEX = 200;
-constexpr int WINSIZEY = 200;
+
 
 enum class WINDOW {
 	Main = 0,
