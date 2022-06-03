@@ -9,9 +9,9 @@ private:
 	HBITMAP mAppearanceBitmap;
 public:
 	GameObject();
-	virtual ~GameObject();
+	virtual ~GameObject() = 0;
 
 	virtual void PlaySound();
-	virtual void Anim(char Type);
+	virtual void Anim(char Type) = 0; // Type에 따라 다른 애니메이션 설정.
 };
 
