@@ -14,3 +14,6 @@
 #include <memory.h>
 #include <tchar.h>
 
+//C++
+#include<string>
+
