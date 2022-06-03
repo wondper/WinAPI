@@ -4,6 +4,8 @@
 class Monster
 {
 private:
+	int mHP;
+
 
 public:
 

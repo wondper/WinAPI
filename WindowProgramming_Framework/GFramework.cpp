@@ -12,7 +12,8 @@ GFramework::~GFramework()
 
 void GFramework::Init(HWND hwnd, HINSTANCE gInst)
 {
-	mhMainWnd = hwnd;
+	//mhMainWnd = hwnd;
+    hwndMain = hwnd;
     mhInstance = gInst;
 }
 
@@ -65,16 +66,16 @@ void GFramework::RegisterWnd()
 void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 {
 	mhInstance = hInstance;
-	mhUIWnd = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
-	mhMainWnd = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
-    mhBackGroundWnd = CreateWindowEx(WS_EX_LAYERED  | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1200, 800, nullptr, nullptr, hInstance, nullptr);
+	hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
+	hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
+    hwndBG = CreateWindowEx(WS_EX_LAYERED  | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1600, 1200, nullptr, nullptr, hInstance, nullptr);
+   
+    SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
+    ShowWindow(hwndBG, nCmdShow);
 
-    SetLayeredWindowAttributes(mhBackGroundWnd, RGB(0, 0, 0), 0, LWA_COLORKEY);
-    ShowWindow(mhBackGroundWnd, nCmdShow);
+	ShowWindow(hwndUI, nCmdShow);
 
-	ShowWindow(mhUIWnd, nCmdShow);
-
-	ShowWindow(mhMainWnd, nCmdShow);
+	ShowWindow(hwndMain, nCmdShow);
 
     
 }
@@ -112,7 +113,7 @@ void GFramework::KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == VK_ESCAPE)
 		{
-			SendMessage(mhMainWnd, WM_DESTROY, 0, 0);
+			SendMessage(hwndMain, WM_DESTROY, 0, 0);
 			return;
 		}
 	}
@@ -185,7 +186,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_LBUTTONDOWN:
     {
         User.DecreaseBulletCount();
-        InvalidateRect(hWnd, NULL, TRUE);
+        InvalidateRect(hwndUI, NULL, TRUE);
         break;
     }
 
@@ -263,6 +264,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     case WM_DESTROY:
         //wndCount--;
         //if (wndCount == 0) {
+
         PostQuitMessage(0);
         //}
 
@@ -290,7 +292,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         hBrush = CreateSolidBrush(RGB(255, 255, 255));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
 
-        Rectangle(hDC, 0, 0, 1200, 800);
+        Rectangle(hDC, 0, 0, 3000, 1200);
 
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);

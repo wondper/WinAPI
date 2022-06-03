@@ -6,6 +6,10 @@
 
 static HBITMAP BG_MAP;
 
+static HWND hwndMain;
+static HWND hwndUI;
+static HWND hwndBG;
+
 extern HINSTANCE g_hInst;
 
 
@@ -25,9 +29,6 @@ private:
 	//인스턴스 핸들 변수
 	HINSTANCE mhInstance;
 	//.윈도우 핸들 변수
-	HWND mhMainWnd;
-	HWND mhUIWnd;
-	HWND mhBackGroundWnd;
 	// 윈도우 클래스 변수
 	WNDCLASSEX mwcxMain;
 	WNDCLASSEX mwcxUI;
@@ -54,9 +55,7 @@ public:
 	void KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam);
 	void MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam);
 
-	HWND GetUIhwnd() const { return mhUIWnd; }
-	HWND GetMainhwnd() const { return mhMainWnd; }
-	HWND GetBackgroundWnd() const { return mhBackGroundWnd; }
+	
 };
 
 extern GFramework gFramework;
