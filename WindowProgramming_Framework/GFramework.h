@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Resource.h"
 #include "Player.h"
+#include "Monster.h"
 
 static HBITMAP BG_MAP;
 

@@ -245,10 +245,10 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
         //Score Text Set, TextOut
         User.SetScorestr();
-        TextOut(hDC, 0, 50, User.GetScoreStr().c_str(), User.GetScoreStr().size());
+        TextOut(hDC, 0, 50, User.GetScoreStr().c_str(), static_cast<int>(User.GetScoreStr().size()));
         //BulletText Set, TextOut
         User.SetBulletstr();
-        TextOut(hDC, 0, 100, User.GetBullerStr().c_str(), User.GetBullerStr().size());
+        TextOut(hDC, 0, 100, User.GetBullerStr().c_str(), static_cast<int>(User.GetBullerStr().size()));
 
         Rectangle(hDC, 80, 0, User.GetHP(), 20);
         SelectObject(hDC, hBrush);
@@ -271,8 +271,8 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC;
-    PAINTSTRUCT ps;
+    //HDC hDC;
+    //PAINTSTRUCT ps;
 
     switch (message)
     {
