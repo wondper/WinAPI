@@ -14,37 +14,6 @@ static HWND hwndBG;
 
 extern HINSTANCE g_hInst;
 
-struct Player
-{
-	POINT P = { 0,0 }; // Plaeyr의 x와 y좌표
-
-	int HP = 1000;
-	int Win_SizeX = 200;
-	int Win_SizeY = 200;
-	int WinFrameSpeed = 20;
-
-	int Bullet = 8;
-	int Score = 1000;
-
-	int Weapon = 1;
-
-	HDC Player_memDC;
-
-	RECT Player_AimintZone;
-	HBITMAP Player_Aiming;
-	int Aming_sizeX = 40;
-	int Aming_sizeY = 40;
-
-	TCHAR str_Bullet[10];
-	TCHAR str_Score[10];
-
-	bool Triger = false;
-	int TrigerFrame = 0; // 발사 애니매이션 프레임 갯수입니다.
-
-	bool gameOver = false;
-
-
-};
 static Player User;
 
 struct Monster
@@ -108,7 +77,6 @@ enum class WINDOW {
 	Monster,
 };
 
-static Player User;
 
 class GFramework
 {

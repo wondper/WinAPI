@@ -72,18 +72,18 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
     hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
     hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1600, 1200, nullptr, nullptr, hInstance, nullptr);
-    for (size_t i = 0; i < m_count[stage_count]; i++)
+    /*for (size_t i = 0; i < m_count[stage_count]; i++)
     {
         mhMonsterWnd[i] = CreateWindow(L"MonsterGroundWindow", L"Monster", NULL, monster[stage_count][i].P.x, monster[stage_count][i].P.y,
             monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL, NULL, hInstance, NULL);
-    }
+    }*/
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
 
-    for (size_t i = 0; i < MAX_m; i++)
-    {
-        ShowWindow(mhMonsterWnd[i], nCmdShow);
-    }
+    //for (size_t i = 0; i < MAX_m; i++)
+    //{
+    //    ShowWindow(mhMonsterWnd[i], nCmdShow);
+    //}
 
 
     ShowWindow(hwndUI, nCmdShow);
@@ -191,12 +191,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             InvalidateRect(hWnd, NULL, TRUE);
             break;
         }
-        User.Player_AimintZone = { User.P.x , User.P.y ,User.P.x + User.Aming_sizeX,User.P.y + User.Aming_sizeY };
+        User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
         break;
 
 
     case WM_LBUTTONDOWN:
-        if (!User.Triger)
+        /*if (!User.Triger)
         {
             User.Bullet -= 1;
             User.Triger = true;
@@ -217,20 +217,20 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     }
                 }
 
-        }
+        }*/
         InvalidateRect(hWnd, NULL, TRUE);
-
-        break;
-
-    {
         User.DecreaseBulletCount();
         InvalidateRect(hwndUI, NULL, TRUE); // UIÇÚµéÀ» º¸³¿.
+        break;
+
+    
+        
 
     case WM_TIMER:
         switch (wParam)
         {
         case 3:
-            if(User.Triger)
+            /*if(User.Triger)
             switch (User.TrigerFrame++)
             {
             case 0:
@@ -257,7 +257,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 User.Triger = false;
                 KillTimer(hWnd, 3);
                 break;
-            }
+            }*/
 
 
 
@@ -271,7 +271,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         gFramework.Draw(hDC);
         memdc = CreateCompatibleDC(hDC);
         SelectObject(memdc, BG_MAP);
-        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN)*2, GetSystemMetrics(SM_CYSCREEN)*2, memdc, User.P.x, User.P.y, GetSystemMetrics(SM_CXSCREEN) , GetSystemMetrics(SM_CYSCREEN) , SRCCOPY);
+        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN)*2, GetSystemMetrics(SM_CYSCREEN)*2, memdc, User.GetPosition().x, User.GetPosition().y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
 
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
@@ -308,15 +308,16 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         InvalidateRect(hWnd, NULL, TRUE);
         break;
 
-
+    }
     case WM_TIMER:
         switch (wParam)
         {
         case 1:
             // UI ¾÷µ¥ÀÌÆ® Æ½
-            InvalidateRect(hWnd, NULL, TRUE);
+            //InvalidateRect(hWnd, NULL, TRUE);
             break;
         }
+
         break;
 
     case WM_CHAR:
@@ -421,7 +422,7 @@ LRESULT CALLBACK MonsterWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             break;
 
         case 3:
-            for (size_t i = 0; i < m_count[stage_count]; i++)
+            /*for (size_t i = 0; i < m_count[stage_count]; i++)
             {
                 switch (monster[stage_count][i].ActionFrame++)
                 {
@@ -450,7 +451,7 @@ LRESULT CALLBACK MonsterWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                     KillTimer(hWnd, 3);
                     break;
                 }
-            }
+            }*/
            
             break;
         

@@ -6,6 +6,8 @@ constexpr int WINSIZEX = 200;
 constexpr int WINSIZEY = 200;
 constexpr int WINSIZE_WIDEX = 400;
 constexpr int WINSIZE_WIDHY = 400;
+constexpr int AIMSIZEX = 40;
+constexpr int AIMSIZEY = 40;
 
 class Player
 {
@@ -21,7 +23,15 @@ private:
 	int mWeapon;
 
 	HDC mPlayerMemDC;
-	HBITMAP mPlayerAimBitmap;
+	HBITMAP mAimBitmap;
+
+	RECT mAimRect;
+
+
+	//bool Triger = false;
+	//int TrigerFrame = 0; // 발사 애니매이션 프레임 갯수입니다.
+
+	bool mIsGameOver = false;
 
 	std::wstring mBulletStr;
 	std::wstring mScoreStr;
@@ -47,6 +57,11 @@ public:
 
 	int GetWeapon() const { return mWeapon; }
 	void SetWeapon(int weapon) { mWeapon = weapon; }
+
+	const RECT& GetRect() const { return mAimRect; }
+	void SetRect(int left, int top, int right, int bottom) { mAimRect.left = left; mAimRect.top = top; mAimRect.right = right; mAimRect.bottom = bottom; }
+
+	void SetGameOver() { mIsGameOver = true; }
 
 	const std::wstring GetBullerStr() const { return mBulletStr; }
 	void SetBulletstr();
