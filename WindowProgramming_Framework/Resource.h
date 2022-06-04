@@ -16,8 +16,12 @@
 #define IDB_MONSTER_HORSE               136
 #define IDB_MONSTER_BOSS1               136
 #define IDB_BG_STAGE1                   137
+#define IDB_BG1_STAGE                   137
 #define IDB_BG_STAGE2                   138
+#define IDB_BG_STAGE10                  138
+#define IDB_BG3_STAGE                   138
 #define IDB_BG_STAGE3                   139
+#define IDB_BG2_STAGE                   139
 #define IDB_ITEM1                       140
 #define IDB_ITEM2                       141
 #define IDB_MONSTER_HORSE1              142

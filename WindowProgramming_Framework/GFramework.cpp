@@ -69,7 +69,7 @@ void GFramework::RegisterWnd()
 void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 {
     mhInstance = hInstance;
-    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, 800, GetSystemMetrics(SM_CXSCREEN), 200, NULL, NULL, hInstance, NULL);
+    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 200, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), NULL, NULL, hInstance, NULL);
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
     hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1600, 1200, nullptr, nullptr, hInstance, nullptr);
     /*for (size_t i = 0; i < m_count[stage_count]; i++)
@@ -149,18 +149,26 @@ bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int botto
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hDC, memdc;
+    static RECT rectView; // 윈도우창 크기
+
+    HBITMAP AimBit; // 조준점 비트맵 이미지
+    static HDC AimDC; // 조준점 DC
+     
     PAINTSTRUCT ps;
+
     switch (message)
     {
 
     case WM_CREATE:
-        BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP1));
-        //     wndCount++;
+        GetClientRect(hWnd, &rectView);
+        BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG1_STAGE));
+      
+
         return 0;
     case WM_CHAR:
         switch (wParam)
         {
-        case 'q':
+        case 'q': // 프로그램 종료
             PostQuitMessage(0);
             break;
 
@@ -168,29 +176,45 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case 'w':
-            User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
-            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
-            InvalidateRect(hWnd, NULL, TRUE);
+            if (User.GetPosition().y - FRAME_SPEED > 0)
+            {
+                User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
+            
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
             break;
 
         case 'a':
-            User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
-            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
-            InvalidateRect(hWnd, NULL, TRUE);
-            break;
-
+            if (User.GetPosition().x - FRAME_SPEED > 0)
+            {
+                User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
+        
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
+                break;
         case 's':
-            User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
-            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
-            InvalidateRect(hWnd, NULL, TRUE);
-            break;
-
+            if (User.GetPosition().y + FRAME_SPEED < GetSystemMetrics(SM_CYSCREEN) -200 - WINSIZEY)
+            {
+                User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
+      
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
+                break;
         case 'd':
-            User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
-            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
-            InvalidateRect(hWnd, NULL, TRUE);
+            if (User.GetPosition().x + FRAME_SPEED < GetSystemMetrics(SM_CXSCREEN) - WINSIZEX)
+            {
+                User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
+                InvalidateRect(hWnd, NULL, TRUE);
+            }
             break;
         }
+        rectView = { User.GetPosition().x, User.GetPosition().y,
+            User.GetPosition().x+WINSIZEX, User.GetPosition().y+ WINSIZEY };
+        ClipCursor(&rectView);
         User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
         break;
 
@@ -230,7 +254,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         switch (wParam)
         {
         case 3:
-            /*if(User.Triger)
+            /*
+            if(User.Triger)
             switch (User.TrigerFrame++)
             {
             case 0:
@@ -271,7 +296,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         gFramework.Draw(hDC);
         memdc = CreateCompatibleDC(hDC);
         SelectObject(memdc, BG_MAP);
-        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN)*2, GetSystemMetrics(SM_CYSCREEN)*2, memdc, User.GetPosition().x, User.GetPosition().y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
+        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.GetPosition().x, User.GetPosition().y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
 
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
