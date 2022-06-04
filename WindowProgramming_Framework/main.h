@@ -27,9 +27,7 @@ LPCTSTR lpszClass = L"Window Class Name";
 LPCTSTR lpszWindowName = L"Window Program";
 GFramework gFramework;
 
-HWND hwnd;
-HWND hwndUI;
-HWND hwndBG;
+
 
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
