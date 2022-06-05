@@ -3,6 +3,8 @@
 // WindowProgramming_Framework.rc에서 사용되고 있습니다.
 //
 #define IDC_MYICON                      2
+#define I_                              2
+#define IDB_ITEM_MAGAZINE               2
 #define IDD_WINDOWPROGRAMMINGFRAMEWORK_DIALOG 102
 #define IDS_APP_TITLE                   103
 #define IDD_ABOUTBOX                    103
@@ -26,6 +28,7 @@
 #define IDB_ITEM2                       141
 #define IDB_MONSTER_HORSE1              142
 #define IDB_ITEM_BULLET                 142
+#define IDB_UI_BULLET                   142
 #define IDB_ITEM_CAKE                   143
 #define IDB_MONSTER_HORSE3              144
 #define IDB_MONSTER_HORSE4              145

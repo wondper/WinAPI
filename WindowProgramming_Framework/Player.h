@@ -23,7 +23,7 @@ private:
 	int mWeapon;
 
 	HDC mPlayerMemDC;
-	HBITMAP mAimBitmap;
+	HBITMAP mAimBitmap; // 윈도우창 조준구 이미지 비트맵
 
 	RECT mAimRect;
 
@@ -62,6 +62,7 @@ public:
 	void SetRect(int left, int top, int right, int bottom) { mAimRect.left = left; mAimRect.top = top; mAimRect.right = right; mAimRect.bottom = bottom; }
 
 	void SetGameOver() { mIsGameOver = true; }
+
 
 	const std::wstring GetBullerStr() const { return mBulletStr; }
 	void SetBulletstr();

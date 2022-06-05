@@ -69,7 +69,7 @@ void GFramework::RegisterWnd()
 void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 {
     mhInstance = hInstance;
-    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 200, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), NULL, NULL, hInstance, NULL);
+    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN),300, NULL, NULL, hInstance, NULL);
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
     hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1600, 1200, nullptr, nullptr, hInstance, nullptr);
     /*for (size_t i = 0; i < m_count[stage_count]; i++)
@@ -212,9 +212,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             }
             break;
         }
-        rectView = { User.GetPosition().x, User.GetPosition().y,
-            User.GetPosition().x+WINSIZEX, User.GetPosition().y+ WINSIZEY };
+        rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+            User.GetPosition().x+WINSIZEX - 10, User.GetPosition().y+ WINSIZEY - 10 };
         ClipCursor(&rectView);
+
         User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
         break;
 
@@ -282,7 +283,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 User.Triger = false;
                 KillTimer(hWnd, 3);
                 break;
-            }*/
+            }
+            */
 
 
 
@@ -317,13 +319,17 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC;
+    HDC hDC,memDC;
     PAINTSTRUCT ps;
     HBRUSH hBrush, oldhBrush;
+    
+    static HBITMAP mBitMap_Magazine;
+    static HBITMAP oldBit;
 
     switch (message) {
 
     case WM_CREATE:
+        mBitMap_Magazine = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_UI_BULLET));
         SetTimer(hWnd, 1, 10, NULL);
 
         break;
@@ -358,16 +364,34 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
+        memDC = CreateCompatibleDC(hDC);
+
+
         hBrush = CreateSolidBrush(RGB(255, 0, 0));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
+
         //Score Text Set, TextOut
         User.SetScorestr();
         TextOut(hDC, 0, 50, User.GetScoreStr().c_str(), static_cast<int>(User.GetScoreStr().size()));
+
+        oldBit = (HBITMAP)SelectObject(memDC, mBitMap_Magazine);
+
         //BulletText Set, TextOut
         User.SetBulletstr();
+        for (int i = 0; i < User.GetBullet(); i++)
+        {
+            BitBlt(hDC,i*18,80,10,50,memDC, 0,0, SRCCOPY );
+        }
+        SelectObject(memDC, oldBit);
+        DeleteDC(memDC);
+
         TextOut(hDC, 0, 100, User.GetBullerStr().c_str(), static_cast<int>(User.GetBullerStr().size()));
 
         Rectangle(hDC, 80, 0, User.GetHP(), 20);
+        
+        
+
+        
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);
 

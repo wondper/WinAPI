@@ -144,5 +144,8 @@
     <Image Include="bitmap\bmp00012.bmp">
       <Filter>리소스 파일</Filter>
     </Image>
+    <Image Include="bitmap\item_bul.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
