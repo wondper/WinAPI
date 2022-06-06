@@ -1,11 +1,11 @@
 #include "GameObject.h"
 
-GameObject::GameObject(int ResCode)
+GameObject::GameObject(int *ResCode)
 	: mHP{ 1 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }
 {
 	BITMAP bmp;
 	for (int i = 0; i < 6; ++i)
-		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode));
+		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
 	GetObject(mAppearanceBitmap[0], sizeof(BITMAP), &bmp);
 	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
 	SetType(0);
@@ -20,13 +20,13 @@ void GameObject::PlaySound()
 void GameObject::DrawBitmap(HDC hdc, HDC memdc)
 {
 	HBITMAP oldBit;
-	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[0]);
+	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[1]);
 	BitBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, SRCCOPY);
 	SelectObject(memdc, oldBit);
 	DeleteDC(memdc);
 }
 
-Cake::Cake() : GameObject(IDB_ITEM_CAKE)
+Cake::Cake(int *ResCode) : GameObject(ResCode)
 {
 
 }
