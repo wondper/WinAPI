@@ -444,11 +444,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         //oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
 
         //if (round == 1)
-        
-
-        {   
-            for (int i = 0; i < 3; ++i)
-                //if(gFramework.GetGameObject() != nullptr)
+        {  
+            for (int i = 0; i < STAGE_ONE_MONSTER; ++i)
+                if(gFramework.GetGameObject() != nullptr)
                     gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc);
         }
             //Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));

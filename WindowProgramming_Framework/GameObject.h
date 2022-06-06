@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "resource.h"
 
+
+
 enum class OBJECT_TYPE {CAKE, MAGAZINE, ZOMBIE, BAT, BOSS};
 
 extern HINSTANCE g_hInst;
@@ -17,6 +19,7 @@ private:
 
 	POINT mPosition;
 	HBITMAP mAppearanceBitmap[6];
+	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
 public:
 	GameObject(int ResCode);
 	virtual ~GameObject(){};
@@ -28,6 +31,10 @@ public:
 
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
+
+
+	int GetBitMapAnim() const { return mBitMapAnim; }
+	void SetmBitMapAnim(int BitMapAnim) { mBitMapAnim = BitMapAnim; }
 
 	void SetType(char type) { mType = type; }
 	
