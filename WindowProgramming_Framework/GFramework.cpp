@@ -2,6 +2,7 @@
 GFramework::GFramework()
 {
 	//mhInstance = g_hInst;
+
 }
 
 GFramework::~GFramework()
@@ -49,6 +50,7 @@ void GFramework::InitWCX(WINDOW wnd)
 		wcex.lpszClassName = L"BackGroundWindow";
 		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		mwcxBackGround = wcex;
+        break;
     case WINDOW::Monster:
         wcex.lpfnWndProc = MonsterWndProc;
         wcex.lpszClassName = L"MonsterGroundWindow";
@@ -71,7 +73,7 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
     mhInstance = hInstance;
     hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN),300, NULL, NULL, hInstance, NULL);
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
-    hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, -50, 1600, 1200, nullptr, nullptr, hInstance, nullptr);
+    hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, hInstance, nullptr);
     /*for (size_t i = 0; i < m_count[stage_count]; i++)
     {
         mhMonsterWnd[i] = CreateWindow(L"MonsterGroundWindow", L"Monster", NULL, monster[stage_count][i].P.x, monster[stage_count][i].P.y,
@@ -138,6 +140,12 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 }
 
+void GFramework::CreateMonster(int Round)
+{
+   mGameObject = new Cake[3];
+}
+
+
 bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int bottom)
 {
     if (Mx<right && Mx > left &&
@@ -145,6 +153,10 @@ bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int botto
         return true;
     return false;
 }
+
+
+
+
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -413,26 +425,37 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC;
+    HDC hDC, memdc;
+
     PAINTSTRUCT ps;
     HBRUSH hBrush, oldhBrush;
-
     switch (message)
     {
 
     case WM_CREATE:
         //wndCount++;
+        gFramework.CreateMonster(1);
         return 0;
     break;
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
-        hBrush = CreateSolidBrush(RGB(255, 255, 255));
-        oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
+        memdc = CreateCompatibleDC(hDC);
+        //hBrush = CreateSolidBrush(RGB(255, 255, 255));
+        //oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
 
-        Rectangle(hDC, 0, 0, 3000, 1200);
+        //if (round == 1)
+        
 
-        SelectObject(hDC, hBrush);
-        DeleteObject(hBrush);
+        {   
+            for (int i = 0; i < 3; ++i)
+                //if(gFramework.GetGameObject() != nullptr)
+                    gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc);
+        }
+            //Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+        
+
+        //SelectObject(hDC, hBrush);
+        //DeleteObject(hBrush);
         EndPaint(hWnd, &ps);
         break;
     case WM_DESTROY:
