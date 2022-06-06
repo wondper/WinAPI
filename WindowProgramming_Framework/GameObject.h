@@ -58,34 +58,46 @@ public:
 
 };
 //
-//class Megazine : public GameObject
-//{
-//private:
-//public:
-//	Megazine();
-//	virtual ~Megazine();
-//};
-//
-//class Zombie : public GameObject
-//{
-//private:
-//public:
-//	Zombie();
-//	virtual	~Zombie();
-//};
-//
-//class Bat : public GameObject
-//{
-//private:
-//public:
-//	Bat();
-//	virtual ~Bat();
-//};
-//
-//class Boss : public GameObject
-//{
-//private:
-//public:
-//	Boss();
-//	virtual ~Boss();
-//};
+class Megazine : public GameObject
+{
+private:
+public:
+	Megazine();
+	virtual ~Megazine();
+	virtual void PlaySound();
+	virtual void Anim(char Action);
+	virtual void DrawBitmap(HDC hdc, HDC memdc);
+};
+
+class Zombie : public GameObject
+{
+private:
+public:
+	Zombie();
+	virtual	~Zombie();
+	virtual void PlaySound();
+	virtual void Anim(char Action);
+	virtual void DrawBitmap(HDC hdc, HDC memdc);
+};
+
+class Bat : public GameObject
+{
+private:
+public:
+	Bat();
+	virtual ~Bat();
+	virtual void PlaySound();
+	virtual void Anim(char Action);
+	virtual void DrawBitmap(HDC hdc, HDC memdc);
+};
+
+class Boss : public GameObject
+{
+private:
+public:
+	Boss();
+	virtual ~Boss();
+	virtual void PlaySound();
+	virtual void Anim(char Action);
+	virtual void DrawBitmap(HDC hdc, HDC memdc);
+};

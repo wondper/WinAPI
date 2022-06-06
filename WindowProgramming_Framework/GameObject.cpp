@@ -50,23 +50,68 @@ void Cake::DrawBitmap(HDC hdc, HDC memdc)
 {
 	GameObject::DrawBitmap(hdc, memdc);
 }
-//
-//Megazine::~Megazine()
-//{
-//
-//}
-//
-//Zombie::~Zombie()
-//{
-//
-//}
-//
-//Bat::~Bat()
-//{
-//
-//}
-//
-//Boss::~Boss()
-//{
-//
-//}
+
+
+Megazine::Megazine() : GameObject(IDB_ITEM_BULLET)
+{
+
+}
+
+Megazine::~Megazine()
+{
+
+}
+
+void Megazine::PlaySound()
+{
+
+}
+
+void Megazine::Anim(char Action)
+{
+
+}
+
+void Megazine::DrawBitmap(HDC hdc, HDC memdc)
+{
+	GameObject::DrawBitmap(hdc, memdc);
+}
+
+
+Zombie::Zombie() : GameObject(IDB_MONSTER_ZOMBIE1)
+{
+
+}
+
+Zombie::~Zombie()
+{
+
+}
+
+void Zombie::PlaySound()
+{
+
+}
+
+void Zombie::Anim(char Action)
+{
+
+}
+
+void Zombie::DrawBitmap(HDC hdc, HDC memdc)
+{
+	GameObject::DrawBitmap(hdc, memdc);
+}
+
+
+
+
+Bat::~Bat()
+{
+
+}
+
+Boss::~Boss()
+{
+
+}
