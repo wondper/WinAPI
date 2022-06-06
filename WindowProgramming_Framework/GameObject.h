@@ -26,7 +26,7 @@ public:
 
 	virtual void PlaySound();
 	virtual void Anim(char Action) = 0; // Type에 따라 다른 애니메이션 설정.
-	virtual void DrawBitmap(HDC hdc, HDC memdc);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 
 
 	int GetHP() const { return mHP; }
@@ -38,8 +38,13 @@ public:
 
 	void SetType(char type) { mType = type; }
 	
+
+	int GetWidth() const { return mWidth; }
+	int GetHeight() const { return mHeight; }
 	void SetBitmapFrame(int width, int height) { mWidth = width; mHeight = height; }
 
+
+	POINT GetPosition() const { return mPosition; }
 	void SetPosition(const POINT& Pos) { mPosition = Pos; }
 
 
@@ -54,7 +59,7 @@ public:
 	virtual ~Cake();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
-	virtual void DrawBitmap(HDC hdc, HDC memdc);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 
 };
 
@@ -63,29 +68,31 @@ class Megazine : public GameObject
 {
 private:
 public:
-	Megazine();
+	Megazine(int* ResCode);
 	virtual ~Megazine();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
-	virtual void DrawBitmap(HDC hdc, HDC memdc);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
+
 
 class Zombie : public GameObject
 {
 private:
 public:
-	Zombie();
-	virtual	~Zombie();
+	Zombie(int* ResCode);
+	virtual ~Zombie();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
-	virtual void DrawBitmap(HDC hdc, HDC memdc);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
+/*
 class Bat : public GameObject
 {
 private:
 public:
-	Bat();
+	Bat(int* ResCode);
 	virtual ~Bat();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
@@ -96,9 +103,10 @@ class Boss : public GameObject
 {
 private:
 public:
-	Boss();
+	Boss(int* ResCode);
 	virtual ~Boss();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc);
 };
+*/

@@ -1,7 +1,8 @@
 #include "GameObject.h"
+#pragma comment (lib, "msimg32.lib")
 
 GameObject::GameObject(int *ResCode)
-	: mHP{ 1 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }
+	: mHP{ 1 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{0}
 {
 	BITMAP bmp;
 	for (int i = 0; i < 6; ++i)
@@ -17,11 +18,11 @@ void GameObject::PlaySound()
 	Beep(1, 10);
 }
 
-void GameObject::DrawBitmap(HDC hdc, HDC memdc)
+void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
 	HBITMAP oldBit;
-	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[1]);
-	BitBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, SRCCOPY);
+	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
+	TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0,255,0));
 	SelectObject(memdc, oldBit);
 	DeleteDC(memdc);
 }
@@ -46,13 +47,12 @@ void Cake::Anim(char Action)
 
 }
 
-void Cake::DrawBitmap(HDC hdc, HDC memdc)
+void Cake::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
-	GameObject::DrawBitmap(hdc, memdc);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
 
-
-Megazine::Megazine() : GameObject(IDB_ITEM_BULLET)
+Megazine::Megazine(int* ResCode) : GameObject(ResCode)
 {
 
 }
@@ -72,13 +72,15 @@ void Megazine::Anim(char Action)
 
 }
 
-void Megazine::DrawBitmap(HDC hdc, HDC memdc)
+void Megazine::DrawBitmap(HDC hdc, HDC memdc,int mBitMapAnim)
 {
-	GameObject::DrawBitmap(hdc, memdc);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
 
 
-Zombie::Zombie() : GameObject(IDB_MONSTER_ZOMBIE1)
+
+
+Zombie::Zombie(int* ResCode) : GameObject(ResCode)
 {
 
 }
@@ -98,20 +100,8 @@ void Zombie::Anim(char Action)
 
 }
 
-void Zombie::DrawBitmap(HDC hdc, HDC memdc)
+void Zombie::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
-	GameObject::DrawBitmap(hdc, memdc);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
 
-
-
-
-Bat::~Bat()
-{
-
-}
-
-Boss::~Boss()
-{
-
-}

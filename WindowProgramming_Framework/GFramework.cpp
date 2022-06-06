@@ -146,12 +146,12 @@ void GFramework::CreateMonster(int Round)
     switch (Round)
     {
     case 1:
-        arr[0] = IDB_MONSTER_BEE1;
-        arr[1] = IDB_MONSTER_BEE2;
-        arr[2] = IDB_MONSTER_BEE3;
-        arr[3] = IDB_MONSTER_BEE4;
-        arr[4] = IDB_MONSTER_BEE5;
-        arr[5] = IDB_MONSTER_BEE6;
+        arr[0] = IDB_MONSTER_ZOMBIE1;
+        arr[1] = IDB_MONSTER_ZOMBIE2;
+        arr[2] = IDB_MONSTER_ZOMBIE3;
+        arr[3] = IDB_MONSTER_ZOMBIE4;
+        arr[4] = IDB_MONSTER_ZOMBIE5;
+        arr[5] = IDB_MONSTER_ZOMBIE6;
         break;
     case 2:
         break;
@@ -159,10 +159,11 @@ void GFramework::CreateMonster(int Round)
         break;
     }
 
-    void* raw_memory = operator new[](6 * sizeof(Cake));
-    mGameObject = static_cast<Cake*>(raw_memory);
-    for (int i = 0; i < 6; ++i) {
-        new(&mGameObject[i]) Cake(arr);
+    void* raw_memory = operator new[](6 * sizeof(Zombie));
+    mGameObject = static_cast<Zombie*>(raw_memory);
+    for (int i = 0; i < 6; ++i) 
+    {
+        new(&mGameObject[i]) Zombie(arr);
     }
 
         // destruct in inverse order    
@@ -173,10 +174,10 @@ void GFramework::CreateMonster(int Round)
 }
 
 
-bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int bottom)
+bool MouseCollisionCheck(int Mx, int My,int Mwidth, int Mheight ,int left, int top, int right, int bottom)
 {
-    if (Mx<right && Mx > left &&
-        My<bottom && My > top)
+    if (Mx + Mwidth<right && Mx > left &&
+        My + Mheight<bottom && My > top)
         return true;
     return false;
 }
@@ -260,30 +261,21 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
     case WM_LBUTTONDOWN:
-        /*if (!User.Triger)
-        {
-            User.Bullet -= 1;
-            User.Triger = true;
-            SetTimer(hWnd, 3, 50, NULL);
-
-                for (size_t i = 0; i < m_count[stage_count]; i++)
-                {
-                    if (User.Player_AimintZone.left >= monster[stage_count][i].P.x && User.Player_AimintZone.right <= monster[stage_count][i].P.x + monster[stage_count][i].Win_SizeX)
-                    {
-                        if (User.Player_AimintZone.top >= monster[stage_count][i].P.y && User.Player_AimintZone.bottom <= monster[stage_count][i].P.y + monster[stage_count][i].Win_SizeY)
-                        {
-                            if (!monster[stage_count][i].Dead)
-                            {
-                                monster[stage_count][i].Hp--;
-                                monster[stage_count][i].Stats = 1;
-                            }
-                        }
-                    }
-                }
-
-        }*/
+       
         InvalidateRect(hWnd, NULL, TRUE);
         User.DecreaseBulletCount();
+        for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
+        {
+            if (MouseCollisionCheck(LOWORD(lParam) - 10, HIWORD(lParam) - 10, LOWORD(lParam) + 10, HIWORD(lParam) + 10
+            , gFramework.GetGameObject()[i].GetPosition().x , gFramework.GetGameObject()[i].GetPosition().y , 
+                gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth() , 
+                gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight() ) )
+            {
+                gFramework.GetGameObject()[i].SetHP(gFramework.GetGameObject()[i].GetHP() - 1);
+            }
+        }
+
+
         InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
         break;
 
@@ -369,7 +361,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
     case WM_CREATE:
         mBitMap_Magazine = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_UI_BULLET));
-        SetTimer(hWnd, 1, 10, NULL);
+        
 
         break;
     case WM_LBUTTONDOWN:
@@ -379,14 +371,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         break;
 
     }
-    case WM_TIMER:
-        switch (wParam)
-        {
-        case 1:
-            // UI 업데이트 틱
-            //InvalidateRect(hWnd, NULL, TRUE);
-            break;
-        }
+   
 
         break;
 
@@ -456,14 +441,31 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     PAINTSTRUCT ps;
     HBRUSH hBrush, oldhBrush;
+
+    static int frame = 0;
+
     switch (message)
     {
 
     case WM_CREATE:
         //wndCount++;
-        gFramework.CreateMonster(1);
+        gFramework.CreateMonster(1); 
+        SetTimer(hWnd, 1, 100, NULL);
         return 0;
     break;
+
+    case WM_TIMER:
+        switch (wParam)
+        {
+        case 1:
+            // 몬스터 애니메이션 틱
+            frame %= 5;
+            frame++;
+            InvalidateRect(hWnd, NULL, TRUE);
+            break;
+        }
+
+
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
         memdc = CreateCompatibleDC(hDC);
@@ -474,7 +476,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {  
             for (int i = 0; i < STAGE_ONE_MONSTER; ++i)
                 if(gFramework.GetGameObject() != nullptr)
-                    gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc);
+                    gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, frame);
         }
             //Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
         
