@@ -21,7 +21,7 @@ private:
 	HBITMAP mAppearanceBitmap[6];
 	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
 public:
-	GameObject(int ResCode);
+	GameObject(int ResCode[6]);
 	virtual ~GameObject(){};
 
 	virtual void PlaySound();
@@ -50,13 +50,14 @@ class Cake : public GameObject
 private:
 
 public:
-	Cake();
+	Cake(int* ResCode);
 	virtual ~Cake();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc);
 
 };
+
 //
 //class Megazine : public GameObject
 //{

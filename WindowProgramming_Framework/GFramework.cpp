@@ -142,7 +142,34 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 void GFramework::CreateMonster(int Round)
 {
-   mGameObject = new Cake[3];
+    int arr[6];
+    switch (Round)
+    {
+    case 1:
+        arr[0] = IDB_MONSTER_BEE1;
+        arr[1] = IDB_MONSTER_BEE2;
+        arr[2] = IDB_MONSTER_BEE3;
+        arr[3] = IDB_MONSTER_BEE4;
+        arr[4] = IDB_MONSTER_BEE5;
+        arr[5] = IDB_MONSTER_BEE6;
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    }
+
+    void* raw_memory = operator new[](6 * sizeof(Cake));
+    mGameObject = static_cast<Cake*>(raw_memory);
+    for (int i = 0; i < 6; ++i) {
+        new(&mGameObject[i]) Cake(arr);
+    }
+
+        // destruct in inverse order    
+        /*for (int i = 6 - 1; i >= 0; --i) {
+            mGameObject[i].~GameObject();
+        }
+        operator delete[](raw_memory);*/
 }
 
 
