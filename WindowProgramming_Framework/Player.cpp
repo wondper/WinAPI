@@ -1,8 +1,8 @@
 #include "Player.h"
 
 Player::Player()
-	: mHP{ 1000 },  mWinFrameSpeed{20}, mBullet{ 10 }, mScore{ 1000 },
-	mWeapon{ 1 }, mBulletStr{ NULL }, mScoreStr{NULL}
+	: mHP{ 500 },  mWinFrameSpeed{20}, mBullet{ 10 }, mScore{ 1000 },
+	mWeapon{ 1 }, mBulletStr{ NULL }, mScoreStr{ NULL }, mPosition{ POINT{0,0} }
 {
 }
 

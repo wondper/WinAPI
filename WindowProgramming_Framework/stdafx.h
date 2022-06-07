@@ -13,7 +13,11 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#pragma comment (lib, "msimg32.lib")
+
 
 //C++
 #include<string>
-
+#include<random>
+#include<ctime>
+using namespace std;

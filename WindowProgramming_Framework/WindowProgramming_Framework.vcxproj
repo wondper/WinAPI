@@ -182,6 +182,7 @@
     <Image Include="bitmap\MONSTER_HORSE1.bmp" />
     <Image Include="bitmap\ITEM_CAKE.bmp" />
     <Image Include="Bitmap\Sample2.bmp" />
+    <Image Include="bitmap\ui_bulle.bmp" />
     <Image Include="small.ico" />
     <Image Include="WindowProgramming_Framework.ico" />
   </ItemGroup>

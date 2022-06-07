@@ -2,8 +2,6 @@
 #include "stdafx.h"
 #include "resource.h"
 
-
-
 enum class OBJECT_TYPE {CAKE, MAGAZINE, ZOMBIE, BAT, BOSS};
 
 extern HINSTANCE g_hInst;
@@ -20,6 +18,9 @@ private:
 	POINT mPosition;
 	HBITMAP mAppearanceBitmap[6];
 	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
+
+
+	int mCoolTime; // 공격 쿨타임
 public:
 	GameObject(int ResCode[6]);
 	virtual ~GameObject(){};
@@ -27,8 +28,9 @@ public:
 	virtual void PlaySound();
 	virtual void Anim(char Action) = 0; // Type에 따라 다른 애니메이션 설정.
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
-
-
+	virtual void DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PRight, int PTop, int PBottom);
+	
+	
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
 
@@ -38,10 +40,12 @@ public:
 
 	void SetType(char type) { mType = type; }
 	
-
 	int GetWidth() const { return mWidth; }
 	int GetHeight() const { return mHeight; }
 	void SetBitmapFrame(int width, int height) { mWidth = width; mHeight = height; }
+
+	int GetCoolTime()  const{ return mCoolTime; }
+	void SetCoolTime(int CoolTime) { mCoolTime = CoolTime; }
 
 
 	POINT GetPosition() const { return mPosition; }

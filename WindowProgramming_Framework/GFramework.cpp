@@ -152,6 +152,9 @@ void GFramework::CreateMonster(int Round)
         arr[3] = IDB_MONSTER_ZOMBIE4;
         arr[4] = IDB_MONSTER_ZOMBIE5;
         arr[5] = IDB_MONSTER_ZOMBIE6;
+
+      
+
         break;
     case 2:
         break;
@@ -161,10 +164,11 @@ void GFramework::CreateMonster(int Round)
 
     void* raw_memory = operator new[](6 * sizeof(Zombie));
     mGameObject = static_cast<Zombie*>(raw_memory);
-    for (int i = 0; i < 6; ++i) 
+    for (int i = 0; i < 6; ++i)
     {
         new(&mGameObject[i]) Zombie(arr);
     }
+
 
         // destruct in inverse order    
         /*for (int i = 6 - 1; i >= 0; --i) {
@@ -174,16 +178,22 @@ void GFramework::CreateMonster(int Round)
 }
 
 
-bool MouseCollisionCheck(int Mx, int My,int Mwidth, int Mheight ,int left, int top, int right, int bottom)
+bool MouseCollisionCheck(int Mx, int My ,int left, int top, int right, int bottom)
 {
-    if (Mx + Mwidth<right && Mx > left &&
-        My + Mheight<bottom && My > top)
+    if (left > Mx &&  Mx<right &&
+        top > My && My < bottom)
         return true;
-    return false;
+    else return false;
 }
 
-
-
+bool BoxCollisionCheck(int Box1Left, int Box1Top, int Box1Right, int Box1Bottom, 
+    int Box2Left, int Box2Top, int Box2Right, int Box2Bottom)
+{
+    if ((Box1Left < Box2Right) && (Box1Top < Box2Bottom) &&
+        (Box1Right > Box2Left) && (Box1Bottom > Box2Top))
+        return true;
+    else return false;
+}
 
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -191,10 +201,14 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     HDC hDC, memdc;
     static RECT rectView; // 윈도우창 크기
 
-    HBITMAP AimBit; // 조준점 비트맵 이미지
+    static HBITMAP AimBit; // 조준점 비트맵 이미지
     static HDC AimDC; // 조준점 DC
      
+    static int Trigerframe = 0;
+    static bool Triger = false;
     PAINTSTRUCT ps;
+
+    static POINT AimPosition{0,0};
 
     switch (message)
     {
@@ -202,7 +216,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_CREATE:
         GetClientRect(hWnd, &rectView);
         BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG1_STAGE));
-      
+        AimBit = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_PLAY_AIM));
 
         return 0;
     case WM_CHAR:
@@ -260,22 +274,37 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         break;
 
 
+    case WM_MOUSEMOVE:
+
+      AimPosition = { LOWORD(lParam),HIWORD(lParam)};
+        
+        
+
+        InvalidateRect(hWnd, NULL, TRUE); // UI핸들을 보냄.
+        break;
+    
+    
+    
     case WM_LBUTTONDOWN:
-       
-        InvalidateRect(hWnd, NULL, TRUE);
-        User.DecreaseBulletCount();
-        for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
+
+        if (User.GetBullet() > 0)
         {
-            if (MouseCollisionCheck(LOWORD(lParam) - 10, HIWORD(lParam) - 10, LOWORD(lParam) + 10, HIWORD(lParam) + 10
-            , gFramework.GetGameObject()[i].GetPosition().x , gFramework.GetGameObject()[i].GetPosition().y , 
-                gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth() , 
-                gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight() ) )
+            User.DecreaseBulletCount();
+            for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
             {
-                gFramework.GetGameObject()[i].SetHP(gFramework.GetGameObject()[i].GetHP() - 1);
+                if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                    , gFramework.GetGameObject()[i].GetPosition().x, gFramework.GetGameObject()[i].GetPosition().y,
+                    gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth(),
+                    gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight()))
+                {
+                    gFramework.GetGameObject()[i].SetHP(gFramework.GetGameObject()[i].GetHP() - 1);
+                    User.SetHP(User.GetHP() + 10);
+
+                }
             }
+            Triger = true;
+            SetTimer(hwndMain,3,10,NULL);
         }
-
-
         InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
         break;
 
@@ -286,39 +315,38 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         switch (wParam)
         {
         case 3:
-            /*
-            if(User.Triger)
-            switch (User.TrigerFrame++)
+            if (Triger)
             {
-            case 0:
-                SetWindowPos(hWnd, NULL, User.P.x + 5, User.P.y -5, User.Win_SizeX, User.Win_SizeY, NULL);
-                break;
-            case 1:
-                SetWindowPos(hWnd, NULL, User.P.x - 5, User.P.y - 5, User.Win_SizeX, User.Win_SizeY, NULL);
-                break;
-            case 2:
-                SetWindowPos(hWnd, NULL, User.P.x + 5, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
-                break;
-            case 3:
-                SetWindowPos(hWnd, NULL, User.P.x + 5, User.P.y + 5, User.Win_SizeX, User.Win_SizeY, NULL);
-                break;
-            case 4:
-                SetWindowPos(hWnd, NULL, User.P.x - 5, User.P.y - 5, User.Win_SizeX, User.Win_SizeY, NULL);
-                break;
-            case 5:
-                SetWindowPos(hWnd, NULL, User.P.x - 5, User.P.y - 5, User.Win_SizeX, User.Win_SizeY, NULL);
-                break;
-            case 6:
-                SetWindowPos(hWnd, NULL, User.P.x, User.P.y, User.Win_SizeX, User.Win_SizeY, NULL);
-                User.TrigerFrame = 0;
-                User.Triger = false;
-                KillTimer(hWnd, 3);
-                break;
+                switch (Trigerframe++)
+                {
+                case 0:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, WINSIZEX - 5, WINSIZEY + 5, NULL);
+                    break;
+                case 1:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y - 5, WINSIZEX, WINSIZEY, NULL);
+                    break;
+                case 2:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
+                    break;
+                case 3:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, WINSIZEX, WINSIZEY, NULL);
+                    break;
+                case 4:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y + 5, WINSIZEX, WINSIZEY, NULL);
+                    break;
+                case 5:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, WINSIZEX, WINSIZEY, NULL);
+                    break;
+                case 6:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, WINSIZEX, WINSIZEY, NULL);
+                    Trigerframe = 0;
+                    Triger = false;
+                    KillTimer(hWnd, 3);
+                    break;
+                }
             }
-            */
-
-
-
+            InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+          
 
             break;
         }
@@ -329,7 +357,26 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         gFramework.Draw(hDC);
         memdc = CreateCompatibleDC(hDC);
         SelectObject(memdc, BG_MAP);
-        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.GetPosition().x, User.GetPosition().y, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
+        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.GetPosition().x, User.GetPosition().y, 
+            GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
+
+        SelectObject(memdc, AimBit);
+        TransparentBlt(hDC, AimPosition.x, AimPosition.y, 134/2, 134/2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
+        SelectObject(memdc, AimBit);
+        DeleteDC(memdc);
+
+        for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
+        {
+            if (BoxCollisionCheck(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + WINSIZEX, User.GetPosition().y + WINSIZEY,
+                gFramework.GetGameObject()[i].GetPosition().x, gFramework.GetGameObject()[i].GetPosition().y,
+                gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth(),
+                gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight()))
+            {
+                gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim());
+            }
+        }
+
+
 
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
@@ -409,12 +456,9 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         SelectObject(memDC, oldBit);
         DeleteDC(memDC);
 
-        TextOut(hDC, 0, 100, User.GetBullerStr().c_str(), static_cast<int>(User.GetBullerStr().size()));
-
-        Rectangle(hDC, 80, 0, User.GetHP(), 20);
+        Rectangle(hDC, 300, 130, User.GetHP(), 20);
         
-        
-
+     
         
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);
@@ -459,8 +503,13 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
         case 1:
             // 몬스터 애니메이션 틱
-            frame %= 5;
-            frame++;
+            for (int i = 0; i < STAGE_ONE_MONSTER; ++i)
+            {
+                if (gFramework.GetGameObject() != nullptr)
+                {
+                    gFramework.GetGameObject()[i].SetmBitMapAnim((gFramework.GetGameObject()[i].GetBitMapAnim() + 1 )% 5);
+                }
+            }
             InvalidateRect(hWnd, NULL, TRUE);
             break;
         }
@@ -469,20 +518,22 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
         memdc = CreateCompatibleDC(hDC);
-        //hBrush = CreateSolidBrush(RGB(255, 255, 255));
-        //oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
 
         //if (round == 1)
-        {  
+        {
             for (int i = 0; i < STAGE_ONE_MONSTER; ++i)
-                if(gFramework.GetGameObject() != nullptr)
-                    gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, frame);
+            if (gFramework.GetGameObject() != nullptr) gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim());
         }
-            //Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-        
+     /*
+     hBrush = CreateSolidBrush(RGB(255, 255, 255));
+     oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
+       Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+     SelectObject(hDC, hBrush);
+     DeleteObject(hBrush);
+     */
 
-        //SelectObject(hDC, hBrush);
-        //DeleteObject(hBrush);
+
+
         EndPaint(hWnd, &ps);
         break;
     case WM_DESTROY:
