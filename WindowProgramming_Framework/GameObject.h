@@ -6,6 +6,8 @@ enum class OBJECT_TYPE {CAKE, MAGAZINE, ZOMBIE, BAT, BOSS};
 
 extern HINSTANCE g_hInst;
 
+
+
 class GameObject
 {
 private:
@@ -26,7 +28,7 @@ public:
 	virtual ~GameObject(){};
 
 	virtual void PlaySound();
-	virtual void Anim(char Action) = 0; // Type에 따라 다른 애니메이션 설정.
+	virtual void Anim(char Action) {}; // Type에 따라 다른 애니메이션 설정.
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 	virtual void DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PRight, int PTop, int PBottom);
 	

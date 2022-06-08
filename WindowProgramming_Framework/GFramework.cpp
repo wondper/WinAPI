@@ -2,7 +2,12 @@
 GFramework::GFramework()
 {
 	//mhInstance = g_hInst;
-
+    void* raw_memory = operator new[](2 * sizeof(GameObject*));
+    mGameObject = static_cast<GameObject**>(raw_memory);
+    for (int i = 0; i < 2; ++i)
+    {
+        new(&mGameObject[i]) GameObject*;
+    }
 }
 
 GFramework::~GFramework()
@@ -74,11 +79,7 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
     hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN),300, NULL, NULL, hInstance, NULL);
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
     hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, hInstance, nullptr);
-    /*for (size_t i = 0; i < m_count[stage_count]; i++)
-    {
-        mhMonsterWnd[i] = CreateWindow(L"MonsterGroundWindow", L"Monster", NULL, monster[stage_count][i].P.x, monster[stage_count][i].P.y,
-            monster[stage_count][i].Win_SizeX, monster[stage_count][i].Win_SizeY, NULL, NULL, hInstance, NULL);
-    }*/
+
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
 
@@ -140,20 +141,26 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 }
 
+int RoundZombie = STAGE_ONE_MONSTER;
 void GFramework::CreateMonster(int Round)
 {
-    int arr[6];
+    int ZombieSprite[6], CakeSprite[6];
     switch (Round)
     {
     case 1:
-        arr[0] = IDB_MONSTER_ZOMBIE1;
-        arr[1] = IDB_MONSTER_ZOMBIE2;
-        arr[2] = IDB_MONSTER_ZOMBIE3;
-        arr[3] = IDB_MONSTER_ZOMBIE4;
-        arr[4] = IDB_MONSTER_ZOMBIE5;
-        arr[5] = IDB_MONSTER_ZOMBIE6;
+        ZombieSprite[0] = IDB_MONSTER_ZOMBIE1;
+        ZombieSprite[1] = IDB_MONSTER_ZOMBIE2;
+        ZombieSprite[2] = IDB_MONSTER_ZOMBIE3;
+        ZombieSprite[3] = IDB_MONSTER_ZOMBIE4;
+        ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
+        ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
 
-      
+       CakeSprite[0] = IDB_ITEM_CAKE;
+       CakeSprite[1] = IDB_ITEM_CAKE;
+       CakeSprite[2] = IDB_ITEM_CAKE;
+       CakeSprite[3] = IDB_ITEM_CAKE;
+       CakeSprite[4] = IDB_ITEM_CAKE;
+       CakeSprite[5] = IDB_ITEM_CAKE;
 
         break;
     case 2:
@@ -162,12 +169,20 @@ void GFramework::CreateMonster(int Round)
         break;
     }
 
-    void* raw_memory = operator new[](6 * sizeof(Zombie));
-    mGameObject = static_cast<Zombie*>(raw_memory);
-    for (int i = 0; i < 6; ++i)
+    void* raw_memory = operator new[](RoundZombie * sizeof(Zombie));
+    mGameObject[0] = static_cast<Zombie*>(raw_memory);
+    for (int i = 0; i < 3; ++i)
     {
-        new(&mGameObject[i]) Zombie(arr);
+        new(&mGameObject[0][i]) Zombie(ZombieSprite);
     }
+
+    raw_memory = operator new[](3 * sizeof(Cake));
+    mGameObject[1] = static_cast<Cake*>(raw_memory);
+    for (int i = 0; i < 3; ++i)
+    {
+        new(&mGameObject[1][i]) Cake(CakeSprite);
+    }
+
 
 
         // destruct in inverse order    
@@ -301,14 +316,16 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             User.DecreaseBulletCount();
             for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
             {
-                if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
-                    , gFramework.GetGameObject()[i].GetPosition().x, gFramework.GetGameObject()[i].GetPosition().y,
-                    gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth(),
-                    gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight()))
-                {
-                    gFramework.GetGameObject()[i].SetHP(gFramework.GetGameObject()[i].GetHP() - 1);
-                    User.SetHP(User.GetHP() + 10);
+                for (size_t j = 0; j < STAGE_ONE_OBJECT_KIND; ++j) {
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , gFramework.GetGameObject()[j][i].GetPosition().x, gFramework.GetGameObject()[j][i].GetPosition().y,
+                        gFramework.GetGameObject()[j][i].GetPosition().x + gFramework.GetGameObject()[j][i].GetWidth(),
+                        gFramework.GetGameObject()[j][i].GetPosition().y + gFramework.GetGameObject()[j][i].GetHeight()))
+                    {
+                        gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                        User.SetHP(User.GetHP() + 10);
 
+                    }
                 }
             }
             Triger = true;
@@ -378,13 +395,16 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
         for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
         {
-            if (BoxCollisionCheck(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + WINSIZEX, User.GetPosition().y + WINSIZEY,
-                gFramework.GetGameObject()[i].GetPosition().x, gFramework.GetGameObject()[i].GetPosition().y,
-                gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth(),
-                gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight()))
+            for (size_t j = 0; j < STAGE_ONE_OBJECT_KIND; ++j)
             {
-                gFramework.GetGameObject()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
-                    User.GetPosition().x + WINSIZEX, User.GetPosition().y + WINSIZEY);
+                if (BoxCollisionCheck(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + WINSIZEX, User.GetPosition().y + WINSIZEY,
+                    gFramework.GetGameObject()[j][i].GetPosition().x, gFramework.GetGameObject()[j][i].GetPosition().y,
+                    gFramework.GetGameObject()[j][i].GetPosition().x + gFramework.GetGameObject()[j][i].GetWidth(),
+                    gFramework.GetGameObject()[j][i].GetPosition().y + gFramework.GetGameObject()[j][i].GetHeight()))
+                {
+                    gFramework.GetGameObject()[j][i].DrawPlayerWindow(hDC, memdc, gFramework.GetGameObject()[j][i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                        User.GetPosition().x + WINSIZEX, User.GetPosition().y + WINSIZEY);
+                }
             }
         }
 
@@ -430,8 +450,6 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         break;
 
     }
-   
-
         break;
 
     case WM_CHAR:
@@ -492,7 +510,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC, memdc;
+    HDC hDC, memdc, mem1dc;
 
     PAINTSTRUCT ps;
     HBRUSH hBrush, oldhBrush;
@@ -516,9 +534,10 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             // 몬스터 애니메이션 틱
             for (int i = 0; i < STAGE_ONE_MONSTER; ++i)
             {
-                if (gFramework.GetGameObject() != nullptr)
+                for(int j=0;j< STAGE_ONE_OBJECT_KIND;++j)
+                if (gFramework.GetGameObject()[j] != nullptr)
                 {
-                    gFramework.GetGameObject()[i].SetmBitMapAnim((gFramework.GetGameObject()[i].GetBitMapAnim() + 1 )% 5);
+                    gFramework.GetGameObject()[j][i].SetmBitMapAnim((gFramework.GetGameObject()[j][i].GetBitMapAnim() + 1 )% 5);
                 }
             }
             InvalidateRect(hWnd, NULL, TRUE);
@@ -532,9 +551,12 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
         //if (round == 1)
         {
-            for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
+            for (int j = 0; j < STAGE_ONE_OBJECT_KIND; ++j) 
             {
-                gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim());
+                for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
+                {
+                    gFramework.GetGameObject()[j][i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[j][i].GetBitMapAnim());
+                }
             }
         }
      /*
@@ -546,6 +568,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
      */
 
 
+        DeleteDC(memdc);
 
         EndPaint(hWnd, &ps);
         break;

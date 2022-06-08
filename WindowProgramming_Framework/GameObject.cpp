@@ -31,10 +31,9 @@ void GameObject::PlaySound()
 void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
 	HBITMAP oldBit;
-	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
+	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]); 
 	TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0,255,0));
 	SelectObject(memdc, oldBit);
-	DeleteDC(memdc);
 }
 
 void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PTop, int PRight, int PBottom)
