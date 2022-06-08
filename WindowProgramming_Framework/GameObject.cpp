@@ -7,8 +7,6 @@ GameObject::GameObject(int *ResCode)
 		random_device rd;
 		mt19937 mersenne(rd());
 		
-		
-		
 	BITMAP bmp;
 	for (int i = 0; i < 6; ++i)
 		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
@@ -39,11 +37,11 @@ void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 	DeleteDC(memdc);
 }
 
-void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PRight, int PTop, int PBottom)
+void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PTop, int PRight, int PBottom)
 {
 	HBITMAP oldBit;
 	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
-	TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+	TransparentBlt(hdc, 0, 0,100, 100, memdc, 0, 0, 100, 100, RGB(0, 255, 0));
 	SelectObject(memdc, oldBit);
 	DeleteDC(memdc);
 }

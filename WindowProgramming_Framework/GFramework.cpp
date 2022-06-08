@@ -178,6 +178,8 @@ void GFramework::CreateMonster(int Round)
 }
 
 
+
+
 bool MouseCollisionCheck(int Mx, int My ,int left, int top, int right, int bottom)
 {
     if (left > Mx &&  Mx<right &&
@@ -209,14 +211,24 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     PAINTSTRUCT ps;
 
     static POINT AimPosition{0,0};
+    static int AimWidth;
+    static int AimHeight;
+
+    BITMAP bmp;
+
+
 
     switch (message)
     {
 
     case WM_CREATE:
         GetClientRect(hWnd, &rectView);
-        BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG1_STAGE));
+
         AimBit = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_PLAY_AIM));
+        GetObject(AimBit, sizeof(BITMAP), &bmp);
+        AimWidth = bmp.bmWidth;
+        AimHeight = bmp.bmHeight;
+        BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG1_STAGE));
 
         return 0;
     case WM_CHAR:
@@ -276,10 +288,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     case WM_MOUSEMOVE:
 
-      AimPosition = { LOWORD(lParam),HIWORD(lParam)};
-        
-        
-
+      AimPosition = { LOWORD(lParam) ,HIWORD(lParam) };
         InvalidateRect(hWnd, NULL, TRUE); // UIÇÚµéÀ» º¸³¿.
         break;
     
@@ -361,9 +370,11 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
 
         SelectObject(memdc, AimBit);
-        TransparentBlt(hDC, AimPosition.x, AimPosition.y, 134/2, 134/2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
+        TransparentBlt(hDC, AimPosition.x - AimWidth/4, AimPosition.y - AimHeight / 4, AimWidth/2, AimHeight/2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
         SelectObject(memdc, AimBit);
         DeleteDC(memdc);
+
+    
 
         for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
         {
@@ -372,7 +383,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 gFramework.GetGameObject()[i].GetPosition().x + gFramework.GetGameObject()[i].GetWidth(),
                 gFramework.GetGameObject()[i].GetPosition().y + gFramework.GetGameObject()[i].GetHeight()))
             {
-                gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim());
+                gFramework.GetGameObject()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                    User.GetPosition().x + WINSIZEX, User.GetPosition().y + WINSIZEY);
             }
         }
 
@@ -436,7 +448,6 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
         memDC = CreateCompatibleDC(hDC);
-
 
         hBrush = CreateSolidBrush(RGB(255, 0, 0));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
@@ -521,8 +532,10 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
         //if (round == 1)
         {
-            for (int i = 0; i < STAGE_ONE_MONSTER; ++i)
-            if (gFramework.GetGameObject() != nullptr) gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim());
+            for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
+            {
+                gFramework.GetGameObject()[i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[i].GetBitMapAnim());
+            }
         }
      /*
      hBrush = CreateSolidBrush(RGB(255, 255, 255));
