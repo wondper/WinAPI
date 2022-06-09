@@ -6,8 +6,7 @@
 #define stage 3 // 스테이지 개수 입니다
 #define MAX_m 10 // 최대 몬스터 생성 갯수입니다.
 #define STAGE_ONE_MONSTER 3 // 최대 몬스터 생성 갯수입니다.
-#define STAGE_ONE_OBJECT_KIND 2
-
+#define STAGE_ONE_OBJECT_KIND 6
 static HBITMAP BG_MAP;
 
 static HWND hwndMain;
@@ -116,6 +115,7 @@ public:
 	GameObject** GetGameObject() { return mGameObject; }
 
 	void CreateMonster(int Round);
+	void CreateItem();
 		
 	//Create Item
 

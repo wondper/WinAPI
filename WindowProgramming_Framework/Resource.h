@@ -53,8 +53,9 @@
 #define IDB_MONSTER_BEE4                159
 #define IDB_MONSTER_BEE5                160
 #define IDB_MONSTER_BEE6                161
-#define IDB_UI_BULLET1                  162
 #define IDB_PLAY_AIM                    162
+#define IDB_ITEM_MAGAZINE1              163
+#define IDB_ITEM_SCOPE                  163
 #define IDC_STATIC                      -1
 
 // Next default values for new objects

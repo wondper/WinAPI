@@ -2,11 +2,9 @@
 #include "stdafx.h"
 #include "resource.h"
 
-enum class OBJECT_TYPE {CAKE, MAGAZINE, ZOMBIE, BAT, BOSS};
+enum class OBJECT_TYPE {CAKE, MAGAZINE, SCOPE, ZOMBIE, BAT, BOSS , END};
 
 extern HINSTANCE g_hInst;
-
-
 
 class GameObject
 {
@@ -81,6 +79,17 @@ public:
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
+class Scope : public GameObject
+{
+private:
+public:
+	Scope(int* ResCode);
+	virtual ~Scope();
+	virtual void PlaySound();
+	virtual void Anim(char Action);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
+};
+
 
 class Zombie : public GameObject
 {
@@ -93,7 +102,6 @@ public:
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
-/*
 class Bat : public GameObject
 {
 private:
@@ -102,7 +110,7 @@ public:
 	virtual ~Bat();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
-	virtual void DrawBitmap(HDC hdc, HDC memdc);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
 class Boss : public GameObject
@@ -113,6 +121,5 @@ public:
 	virtual ~Boss();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
-	virtual void DrawBitmap(HDC hdc, HDC memdc);
+	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
-*/

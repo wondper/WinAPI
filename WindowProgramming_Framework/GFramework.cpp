@@ -1,10 +1,11 @@
 #include "GFramework.h"
 GFramework::GFramework()
 {
+    
 	//mhInstance = g_hInst;
-    void* raw_memory = operator new[](2 * sizeof(GameObject*));
+    void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{OBJECT_TYPE::END}) *sizeof(GameObject*));
     mGameObject = static_cast<GameObject**>(raw_memory);
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END }); ++i)
     {
         new(&mGameObject[i]) GameObject*;
     }
@@ -144,7 +145,7 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 int RoundZombie = STAGE_ONE_MONSTER;
 void GFramework::CreateMonster(int Round)
 {
-    int ZombieSprite[6], CakeSprite[6];
+    int ZombieSprite[6];
     switch (Round)
     {
     case 1:
@@ -155,12 +156,7 @@ void GFramework::CreateMonster(int Round)
         ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
         ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
 
-       CakeSprite[0] = IDB_ITEM_CAKE;
-       CakeSprite[1] = IDB_ITEM_CAKE;
-       CakeSprite[2] = IDB_ITEM_CAKE;
-       CakeSprite[3] = IDB_ITEM_CAKE;
-       CakeSprite[4] = IDB_ITEM_CAKE;
-       CakeSprite[5] = IDB_ITEM_CAKE;
+       
 
         break;
     case 2:
@@ -174,14 +170,13 @@ void GFramework::CreateMonster(int Round)
     for (int i = 0; i < 3; ++i)
     {
         new(&mGameObject[0][i]) Zombie(ZombieSprite);
+
+        // STAGE_ONE_OBJECT_KIND 의 값을 2에서 6으로 바꾼 후,
+        // &mGameObject[static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::ZOMBIE })][i] == &mGameObject[3][i]
+        //  에 값을 넣었을때 게임이 꺼짐
     }
 
-    raw_memory = operator new[](3 * sizeof(Cake));
-    mGameObject[1] = static_cast<Cake*>(raw_memory);
-    for (int i = 0; i < 3; ++i)
-    {
-        new(&mGameObject[1][i]) Cake(CakeSprite);
-    }
+   
 
 
 
@@ -190,6 +185,25 @@ void GFramework::CreateMonster(int Round)
             mGameObject[i].~GameObject();
         }
         operator delete[](raw_memory);*/
+}
+
+
+void GFramework::CreateItem()
+{
+    int CakeSprite[6];
+    CakeSprite[0] = IDB_ITEM_CAKE;
+    CakeSprite[1] = IDB_ITEM_CAKE;
+    CakeSprite[2] = IDB_ITEM_CAKE;
+    CakeSprite[3] = IDB_ITEM_CAKE;
+    CakeSprite[4] = IDB_ITEM_CAKE;
+    CakeSprite[5] = IDB_ITEM_CAKE;
+
+    void* raw_memory = operator new[](3 * sizeof(Cake));
+    mGameObject[1] = static_cast<Cake*>(raw_memory);
+    for (int i = 0; i < 3; ++i)
+    {
+        new(&mGameObject[1][i]) Cake(CakeSprite);
+    }
 }
 
 
@@ -393,6 +407,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     
 
+        // 플레이어와 게임오브젝트의 위치가 겹칠때 겹친 위치에 이미지가 출력됨 (미완성)
         for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
         {
             for (size_t j = 0; j < STAGE_ONE_OBJECT_KIND; ++j)
@@ -523,6 +538,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     case WM_CREATE:
         //wndCount++;
         gFramework.CreateMonster(1); 
+        gFramework.CreateItem();
         SetTimer(hWnd, 1, 100, NULL);
         return 0;
     break;

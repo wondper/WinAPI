@@ -98,6 +98,31 @@ void Megazine::DrawBitmap(HDC hdc, HDC memdc,int mBitMapAnim)
 }
 
 
+Scope::Scope(int* ResCode) : GameObject(ResCode)
+{
+
+}
+
+Scope::~Scope()
+{
+
+}
+
+void Scope::PlaySound()
+{
+
+}
+
+void Scope::Anim(char Action)
+{
+
+}
+
+void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+{
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+}
+
 
 
 Zombie::Zombie(int* ResCode) : GameObject(ResCode)
@@ -121,6 +146,57 @@ void Zombie::Anim(char Action)
 }
 
 void Zombie::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+{
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+}
+
+Bat::Bat(int* ResCode) : GameObject(ResCode)
+{
+
+}
+
+Bat::~Bat()
+{
+
+}
+
+void Bat::PlaySound()
+{
+
+}
+
+void Bat::Anim(char Action)
+{
+
+}
+
+void Bat::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+{
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+}
+
+
+Boss::Boss(int* ResCode) : GameObject(ResCode)
+{
+
+}
+
+Boss::~Boss()
+{
+
+}
+
+void Boss::PlaySound()
+{
+
+}
+
+void Boss::Anim(char Action)
+{
+
+}
+
+void Boss::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
 	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
