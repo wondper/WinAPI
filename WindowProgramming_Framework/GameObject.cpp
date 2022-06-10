@@ -7,13 +7,11 @@ GameObject::GameObject(int *ResCode)
 		random_device rd;
 		mt19937 mersenne(rd());
 		
-	BITMAP bmp;
-	for (int i = 0; i < 6; ++i)
-		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
-
-	GetObject(mAppearanceBitmap[0], sizeof(BITMAP), &bmp);
-	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
-	SetType(0);
+		BITMAP bmp;
+		SetBitmap(ResCode);
+		auto bitmap = GetBitmap();
+		GetObject(bitmap[0], sizeof(BITMAP), &bmp);
+		SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
 
 	uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - mWidth);
 	mPosition.x = rand_X(mersenne);
@@ -45,11 +43,18 @@ void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft
 	DeleteDC(memdc);
 }
 
+void GameObject::SetBitmap(int* ResCode)
+{
+	for(int i=0;i<6;++i)
+		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
+}
+
+
 
 
 Cake::Cake(int *ResCode) : GameObject(ResCode)
 {
-
+	SetType(0);
 }
 
 Cake::~Cake()
@@ -74,7 +79,7 @@ void Cake::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 
 Megazine::Megazine(int* ResCode) : GameObject(ResCode)
 {
-
+	SetType(1);
 }
 
 Megazine::~Megazine()
@@ -100,7 +105,7 @@ void Megazine::DrawBitmap(HDC hdc, HDC memdc,int mBitMapAnim)
 
 Scope::Scope(int* ResCode) : GameObject(ResCode)
 {
-
+	SetType(2);
 }
 
 Scope::~Scope()
@@ -127,7 +132,7 @@ void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 
 Zombie::Zombie(int* ResCode) : GameObject(ResCode)
 {
-
+	SetType(3);
 }
 
 Zombie::~Zombie()
@@ -150,27 +155,27 @@ void Zombie::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
 
-Bat::Bat(int* ResCode) : GameObject(ResCode)
+Bee::Bee(int* ResCode) : GameObject(ResCode)
+{
+	SetType(4);
+}
+
+Bee::~Bee()
 {
 
 }
 
-Bat::~Bat()
+void Bee::PlaySound()
 {
 
 }
 
-void Bat::PlaySound()
+void Bee::Anim(char Action)
 {
 
 }
 
-void Bat::Anim(char Action)
-{
-
-}
-
-void Bat::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+void Bee::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
 	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
@@ -178,7 +183,7 @@ void Bat::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 
 Boss::Boss(int* ResCode) : GameObject(ResCode)
 {
-
+	SetType(5);
 }
 
 Boss::~Boss()

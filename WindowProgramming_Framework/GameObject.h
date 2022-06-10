@@ -51,7 +51,9 @@ public:
 	POINT GetPosition() const { return mPosition; }
 	void SetPosition(const POINT& Pos) { mPosition = Pos; }
 
+	void SetBitmap(int* ResCode);
 
+	HBITMAP* GetBitmap() { return mAppearanceBitmap; }
 };
 
 class Cake : public GameObject
@@ -102,12 +104,12 @@ public:
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
-class Bat : public GameObject
+class Bee : public GameObject
 {
 private:
 public:
-	Bat(int* ResCode);
-	virtual ~Bat();
+	Bee(int* ResCode);
+	virtual ~Bee();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
