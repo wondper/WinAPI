@@ -3,13 +3,14 @@
 #include "resource.h"
 
 enum class OBJECT_TYPE {CAKE, MAGAZINE, SCOPE, ZOMBIE, BAT, BOSS , END};
+enum class OBJECT_ACTION {CREATE, ATTACK, BOSS_SKIL ,DEAD };
 
 extern HINSTANCE g_hInst;
 
 class GameObject
 {
 private:
-	char mType = -1;
+	int mType = -1;
 	int mHP;
 
 	int mWidth;
@@ -26,7 +27,7 @@ public:
 	virtual ~GameObject(){};
 
 	virtual void PlaySound();
-	virtual void Anim(char Action) {}; // Type에 따라 다른 애니메이션 설정.
+	virtual void Anim(int Action) {}; // Type에 따라 다른 애니메이션 설정.
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 	virtual void DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PRight, int PTop, int PBottom);
 	
@@ -38,7 +39,7 @@ public:
 	int GetBitMapAnim() const { return mBitMapAnim; }
 	void SetmBitMapAnim(int BitMapAnim) { mBitMapAnim = BitMapAnim; }
 
-	void SetType(char type) { mType = type; }
+	void SetType(int type) { mType = type; }
 	
 	int GetWidth() const { return mWidth; }
 	int GetHeight() const { return mHeight; }
@@ -62,7 +63,7 @@ public:
 	Cake(int* ResCode);
 	virtual ~Cake();
 	virtual void PlaySound();
-	virtual void Anim(char Action);
+	virtual void Anim(int Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 
 };
@@ -75,7 +76,7 @@ public:
 	Megazine(int* ResCode);
 	virtual ~Megazine();
 	virtual void PlaySound();
-	virtual void Anim(char Action);
+	virtual void Anim(int Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
@@ -86,7 +87,7 @@ public:
 	Scope(int* ResCode);
 	virtual ~Scope();
 	virtual void PlaySound();
-	virtual void Anim(char Action);
+	virtual void Anim(int Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
@@ -98,7 +99,7 @@ public:
 	Zombie(int* ResCode);
 	virtual ~Zombie();
 	virtual void PlaySound();
-	virtual void Anim(char Action);
+	virtual void Anim(int Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
@@ -109,7 +110,7 @@ public:
 	Bat(int* ResCode);
 	virtual ~Bat();
 	virtual void PlaySound();
-	virtual void Anim(char Action);
+	virtual void Anim(int Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
 
@@ -120,6 +121,6 @@ public:
 	Boss(int* ResCode);
 	virtual ~Boss();
 	virtual void PlaySound();
-	virtual void Anim(char Action);
+	virtual void Anim(int Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 };
