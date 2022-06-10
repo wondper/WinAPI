@@ -402,7 +402,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
         SelectObject(memdc, AimBit);
         TransparentBlt(hDC, AimPosition.x - AimWidth/4, AimPosition.y - AimHeight / 4, AimWidth/2, AimHeight/2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
-       
+        SelectObject(memdc, AimBit);
+        DeleteDC(memdc);
+
     
 
         // 플레이어와 게임오브젝트의 위치가 겹칠때 겹친 위치에 이미지가 출력됨 (미완성)
@@ -422,7 +424,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         }
 
 
-        SelectObject(memdc, AimBit);
+
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
         return 0;
@@ -569,7 +571,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             {
                 for (size_t i = 0; i < STAGE_ONE_MONSTER; i++)
                 {
-               //     gFramework.GetGameObject()[j][i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[j][i].GetBitMapAnim());
+                    gFramework.GetGameObject()[j][i].DrawBitmap(hDC, memdc, gFramework.GetGameObject()[j][i].GetBitMapAnim());
                 }
             }
         }

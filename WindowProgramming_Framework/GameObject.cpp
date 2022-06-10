@@ -1,8 +1,8 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(int* ResCode)
-	: mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{ 0 }
+GameObject::GameObject(int *ResCode)
+	: mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{0}
 {
 		random_device rd;
 		mt19937 mersenne(rd());
@@ -40,15 +40,16 @@ void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft
 {
 	HBITMAP oldBit;
 	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
-	TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+	TransparentBlt(hdc, 0, 0,100, 100, memdc, 0, 0, 100, 100, RGB(0, 255, 0));
 	SelectObject(memdc, oldBit);
+	DeleteDC(memdc);
 }
 
 
 
-Cake::Cake(int* ResCode) : GameObject(ResCode) 
+Cake::Cake(int *ResCode) : GameObject(ResCode)
 {
-	
+
 }
 
 Cake::~Cake()
@@ -61,7 +62,7 @@ void Cake::PlaySound()
 
 }
 
-void Cake::Anim(int Action)
+void Cake::Anim(char Action)
 {
 
 }
@@ -86,7 +87,7 @@ void Megazine::PlaySound()
 
 }
 
-void Megazine::Anim(int Action)
+void Megazine::Anim(char Action)
 {
 
 }
@@ -112,7 +113,7 @@ void Scope::PlaySound()
 
 }
 
-void Scope::Anim(int Action)
+void Scope::Anim(char Action)
 {
 
 }
@@ -139,7 +140,7 @@ void Zombie::PlaySound()
 
 }
 
-void Zombie::Anim(int Action)
+void Zombie::Anim(char Action)
 {
 
 }
@@ -164,7 +165,7 @@ void Bat::PlaySound()
 
 }
 
-void Bat::Anim(int Action)
+void Bat::Anim(char Action)
 {
 
 }
@@ -190,7 +191,7 @@ void Boss::PlaySound()
 
 }
 
-void Boss::Anim(int Action)
+void Boss::Anim(char Action)
 {
 
 }
