@@ -56,6 +56,8 @@
 #define IDB_PLAY_AIM                    162
 #define IDB_ITEM_MAGAZINE1              163
 #define IDB_ITEM_SCOPE                  163
+#define IDB_UI_BULLET1                  164
+#define IDB_UI_BACKGROUND               164
 #define IDC_STATIC                      -1
 
 // Next default values for new objects

@@ -171,6 +171,7 @@
     <Image Include="bitmap\bmp00010.bmp" />
     <Image Include="bitmap\bmp00011.bmp" />
     <Image Include="bitmap\bmp00012.bmp" />
+    <Image Include="bitmap\bmp00013.bmp" />
     <Image Include="bitmap\item_bul.bmp" />
     <Image Include="bitmap\item_mag.bmp" />
     <Image Include="bitmap\monster_.bmp" />

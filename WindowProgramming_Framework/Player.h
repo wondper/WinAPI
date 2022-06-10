@@ -2,8 +2,6 @@
 #include "stdafx.h"
 
 constexpr int FRAME_SPEED = 20;
-constexpr int WINSIZEX = 200;
-constexpr int WINSIZEY = 200;
 constexpr int WINSIZE_WIDEX = 400;
 constexpr int WINSIZE_WIDHY = 400;
 constexpr int AIMSIZEX = 40;
@@ -16,6 +14,9 @@ private:
 
 	int mHP;
 	int mWinFrameSpeed ;
+
+	int mWinSizeX = 200;
+	int mWinSizeY = 200;
 
 	int mBullet;
 	int mScore;
@@ -48,6 +49,14 @@ public:
 	void SetHP(int hp) { mHP = hp; }
 
 	void DecreaseBulletCount() { --mBullet; }
+
+
+	int GetWinSizeX() const { return mWinSizeX; }
+	void SetWinSizeX(int WinSizeX) { mWinSizeX = WinSizeX; }
+
+	int GetWinSizeY() const { return mWinSizeY; }
+	void SetWinSizeY(int WinSizeY) { mWinSizeY = WinSizeY; }
+
 
 	int GetBullet() const { return mBullet; }
 	void SetBullet(int bullet) { mBullet = bullet; }

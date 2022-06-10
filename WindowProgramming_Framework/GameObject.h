@@ -34,6 +34,8 @@ public:
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
 
+	int GetType() const { return mType; }
+
 
 	int GetBitMapAnim() const { return mBitMapAnim; }
 	void SetmBitMapAnim(int BitMapAnim) { mBitMapAnim = BitMapAnim; }

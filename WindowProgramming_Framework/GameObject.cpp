@@ -38,9 +38,8 @@ void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft
 {
 	HBITMAP oldBit;
 	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
-	TransparentBlt(hdc, 0, 0,100, 100, memdc, 0, 0, 100, 100, RGB(0, 255, 0));
+	TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 	SelectObject(memdc, oldBit);
-	DeleteDC(memdc);
 }
 
 void GameObject::SetBitmap(int* ResCode)
