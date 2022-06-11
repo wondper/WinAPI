@@ -37,6 +37,15 @@
 
 #define BITMAP_SPRITE_COUNT 6
 #define MAX_OBJECT_KIND 6
+
+
+#define MONSTER_CREATE 0
+#define MONSTER_ATTACK 1
+#define MONSTER_DEATH 2
+
+#define MONSTER_NONE 10
+
+
 static HBITMAP BG_MAP;
 
 static HWND hwndMain;

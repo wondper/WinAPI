@@ -30,7 +30,6 @@ public:
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim);
 	virtual void DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PRight, int PTop, int PBottom);
 	
-	
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
 

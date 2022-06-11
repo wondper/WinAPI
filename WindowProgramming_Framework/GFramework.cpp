@@ -107,7 +107,7 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
 
-    //for (size_t i = 0; i < MAX_m; i++)
+    //for (int i = 0; i < MAX_m; i++)
     //{
     //    ShowWindow(mhMonsterWnd[i], nCmdShow);
     //}
@@ -451,9 +451,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
             }
 
-            for (size_t j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
+            for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
             {
-                for (size_t i = 0; i < ICount[j]; i++) {
+                for (int i = 0; i < ICount[j]; i++) {
                     auto GameObject = gFramework.GetGameObject();
                     if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
                         , GameObject[j][i].GetPosition().x, GameObject[j][i].GetPosition().y,
@@ -609,9 +609,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         SelectObject(memdc, AimBit);
         TransparentBlt(hDC, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4, AimWidth / 2, AimHeight / 2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
 
-        for (size_t j = 0; j < STAGE_FIXED_OBJECT_KIND + gFramework.GetRound() + 2; ++j)
+        for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + gFramework.GetRound() + 2; ++j)
         {
-            for (size_t i = 0; i < ICount[j]; i++)
+            for (int i = 0; i < ICount[j]; i++)
             {
                 auto GameObject = gFramework.GetGameObject();
 
