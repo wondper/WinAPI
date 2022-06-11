@@ -107,7 +107,7 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
 
-    //for (int i = 0; i < MAX_m; i++)
+    //for (size_t i = 0; i < MAX_m; i++)
     //{
     //    ShowWindow(mhMonsterWnd[i], nCmdShow);
     //}
@@ -409,7 +409,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_MOUSEMOVE:
     {
         AimPosition = { LOWORD(lParam) ,HIWORD(lParam) };
-        InvalidateRect(hWnd, NULL, TRUE); // UI핸들을 보냄.
+        InvalidateRect(hWnd, NULL, TRUE);
     }
         break;
     
@@ -451,9 +451,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             break;
             }
 
-            for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
+            for (size_t j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
             {
-                for (int i = 0; i < ICount[j]; i++) {
+                for (size_t i = 0; i < ICount[j]; i++) {
                     auto GameObject = gFramework.GetGameObject();
                     if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
                         , GameObject[j][i].GetPosition().x, GameObject[j][i].GetPosition().y,
@@ -463,22 +463,25 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         switch (gFramework.GetGameObject()[j][i].GetType())
                         {
                         case CAKE:
-                            User.SetHP(User.GetHP() + 10);
+                            if(User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
+                            User.SetScore(User.GetScore() + 30);
                             break;
 
                         case MEGAZINE:
-                            User.SetBullet(User.GetBullet() + 2);
+                            if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                            User.SetScore(User.GetScore() + 30);
                             break;
 
                         case SCOPE:
-                            User.SetPosition(User.GetPosition().x - 5 , User.GetPosition().y - 5);
-                            User.SetWinSizeX(User.GetWinSizeX() + 10);   User.SetWinSizeY(User.GetWinSizeY() + 10);
+                            User.SetPosition(User.GetPosition().x - 15 , User.GetPosition().y - 5);
+                            User.SetWinSizeX(User.GetWinSizeX() +30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
                             SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
                             rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
                                 User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
                             ClipCursor(&rectView);
 
+                            User.SetScore(User.GetScore() + 30);
                             User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
                             break;
 
@@ -488,6 +491,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
                             {
                                 // 사망 처리
+
+
+                                User.SetScore(User.GetScore() + 100);
                             }
                             break;
 
@@ -496,6 +502,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
                             {
                                 // 사망 처리
+
+
+                                User.SetScore(User.GetScore() + 200);
                             }
                             break;
 
@@ -504,6 +513,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
                             {
                                 // 사망 처리
+
+
+                                User.SetScore(User.GetScore() + 1000);
                             }
                             break;
                         }
@@ -568,11 +580,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.GetPosition().x, User.GetPosition().y,
             GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
 
-       
-
-
-
-        // 플레이어와 게임오브젝트의 위치가 겹칠때 겹친 위치에 이미지가 출력됨 (미완성)
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 3 };
         int round = gFramework.GetRound();
         switch (round)
@@ -606,12 +613,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         }
         break;
         }
-        SelectObject(memdc, AimBit);
-        TransparentBlt(hDC, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4, AimWidth / 2, AimHeight / 2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
 
-        for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + gFramework.GetRound() + 2; ++j)
+        for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + gFramework.GetRound(); ++j)
         {
-            for (int i = 0; i < ICount[j]; i++)
+            for (size_t i = 0; i < ICount[j]; i++)
             {
                 auto GameObject = gFramework.GetGameObject();
 
@@ -629,6 +634,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             }
         }
 
+        SelectObject(memdc, AimBit);
+        TransparentBlt(hDC, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4, AimWidth / 2, AimHeight / 2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
 
 
         DeleteDC(memdc);
@@ -692,11 +699,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         memDC = CreateCompatibleDC(hDC);
 
 
-        //Score Text Set, TextOut
-        User.SetScorestr();
-        TextOut(hDC, 0, 50, User.GetScoreStr().c_str(), static_cast<int>(User.GetScoreStr().size()));
-
-
+        
         oldBit = (HBITMAP)SelectObject(memDC, mBitMap_BackGround);
         BitBlt(hDC, 0, 0, 1300, 450, memDC, 0, 0 , SRCCOPY);
 
@@ -713,9 +716,13 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
         hBrush = CreateSolidBrush(RGB(148, 228, 241));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
-        Rectangle(hDC, 310, 55, 310 +User.GetHP(), 105);
+        Rectangle(hDC, 310, 65, 310 +User.GetHP()* 1.2, 95);
         
-     
+        //Score Text Set, TextOut
+        User.SetScorestr();
+        TextOut(hDC, 300, 230, User.GetScoreStr().c_str(), static_cast<int>(User.GetScoreStr().size()));
+
+
         
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);
@@ -724,12 +731,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         return 0;
 
     case WM_DESTROY:
-        //wndCount--;
-        //if (wndCount == 0) {
-
         PostQuitMessage(0);
-        //}
-
         return 0;
 
     }
@@ -749,11 +751,22 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     {
 
     case WM_CREATE:
-    { //wndCount++;
+    { 
         int Round = 0;
         gFramework.CreateMonster(Round);
-        //gFramework.CreateItem();
         SetTimer(hWnd, 1, 100, NULL);
+        SetTimer(hWnd, 2, 1000, NULL);
+        for (int j = 0; j < MAX_OBJECT_KIND; ++j)
+        {
+            if (gFramework.GetGameObject()[j] != nullptr)
+            {
+                for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
+                {
+                    gFramework.GetGameObject()[j][i].SetCoolTime(15);
+                }
+            }
+        }
+
     }
     break;
 
@@ -774,12 +787,40 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             }
             InvalidateRect(hWnd, NULL, TRUE);
             break;
+
+
+        case 2:
+            // 몬스터 공격 쿨타임 감소 틱
+            for (int j = 0; j < MAX_OBJECT_KIND; ++j)
+            {
+                if (gFramework.GetGameObject()[j] != nullptr)
+                {
+                    for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
+                    {
+                        if(gFramework.GetGameObject()[j][i].GetType() != CAKE ||
+                            gFramework.GetGameObject()[j][i].GetType() != MEGAZINE || 
+                                gFramework.GetGameObject()[j][i].GetType() != SCOPE )
+                            gFramework.GetGameObject()[j][i].SetCoolTime(gFramework.GetGameObject()[j][i].GetCoolTime() - 1);
+
+                   
+                        if (gFramework.GetGameObject()[j][i].GetCoolTime() == 0)
+                        {
+                            User.SetHP(User.GetHP() - 60);
+                            gFramework.GetGameObject()[j][i].SetCoolTime(15);
+                            InvalidateRect(hwndUI, NULL , TRUE);
+                        }
+                    }
+                }
+            }
+            
+            break;
         }
+
+
     case WM_PAINT:
     {
         hDC = BeginPaint(hWnd, &ps);
         memdc = CreateCompatibleDC(hDC);
-
 
         auto GameObject = gFramework.GetGameObject();
        
@@ -822,7 +863,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j]-1; i > -1; --i) // ICount까지
             {
-                GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+           GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
             }
         }
 
@@ -830,7 +871,8 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
         Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
         SelectObject(hDC, hBrush);
-        DeleteObject(hBrush);*/
+        DeleteObject(hBrush);
+        */
 
         DeleteDC(memdc);
 

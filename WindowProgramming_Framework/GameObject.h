@@ -19,6 +19,7 @@ private:
 	HBITMAP mAppearanceBitmap[6];
 	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
 
+	// int mState; // 몬스터 상태
 
 	int mCoolTime; // 공격 쿨타임
 public:
@@ -34,13 +35,15 @@ public:
 	void SetHP(int hp) { mHP = hp; }
 
 	int GetType() const { return mType; }
+	void SetType(char type) { mType = type; }
+
+	//int GetState() const { return mState; }
+	// void SetState(char State) { mState = State; }
 
 
 	int GetBitMapAnim() const { return mBitMapAnim; }
 	void SetmBitMapAnim(int BitMapAnim) { mBitMapAnim = BitMapAnim; }
 
-	void SetType(char type) { mType = type; }
-	
 	int GetWidth() const { return mWidth; }
 	int GetHeight() const { return mHeight; }
 	void SetBitmapFrame(int width, int height) { mWidth = width; mHeight = height; }

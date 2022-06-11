@@ -56,60 +56,6 @@ extern HINSTANCE g_hInst;
 
 static Player User;
 
-struct Monster
-{
-	bool create = false;
-
-	POINT P = { rand()%1200,rand()%200}; // Monster의 x와 y좌표
-
-	int Win_SizeX = 200;
-	int Win_SizeY = 400;
-
-	int Hp = 3;
-
-	bool Dead = true;
-
-	int skin = 0;
-	// 0 좀비
-	// 1 박쥐
-	// 2 숙주
-
-	int Stats = 0;
-	// 0 대기 상태
-	// 1 피격 상태
-	// 2 사망 상태
-	int ActionFrame = 0;
-
-
-	HBITMAP sprite[6];
-	HBITMAP sprite_mask[6];
-	HDC memDC= NULL;
-};
-
-static Monster monster[stage][MAX_m]; // 스테이지별 적을 저장할 배열
-static int m_count[stage] = {3,5,3};// 스테이지별 적 수
-static int stage_count=0;
-
-
-struct Item
-{
-	int x= 0;
-	int y = 0;
-
-	int width;
-	int height;
-
-
-	int type = 0;
-	// 0 : 케이크 <-체력 회복
-	// 1 : 탄환 <-탄창 충천
-	// 2 : 스코프 <- 윈도우 크기 증가?
-
-	HBITMAP sprite[6];
-	HDC memDC = NULL;
-};
-
-
 enum class WINDOW {
 	Main = 0,
 	UI,
