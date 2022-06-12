@@ -29,13 +29,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     g_hInst = hInstance;
 
-
-    gFramework.InitWCX(WINDOW::BackGround);
-    gFramework.InitWCX(WINDOW::Main);
-    gFramework.InitWCX(WINDOW::UI);
-
-    gFramework.RegisterWnd();
-
     gFramework.ShowWnd(hInstance, nCmdShow);
 
     //CTRL + V

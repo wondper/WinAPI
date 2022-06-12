@@ -29,5 +29,5 @@ GFramework gFramework;
 
 
 
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
 
