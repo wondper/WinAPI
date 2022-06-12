@@ -29,8 +29,3 @@ GFramework gFramework;
 
 
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> b16d82398f180b04b317353607371b2a2e57c031
