@@ -470,6 +470,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         case MEGAZINE:
                             if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
                             User.SetScore(User.GetScore() + 30);
+
+                            delete(gFramework.GetGameObject()[j]);
                             break;
 
                         case SCOPE:
@@ -698,8 +700,6 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         hDC = BeginPaint(hWnd, &ps);
         memDC = CreateCompatibleDC(hDC);
 
-
-        
         oldBit = (HBITMAP)SelectObject(memDC, mBitMap_BackGround);
         BitBlt(hDC, 0, 0, 1300, 450, memDC, 0, 0 , SRCCOPY);
 
@@ -786,6 +786,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 }
             }
             InvalidateRect(hWnd, NULL, TRUE);
+            InvalidateRect(hwndMain, NULL, TRUE);
             break;
 
 
@@ -863,7 +864,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j]-1; i > -1; --i) // ICount±îÁö
             {
-           GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+              /*if (gFramework.GetGameObject()[j] != nullptr)*/ GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
             }
         }
 

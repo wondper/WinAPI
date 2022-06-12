@@ -129,6 +129,7 @@ void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 
 
 
+
 Zombie::Zombie(int* ResCode) : GameObject(ResCode)
 {
 	SetType(3);
@@ -153,6 +154,7 @@ void Zombie::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 {
 	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
 }
+
 
 Bee::Bee(int* ResCode) : GameObject(ResCode)
 {
