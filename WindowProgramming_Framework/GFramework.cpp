@@ -1,7 +1,6 @@
 #include "GFramework.h"
 GFramework::GFramework()
 {
-    
 	//mhInstance = g_hInst;
     void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{OBJECT_TYPE::END}) *sizeof(GameObject*));
     mGameObject = static_cast<GameObject**>(raw_memory);
@@ -10,6 +9,7 @@ GFramework::GFramework()
     {
         new(&mGameObject[i]) GameObject*;
     }
+
 }
 
 GFramework::~GFramework()
@@ -167,12 +167,10 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 
 
-void GFramework::CreateMonster(int Round)
+void GFramework::CreateMonster()
 {
-    SetRound(Round);
     int CakeSprite[6], MegazineSprite[6], ScopeSprite[6], ZombieSprite[6], BeeSprite[6], BossSprite[6];
-    /*int RoundCake{}, RoundMegazine{}, RoundScope{};*/
-    int RoundZombie{}, RoundBee{}, RoundBoss{};
+    int RoundZombie{3}, RoundBee{3}, RoundBoss{3};
 
     for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
     {
@@ -184,99 +182,60 @@ void GFramework::CreateMonster(int Round)
     void* raw_memory = operator new[](CAKE_COUNT * sizeof(Cake));
     mGameObject[0] = static_cast<Cake*>(raw_memory);
     for (int i = 0; i < CAKE_COUNT; ++i)
-        new(&mGameObject[0][i]) Cake(CakeSprite);
+        new(&mGameObject[CAKE][i]) Cake(CakeSprite);
     
 
     raw_memory = operator new[](MEGAZINE_COUNT * sizeof(Megazine));
     mGameObject[1] = static_cast<Megazine*>(raw_memory);
     for (int i = 0; i < MEGAZINE_COUNT; ++i)
-        new(&mGameObject[1][i]) Megazine(MegazineSprite);
+        new(&mGameObject[MEGAZINE][i]) Megazine(MegazineSprite);
     
     raw_memory = operator new[](SCOPE_COUNT * sizeof(Scope));
     mGameObject[2] = static_cast<Scope*>(raw_memory);
     for (int i = 0; i < SCOPE_COUNT; ++i)
-        new(&mGameObject[2][i]) Scope(ScopeSprite);
+        new(&mGameObject[SCOPE][i]) Scope(ScopeSprite);
 
-    switch (Round)
-    {
-    case 0: 
-    {
-        RoundZombie = STAGE_TEST_ZOMBIE;
-        ZombieSprite[0] = IDB_MONSTER_ZOMBIE1;
-        ZombieSprite[1] = IDB_MONSTER_ZOMBIE2;
-        ZombieSprite[2] = IDB_MONSTER_ZOMBIE3;
-        ZombieSprite[3] = IDB_MONSTER_ZOMBIE4;
-        ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
-        ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
+  
+     ZombieSprite[0] = IDB_MONSTER_ZOMBIE1;
+     ZombieSprite[1] = IDB_MONSTER_ZOMBIE2;
+     ZombieSprite[2] = IDB_MONSTER_ZOMBIE3;
+     ZombieSprite[3] = IDB_MONSTER_ZOMBIE4;
+     ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
+     ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
 
-        raw_memory = operator new[](RoundZombie * sizeof(Zombie));
-        mGameObject[3] = static_cast<Zombie*>(raw_memory);
-        for (int i = 0; i < RoundZombie; ++i)
-            new(&mGameObject[3][i]) Zombie(ZombieSprite);
+     raw_memory = operator new[](RoundZombie * sizeof(Zombie));
+     mGameObject[3] = static_cast<Zombie*>(raw_memory);
+     for (int i = 0; i < RoundZombie; ++i)
+         new(&mGameObject[ZOMBIE][i]) Zombie(ZombieSprite);
+   
 
-        RoundBee = STAGE_TEST_BEE;
+   
+     BeeSprite[0] = IDB_MONSTER_BEE1;
+     BeeSprite[1] = IDB_MONSTER_BEE2;
+     BeeSprite[2] = IDB_MONSTER_BEE3;
+     BeeSprite[3] = IDB_MONSTER_BEE4;
+     BeeSprite[4] = IDB_MONSTER_BEE5;
+     BeeSprite[5] = IDB_MONSTER_BEE6;
 
-        BeeSprite[0] = IDB_MONSTER_BEE1;
-        BeeSprite[1] = IDB_MONSTER_BEE2;
-        BeeSprite[2] = IDB_MONSTER_BEE3;
-        BeeSprite[3] = IDB_MONSTER_BEE4;
-        BeeSprite[4] = IDB_MONSTER_BEE5;
-        BeeSprite[5] = IDB_MONSTER_BEE6;
+     raw_memory = operator new[](RoundBee * sizeof(Bee));
+     mGameObject[4] = static_cast<Bee*>(raw_memory);
+     for (int i = 0; i < RoundBee; ++i)
+         new(&mGameObject[BEE][i]) Bee(BeeSprite);
+    
+    
+    
+     BossSprite[0] = IDB_MONSTER_BOSS1;
+     BossSprite[1] = IDB_MONSTER_BOSS2;
+     BossSprite[2] = IDB_MONSTER_BOSS3;
+     BossSprite[3] = IDB_MONSTER_BOSS4;
+     BossSprite[4] = IDB_MONSTER_BOSS5;
+     BossSprite[5] = IDB_MONSTER_BOSS6;
 
-        raw_memory = operator new[](RoundBee * sizeof(Bee));
-        mGameObject[4] = static_cast<Bee*>(raw_memory);
-        for (int i = 0; i < RoundBee; ++i)
-            new(&mGameObject[4][i]) Bee(BeeSprite);
-
-        RoundBoss = STAGE_TEST_BOSS;
-
-        BossSprite[0] = IDB_MONSTER_BOSS1;
-        BossSprite[1] = IDB_MONSTER_BOSS2;
-        BossSprite[2] = IDB_MONSTER_BOSS3;
-        BossSprite[3] = IDB_MONSTER_BOSS4;
-        BossSprite[4] = IDB_MONSTER_BOSS5;
-        BossSprite[5] = IDB_MONSTER_BOSS6;
-
-       raw_memory = operator new[](RoundBoss * sizeof(Boss));
-        mGameObject[5] = static_cast<Boss*>(raw_memory);
-        for (int i = 0; i < RoundBoss; ++i)
-            new(&mGameObject[5][i]) Boss(BossSprite);
-
-    }
-        break;
-    case 1:
-    {
-        RoundZombie = STAGE_ONE_ZOMBIE;
-
-        ZombieSprite[0] = IDB_MONSTER_ZOMBIE1;
-        ZombieSprite[1] = IDB_MONSTER_ZOMBIE2;
-        ZombieSprite[2] = IDB_MONSTER_ZOMBIE3;
-        ZombieSprite[3] = IDB_MONSTER_ZOMBIE4;
-        ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
-        ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
-
-        void* raw_memory = operator new[](RoundZombie * sizeof(Zombie));
-        mGameObject[3] = static_cast<Zombie*>(raw_memory);
-        for (int i = 0; i < 3; ++i)
-        {
-            new(&mGameObject[3][i]) Zombie(ZombieSprite);
-
-            // STAGE_ONE_OBJECT_KIND 의 값을 2에서 6으로 바꾼 후,
-            // &mGameObject[static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::ZOMBIE })][i] == &mGameObject[3][i]
-            //  에 값을 넣었을때 게임이 꺼짐
-        }
-    }
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    }
-        // destruct in inverse order    
-        /*for (int i = 6 - 1; i >= 0; --i) {
-            mGameObject[i].~GameObject();
-        }
-        operator delete[](raw_memory);*/
+     raw_memory = operator new[](RoundBoss * sizeof(Boss));
+     mGameObject[5] = static_cast<Boss*>(raw_memory);
+     for (int i = 0; i < RoundBoss; ++i)
+         new(&mGameObject[BOSS][i]) Boss(BossSprite);
+    
 }
 
 
@@ -460,18 +419,20 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
                         GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
                     {
-                        switch (gFramework.GetGameObject()[j][i].GetType())
+                        switch (gFramework.GetGameObject()[j][i].GetType() && GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
                         {
                         case CAKE:
                             if(User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
                             User.SetScore(User.GetScore() + 30);
+
+                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
                             break;
 
                         case MEGAZINE:
                             if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
                             User.SetScore(User.GetScore() + 30);
 
-                            delete(gFramework.GetGameObject()[j]);
+                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
                             break;
 
                         case SCOPE:
@@ -485,6 +446,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
                             User.SetScore(User.GetScore() + 30);
                             User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
                             break;
 
 
@@ -496,6 +458,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                                 User.SetScore(User.GetScore() + 100);
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
                             }
                             break;
 
@@ -507,6 +470,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                                 User.SetScore(User.GetScore() + 200);
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
                             }
                             break;
 
@@ -518,6 +482,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                                 User.SetScore(User.GetScore() + 1000);
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
                             }
                             break;
                         }
@@ -630,7 +595,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
                     GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
                 {
-                    GameObject[j][i].DrawPlayerWindow(hDC, memdc, GameObject[j][i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                    if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW)GameObject[j][i].DrawPlayerWindow(hDC, memdc, GameObject[j][i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                         User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY());
                 }
             }
@@ -751,9 +716,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     {
 
     case WM_CREATE:
-    { 
+    {
+        gFramework.CreateMonster();
         int Round = 0;
-        gFramework.CreateMonster(Round);
         SetTimer(hWnd, 1, 100, NULL);
         SetTimer(hWnd, 2, 1000, NULL);
         for (int j = 0; j < MAX_OBJECT_KIND; ++j)
@@ -826,7 +791,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         auto GameObject = gFramework.GetGameObject();
        
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 1 };
-        int round = gFramework.GetRound();
+        int round = 0;
 
         switch (round)
         {
@@ -864,7 +829,8 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j]-1; i > -1; --i) // ICount까지
             {
-              /*if (gFramework.GetGameObject()[j] != nullptr)*/ GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+              /*if (gFramework.GetGameObject()[j] != nullptr)*/ 
+                if(GameObject[j][i].GetState() != MONSTER_NOT_DRAW)GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
             }
         }
 

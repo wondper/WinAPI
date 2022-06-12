@@ -2,7 +2,7 @@
 
 
 GameObject::GameObject(int *ResCode)
-	: mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{ 0 }, mCoolTime{15}
+	: mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState{0}
 {
 		random_device rd;
 		mt19937 mersenne(rd());
