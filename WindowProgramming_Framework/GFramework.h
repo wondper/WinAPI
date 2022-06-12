@@ -95,7 +95,10 @@ public:
 	void ShowBGWnd(int nCmdShow);
 	void ShowMainWnd(int nCmdShow);
 	void ShowUIWnd(int nCmdShow);
+<<<<<<< HEAD
+=======
 
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 	void ShowWnd(int nCmdShow);
 
 	void Reset();

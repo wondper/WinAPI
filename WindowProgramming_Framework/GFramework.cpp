@@ -1,9 +1,15 @@
 #include "GFramework.h"
 GFramework::GFramework()
 {
+<<<<<<< HEAD
+
+    mhInstance = g_hInst;
+    void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END }) * sizeof(GameObject*));
+=======
     
 	mhInstance = g_hInst;
     void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{OBJECT_TYPE::END}) *sizeof(GameObject*));
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
     mGameObject = static_cast<GameObject**>(raw_memory);
     auto GameobjectKindNum = static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END });
     for (int i = 0; i < GameobjectKindNum; ++i)
@@ -15,7 +21,11 @@ GFramework::GFramework()
     InitWCX(WINDOW::Main);
     InitWCX(WINDOW::UI);
 
+<<<<<<< HEAD
+     gFramework.RegisterWnd();
+=======
     gFramework.RegisterWnd();
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 
     CreateMonster();
 }
@@ -47,6 +57,27 @@ GFramework::~GFramework()
     delete[] mGameObject;*/
 }
 
+<<<<<<< HEAD
+
+void GFramework::InitWCX(WINDOW wnd)
+{
+    WNDCLASSEX wcex;
+    wcex.cbSize = sizeof(WNDCLASSEX);
+    wcex.style = CS_HREDRAW | CS_VREDRAW;
+    //wcex.lpfnWndProc = WndProc;
+    wcex.cbClsExtra = 0;
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = mhInstance;
+    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground = (HBRUSH)GetStockObject(RGB(100, 100, 100));
+    wcex.lpszMenuName = NULL;
+    wcex.lpszClassName = L"MainWindow";
+    wcex.hIconSm = NULL;
+    switch (wnd)
+    {
+    case WINDOW::Main:
+=======
 void GFramework::InitWCX(WINDOW wnd)
 {
     WNDCLASSEX wcex{0};
@@ -65,40 +96,48 @@ void GFramework::InitWCX(WINDOW wnd)
 	switch (wnd)
 	{
 	case WINDOW::Main:
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 		wcex.lpfnWndProc = MainWndProc;
 		wcex.lpszClassName = L"MainWindow";
 		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		mwcxMain = wcex;
 		break;
 	case WINDOW::UI:
-		wcex.lpfnWndProc = UIWndProc;
-		wcex.lpszClassName = L"UIWindow";
-		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+        wcex.lpfnWndProc = UIWndProc;
+        wcex.lpszClassName = L"UIWindow";
+        wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 		mwcxUI = wcex;
 		break;
 	case WINDOW::BackGround:
-		wcex.lpfnWndProc = BackGroundWndProc;
-		wcex.lpszClassName = L"BackGroundWindow";
-		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-		mwcxBackGround = wcex;
-        break;
-    /*case WINDOW::Monster:
-        wcex.lpfnWndProc = MonsterWndProc;
-        wcex.lpszClassName = L"MonsterGroundWindow";
+        wcex.lpfnWndProc = BackGroundWndProc;
+        wcex.lpszClassName = L"BackGroundWindow";
         wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
         mwcxBackGround = wcex;
-		break;*/
-	}
-    
+        break;
+        /*case WINDOW::Monster:
+          wcex.lpfnWndProc = MonsterWndProc;
+          wcex.lpszClassName = L"MonsterGroundWindow";
+          wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+          mwcxBackGround = wcex;
+          break;*/
+    }
+
 }
 
 void GFramework::RegisterWnd()
 {
+<<<<<<< HEAD
+	RegisterClassEx(&mwcxBackGround);
+	RegisterClassEx(&mwcxMain);
+	RegisterClassEx(&mwcxUI);
+}
+=======
     RegisterClassEx(&mwcxBackGround);
 	RegisterClassEx(&mwcxMain);
 	RegisterClassEx(&mwcxUI);
 }
 
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 void GFramework::ShowBGWnd(int nCmdShow)
 {
     hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0,
@@ -109,6 +148,10 @@ void GFramework::ShowBGWnd(int nCmdShow)
 
 void GFramework::ShowMainWnd(int nCmdShow)
 {
+<<<<<<< HEAD
+    hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, mhInstance, NULL);
+    ShowWindow(hwndMain, nCmdShow);
+=======
     //ShowWindow(hwndMain, nCmdShow);
 }
 
@@ -122,7 +165,22 @@ void GFramework::ShowWnd(int nCmdShow)
     ShowBGWnd(nCmdShow);
     ShowMainWnd(nCmdShow);
     ShowUIWnd(nCmdShow);
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 }
+
+void GFramework::ShowUIWnd(int nCmdShow)
+{
+    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, NULL, NULL, mhInstance, NULL);
+    ShowWindow(hwndUI, nCmdShow);
+}
+
+void GFramework::ShowWnd(int nCmdShow)
+{
+    ShowBGWnd(nCmdShow);
+    ShowMainWnd(nCmdShow);
+    ShowUIWnd(nCmdShow);
+}
+
 
 
 void GFramework::Update(const float fTime)
@@ -173,11 +231,10 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 }
 
 
-
 void GFramework::CreateMonster()
 {
     int CakeSprite[6], MegazineSprite[6], ScopeSprite[6], ZombieSprite[6], BeeSprite[6], BossSprite[6];
-    int RoundZombie{3}, RoundBee{3}, RoundBoss{3};
+    int RoundZombie{ 3 }, RoundBee{ 3 }, RoundBoss{ 3 };
 
     for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
     {
@@ -190,59 +247,59 @@ void GFramework::CreateMonster()
     mGameObject[0] = static_cast<Cake*>(raw_memory);
     for (int i = 0; i < CAKE_COUNT; ++i)
         new(&mGameObject[CAKE][i]) Cake(CakeSprite);
-    
+
 
     raw_memory = operator new[](MEGAZINE_COUNT * sizeof(Megazine));
     mGameObject[1] = static_cast<Megazine*>(raw_memory);
     for (int i = 0; i < MEGAZINE_COUNT; ++i)
         new(&mGameObject[MEGAZINE][i]) Megazine(MegazineSprite);
-    
+
     raw_memory = operator new[](SCOPE_COUNT * sizeof(Scope));
     mGameObject[2] = static_cast<Scope*>(raw_memory);
     for (int i = 0; i < SCOPE_COUNT; ++i)
         new(&mGameObject[SCOPE][i]) Scope(ScopeSprite);
 
-  
-     ZombieSprite[0] = IDB_MONSTER_ZOMBIE1;
-     ZombieSprite[1] = IDB_MONSTER_ZOMBIE2;
-     ZombieSprite[2] = IDB_MONSTER_ZOMBIE3;
-     ZombieSprite[3] = IDB_MONSTER_ZOMBIE4;
-     ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
-     ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
 
-     raw_memory = operator new[](RoundZombie * sizeof(Zombie));
-     mGameObject[3] = static_cast<Zombie*>(raw_memory);
-     for (int i = 0; i < RoundZombie; ++i)
-         new(&mGameObject[ZOMBIE][i]) Zombie(ZombieSprite);
-   
+    ZombieSprite[0] = IDB_MONSTER_ZOMBIE1;
+    ZombieSprite[1] = IDB_MONSTER_ZOMBIE2;
+    ZombieSprite[2] = IDB_MONSTER_ZOMBIE3;
+    ZombieSprite[3] = IDB_MONSTER_ZOMBIE4;
+    ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
+    ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
 
-   
-     BeeSprite[0] = IDB_MONSTER_BEE1;
-     BeeSprite[1] = IDB_MONSTER_BEE2;
-     BeeSprite[2] = IDB_MONSTER_BEE3;
-     BeeSprite[3] = IDB_MONSTER_BEE4;
-     BeeSprite[4] = IDB_MONSTER_BEE5;
-     BeeSprite[5] = IDB_MONSTER_BEE6;
+    raw_memory = operator new[](RoundZombie * sizeof(Zombie));
+    mGameObject[3] = static_cast<Zombie*>(raw_memory);
+    for (int i = 0; i < RoundZombie; ++i)
+        new(&mGameObject[ZOMBIE][i]) Zombie(ZombieSprite);
 
-     raw_memory = operator new[](RoundBee * sizeof(Bee));
-     mGameObject[4] = static_cast<Bee*>(raw_memory);
-     for (int i = 0; i < RoundBee; ++i)
-         new(&mGameObject[BEE][i]) Bee(BeeSprite);
-    
-    
-    
-     BossSprite[0] = IDB_MONSTER_BOSS1;
-     BossSprite[1] = IDB_MONSTER_BOSS2;
-     BossSprite[2] = IDB_MONSTER_BOSS3;
-     BossSprite[3] = IDB_MONSTER_BOSS4;
-     BossSprite[4] = IDB_MONSTER_BOSS5;
-     BossSprite[5] = IDB_MONSTER_BOSS6;
 
-     raw_memory = operator new[](RoundBoss * sizeof(Boss));
-     mGameObject[5] = static_cast<Boss*>(raw_memory);
-     for (int i = 0; i < RoundBoss; ++i)
-         new(&mGameObject[BOSS][i]) Boss(BossSprite);
-    
+
+    BeeSprite[0] = IDB_MONSTER_BEE1;
+    BeeSprite[1] = IDB_MONSTER_BEE2;
+    BeeSprite[2] = IDB_MONSTER_BEE3;
+    BeeSprite[3] = IDB_MONSTER_BEE4;
+    BeeSprite[4] = IDB_MONSTER_BEE5;
+    BeeSprite[5] = IDB_MONSTER_BEE6;
+
+    raw_memory = operator new[](RoundBee * sizeof(Bee));
+    mGameObject[4] = static_cast<Bee*>(raw_memory);
+    for (int i = 0; i < RoundBee; ++i)
+        new(&mGameObject[BEE][i]) Bee(BeeSprite);
+
+
+
+    BossSprite[0] = IDB_MONSTER_BOSS1;
+    BossSprite[1] = IDB_MONSTER_BOSS2;
+    BossSprite[2] = IDB_MONSTER_BOSS3;
+    BossSprite[3] = IDB_MONSTER_BOSS4;
+    BossSprite[4] = IDB_MONSTER_BOSS5;
+    BossSprite[5] = IDB_MONSTER_BOSS6;
+
+    raw_memory = operator new[](RoundBoss * sizeof(Boss));
+    mGameObject[5] = static_cast<Boss*>(raw_memory);
+    for (int i = 0; i < RoundBoss; ++i)
+        new(&mGameObject[BOSS][i]) Boss(BossSprite);
+
 }
 
 
@@ -264,17 +321,14 @@ void GFramework::CreateItem()
     }
 }
 
-
-
-
-bool MouseCollisionCheck(int Mx, int My ,int left, int top, int right, int bottom)
+bool MouseCollisionCheck(int Mx, int My, int left, int top, int right, int bottom)
 {
-    if (left < Mx &&  Mx<right &&    top < My && My < bottom)
+    if (left < Mx && Mx < right && top < My && My < bottom)
         return true;
     else return false;
 }
 
-bool BoxCollisionCheck(int Box1Left, int Box1Top, int Box1Right, int Box1Bottom, 
+bool BoxCollisionCheck(int Box1Left, int Box1Top, int Box1Right, int Box1Bottom,
     int Box2Left, int Box2Top, int Box2Right, int Box2Bottom)
 {
     if ((Box1Left < Box2Right) && (Box1Top < Box2Bottom) &&
@@ -291,12 +345,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     static HBITMAP AimBit; // 조준점 비트맵 이미지
     static HDC AimDC; // 조준점 DC
-     
+
     static int Trigerframe = 0;
     static bool Triger = false;
     PAINTSTRUCT ps;
 
-    static POINT AimPosition{0,0};
+    static POINT AimPosition{ 0,0 };
     static int AimWidth;
     static int AimHeight;
 
@@ -331,8 +385,13 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().y - FRAME_SPEED > 0)
             {
                 User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
+<<<<<<< HEAD
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+=======
                 SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
             
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                 InvalidateRect(hWnd, NULL, TRUE);
             }
             break;
@@ -341,20 +400,30 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().x - FRAME_SPEED > 0)
             {
                 User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
+<<<<<<< HEAD
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+=======
                 SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
         
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                 InvalidateRect(hWnd, NULL, TRUE);
             }
-                break;
+            break;
         case 's':
-            if (User.GetPosition().y + FRAME_SPEED < GetSystemMetrics(SM_CYSCREEN) -200 - User.GetWinSizeY())
+            if (User.GetPosition().y + FRAME_SPEED < GetSystemMetrics(SM_CYSCREEN) - 200 - User.GetWinSizeY())
             {
                 User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
+<<<<<<< HEAD
+                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+=======
                 SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
       
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                 InvalidateRect(hWnd, NULL, TRUE);
             }
-                break;
+            break;
         case 'd':
             if (User.GetPosition().x + FRAME_SPEED < GetSystemMetrics(SM_CXSCREEN) - User.GetWinSizeX())
             {
@@ -381,55 +450,97 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         AimPosition = { LOWORD(lParam) ,HIWORD(lParam) };
         InvalidateRect(hWnd, NULL, TRUE);
     }
-        break;
-    
+    break;
+
     case WM_LBUTTONDOWN:
 
+    {
+        User.DecreaseBulletCount();
+        int ICount[MAX_OBJECT_KIND];
+        int round = gFramework.GetRound();
+        switch (round)
         {
-            User.DecreaseBulletCount();
-            int ICount[MAX_OBJECT_KIND];
-            int round = gFramework.GetRound();
-            switch (round)
-            {
-            case 1:
-            {
-                int Count[6] = { 3, 3, 2, STAGE_ONE_ZOMBIE, 0, 0 };
-                for (int i = 0; i < 6; ++i)
-                    ICount[i] = Count[i];
-            }
-            break;
-            case 2:
-            {
-                int Count[6] = { 3, 3, 2, STAGE_TWO_ZOMBIE, STAGE_TWO_BEE, 0 };
-                for (int i = 0; i < 6; ++i)
-                    ICount[i] = Count[i];
-            }
-                break;
-            case 3:
-            {
-                int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
-                for (int i = 0; i < 6; ++i)
-                    ICount[i] = Count[i];
-            }
-                break;
-            default:
-            {
-                int Count[6] = { 3, 3, 2, 3, 3, 1 };
-                for (int i = 0; i < 6; ++i)
-                    ICount[i] = Count[i];
-            }
-            break;
-            }
+        case 1:
+        {
+            int Count[6] = { 3, 3, 2, STAGE_ONE_ZOMBIE, 0, 0 };
+            for (int i = 0; i < 6; ++i)
+                ICount[i] = Count[i];
+        }
+        break;
+        case 2:
+        {
+            int Count[6] = { 3, 3, 2, STAGE_TWO_ZOMBIE, STAGE_TWO_BEE, 0 };
+            for (int i = 0; i < 6; ++i)
+                ICount[i] = Count[i];
+        }
+        break;
+        case 3:
+        {
+            int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+            for (int i = 0; i < 6; ++i)
+                ICount[i] = Count[i];
+        }
+        break;
+        default:
+        {
+            int Count[6] = { 3, 3, 2, 3, 3, 1 };
+            for (int i = 0; i < 6; ++i)
+                ICount[i] = Count[i];
+        }
+        break;
+        }
 
-            for (size_t j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
-            {
-                for (size_t i = 0; i < ICount[j]; i++) {
-                    auto GameObject = gFramework.GetGameObject();
-                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
-                        , GameObject[j][i].GetPosition().x, GameObject[j][i].GetPosition().y,
-                        GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
-                        GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
+        for (size_t j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
+        {
+            for (size_t i = 0; i < ICount[j]; i++) {
+                auto GameObject = gFramework.GetGameObject();
+                if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                    , GameObject[j][i].GetPosition().x, GameObject[j][i].GetPosition().y,
+                    GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
+                    GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
+                {
+                    switch (gFramework.GetGameObject()[j][i].GetType() && GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
                     {
+<<<<<<< HEAD
+                    case CAKE:
+                        if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
+                        User.SetScore(User.GetScore() + 30);
+
+                        GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                        break;
+
+                    case MEGAZINE:
+                        if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                        User.SetScore(User.GetScore() + 30);
+
+                        GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                        break;
+
+                    case SCOPE:
+                        User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
+                        User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
+                        SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                        rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+                            User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+                        ClipCursor(&rectView);
+
+                        User.SetScore(User.GetScore() + 30);
+                        User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+                        GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                        break;
+
+
+                    case ZOMBIE:
+                        gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                        if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                        {
+                            // 사망 처리
+
+
+                            User.SetScore(User.GetScore() + 100);
+                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+=======
                         if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW) 
                         {
                             switch (GameObject[j][i].GetType())
@@ -499,14 +610,41 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                                 }
                                 break;
                             }
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                         }
+                        break;
+
+                    case BEE:
+                        gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                        if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                        {
+                            // 사망 처리
+
+
+                            User.SetScore(User.GetScore() + 200);
+                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                        }
+                        break;
+
+                    case BOSS:
+                        gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                        if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                        {
+                            // 사망 처리
+
+
+                            User.SetScore(User.GetScore() + 1000);
+                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                        }
+                        break;
                     }
                 }
             }
-
-            Triger = true;
-            SetTimer(hwndMain,3,10,NULL);
         }
+
+        Triger = true;
+        SetTimer(hwndMain, 3, 10, NULL);
+    }
 
         InvalidateRect(hWnd, NULL, TRUE); // UI핸들을 보냄.
         //InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
@@ -548,7 +686,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 }
             }
             InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
-          
+
 
             break;
         }
@@ -642,10 +780,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC,memDC;
+    HDC hDC, memDC;
     PAINTSTRUCT ps;
     HBRUSH hBrush, oldhBrush;
-    
+
     static HBITMAP mBitMap_Magazine;
     static HBITMAP mBitMap_BackGround;
     static HBITMAP oldBit;
@@ -664,7 +802,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         break;
 
     }
-        break;
+    break;
 
     case WM_CHAR:
         switch (wParam)
@@ -682,7 +820,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
         memDC = CreateCompatibleDC(hDC);
 
         oldBit = (HBITMAP)SelectObject(memDC, mBitMap_BackGround);
-        BitBlt(hDC, 0, 0, 1300, 450, memDC, 0, 0 , SRCCOPY);
+        BitBlt(hDC, 0, 0, 1300, 450, memDC, 0, 0, SRCCOPY);
 
 
         oldBit = (HBITMAP)SelectObject(memDC, mBitMap_Magazine);
@@ -697,14 +835,19 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
         hBrush = CreateSolidBrush(RGB(148, 228, 241));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
+<<<<<<< HEAD
+        Rectangle(hDC, 310, 65, 310 + User.GetHP() * 1.2, 95);
+
+=======
         Rectangle(hDC, 310, 65, 310 +User.GetHP()* 12 / 10, 95);
         
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
         //Score Text Set, TextOut
         User.SetScorestr();
         TextOut(hDC, 300, 230, User.GetScoreStr().c_str(), static_cast<int>(User.GetScoreStr().size()));
 
 
-        
+
         SelectObject(hDC, hBrush);
         DeleteObject(hBrush);
 
@@ -734,11 +877,15 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     {
 
     case WM_CREATE:
+<<<<<<< HEAD
+    {
+=======
     { 
         hwndMain = CreateWindowEx(WS_EX_CLIENTEDGE, L"MainWindow", L"Main", WS_CHILD | WS_VISIBLE, 0 , 0, 200, 200, hWnd, NULL, g_hInst, NULL);
         hwndUI = CreateWindowEx(WS_EX_CLIENTEDGE, L"UIWindow", L"UI", WS_CHILD | WS_VISIBLE, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, hWnd, NULL, g_hInst, NULL);
         GetClientRect(hWnd, &rectView);
 
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
         int Round = 0;
         //gFramework.CreateMonster(Round);
         SetTimer(hWnd, 1, 100, NULL);
@@ -843,17 +990,23 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 {
                     for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
                     {
+<<<<<<< HEAD
+                        if (gFramework.GetGameObject()[j][i].GetType() != CAKE &&
+                            gFramework.GetGameObject()[j][i].GetType() != MEGAZINE &&
+                            gFramework.GetGameObject()[j][i].GetType() != SCOPE)
+=======
                         if(gFramework.GetGameObject()[j][i].GetType() != CAKE &&
                             gFramework.GetGameObject()[j][i].GetType() != MEGAZINE &&
                                 gFramework.GetGameObject()[j][i].GetType() != SCOPE )
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                             gFramework.GetGameObject()[j][i].SetCoolTime(gFramework.GetGameObject()[j][i].GetCoolTime() - 1);
 
-                   
+
                         if (gFramework.GetGameObject()[j][i].GetCoolTime() == 0)
                         {
                             User.SetHP(User.GetHP() - 60);
                             gFramework.GetGameObject()[j][i].SetCoolTime(15);
-                            InvalidateRect(hwndUI, NULL , TRUE);
+                            InvalidateRect(hwndUI, NULL, TRUE);
                         }
                     }
                 }
@@ -1031,7 +1184,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         memdc = CreateCompatibleDC(hDC);
         
         auto GameObject = gFramework.GetGameObject();
-       
+
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 1 };
         int round = 0;
 
@@ -1067,12 +1220,17 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         break;
         }
 
-        for (int j = MAX_OBJECT_KIND-1; j > -1; --j)  // 전부 돎
+        for (int j = MAX_OBJECT_KIND - 1; j > -1; --j)  // 전부 돎
         {
-            for (int i = ICount[j]-1; i > -1; --i) // ICount까지
+            for (int i = ICount[j] - 1; i > -1; --i) // ICount까지
             {
+<<<<<<< HEAD
+                /*if (gFramework.GetGameObject()[j] != nullptr)*/
+                if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW)GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+=======
                 if(GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
                     GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
             }
         }
 
@@ -1080,14 +1238,14 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
         EndPaint(hWnd, &ps);
     }
-        break;
+    break;
     case WM_DESTROY:
         //wndCount--;
         //if (wndCount == 0) {
-            PostQuitMessage(0);
+        PostQuitMessage(0);
         //}
         return 0;
-    break;
+        break;
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 }
