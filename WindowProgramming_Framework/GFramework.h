@@ -1,8 +1,10 @@
 #pragma once
+
 #include "stdafx.h"
 #include "Resource.h"
 #include "Player.h"
 #include "GameObject.h"
+
 #define stage 3 // 스테이지 개수 입니다
 #define MAX_m 10 // 최대 몬스터 생성 갯수입니다.
 
@@ -72,14 +74,11 @@ private:
 	HINSTANCE mhInstance;
 	//.윈도우 핸들 변수
 	// 윈도우 클래스 변수
-	WNDCLASSEX mwcxMain;
-	WNDCLASSEX mwcxUI;
-	WNDCLASSEX mwcxBackGround;
+	WNDCLASSEX mwcxMain{ 0 };
+	WNDCLASSEX mwcxUI{ 0 };
+	WNDCLASSEX mwcxBackGround{ 0 };
 
 	WNDCLASSEX mwcxMonster;
-
-
-	HBITMAP m_hBitmap;
 
 	GameObject** mGameObject;
 
@@ -96,6 +95,10 @@ public:
 	void ShowBGWnd(int nCmdShow);
 	void ShowMainWnd(int nCmdShow);
 	void ShowUIWnd(int nCmdShow);
+<<<<<<< HEAD
+=======
+
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 	void ShowWnd(int nCmdShow);
 
 	void Reset();

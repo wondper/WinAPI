@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "resource.h"
+#include "Resource.h"
 
 enum class OBJECT_TYPE {CAKE, MAGAZINE, SCOPE, ZOMBIE, BAT, BOSS , END};
 
@@ -9,9 +9,7 @@ extern HINSTANCE g_hInst;
 class GameObject
 {
 private:
-	char mType = -1;
-	char mState; // 몬스터 상태
-
+	char mType;
 	int mHP;
 
 	int mWidth;
@@ -20,6 +18,8 @@ private:
 	POINT mPosition;
 	HBITMAP mAppearanceBitmap[6];
 	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
+
+	char mState; // 몬스터 상태
 
 	int mCoolTime; // 공격 쿨타임
 public:
@@ -56,7 +56,8 @@ public:
 	void SetPosition(const POINT& Pos) { mPosition = Pos; }
 
 	void SetBitmap(int* ResCode);
-
+	//임시커밋
+	//임시커밋2
 	HBITMAP* GetBitmap() { return mAppearanceBitmap; }
 };
 

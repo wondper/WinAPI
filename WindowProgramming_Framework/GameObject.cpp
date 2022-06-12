@@ -2,11 +2,16 @@
 
 
 GameObject::GameObject(int* ResCode)
+<<<<<<< HEAD
 	: mType(-1), mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 },
+=======
+	: mType(-1),  mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, 
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 	mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState(0)
 {
 	for (int i = 0; i < 6; ++i)
 		mAppearanceBitmap[i] = NULL;
+<<<<<<< HEAD
 	random_device rd;
 	mt19937 mersenne(rd());
 
@@ -15,6 +20,16 @@ GameObject::GameObject(int* ResCode)
 	auto bitmap = GetBitmap();
 	GetObject(bitmap[0], sizeof(BITMAP), &bmp);
 	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
+=======
+		random_device rd;
+		mt19937 mersenne(rd());
+		
+		BITMAP bmp;
+		SetBitmap(ResCode);
+		auto bitmap = GetBitmap();
+		GetObject(bitmap[0], sizeof(BITMAP), &bmp);
+		SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 
 	uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - mWidth);
 	mPosition.x = rand_X(mersenne);

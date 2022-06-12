@@ -1,9 +1,15 @@
 #include "GFramework.h"
 GFramework::GFramework()
 {
+<<<<<<< HEAD
 
     mhInstance = g_hInst;
     void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END }) * sizeof(GameObject*));
+=======
+    
+	mhInstance = g_hInst;
+    void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{OBJECT_TYPE::END}) *sizeof(GameObject*));
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
     mGameObject = static_cast<GameObject**>(raw_memory);
     auto GameobjectKindNum = static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END });
     for (int i = 0; i < GameobjectKindNum; ++i)
@@ -15,7 +21,11 @@ GFramework::GFramework()
     InitWCX(WINDOW::Main);
     InitWCX(WINDOW::UI);
 
+<<<<<<< HEAD
      gFramework.RegisterWnd();
+=======
+    gFramework.RegisterWnd();
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 
     CreateMonster();
 }
@@ -47,6 +57,7 @@ GFramework::~GFramework()
     delete[] mGameObject;*/
 }
 
+<<<<<<< HEAD
 
 void GFramework::InitWCX(WINDOW wnd)
 {
@@ -66,6 +77,26 @@ void GFramework::InitWCX(WINDOW wnd)
     switch (wnd)
     {
     case WINDOW::Main:
+=======
+void GFramework::InitWCX(WINDOW wnd)
+{
+    WNDCLASSEX wcex{0};
+	wcex.cbSize = sizeof(WNDCLASSEX);
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	//wcex.lpfnWndProc = WndProc;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = mhInstance;
+	wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground = (HBRUSH)GetStockObject(RGB(100, 100, 100));
+	wcex.lpszMenuName = NULL;
+	wcex.lpszClassName = L"MainWindow";
+	wcex.hIconSm = NULL;
+	switch (wnd)
+	{
+	case WINDOW::Main:
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 		wcex.lpfnWndProc = MainWndProc;
 		wcex.lpszClassName = L"MainWindow";
 		wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -95,10 +126,18 @@ void GFramework::InitWCX(WINDOW wnd)
 
 void GFramework::RegisterWnd()
 {
+<<<<<<< HEAD
 	RegisterClassEx(&mwcxBackGround);
 	RegisterClassEx(&mwcxMain);
 	RegisterClassEx(&mwcxUI);
 }
+=======
+    RegisterClassEx(&mwcxBackGround);
+	RegisterClassEx(&mwcxMain);
+	RegisterClassEx(&mwcxUI);
+}
+
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 void GFramework::ShowBGWnd(int nCmdShow)
 {
     hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0,
@@ -109,8 +148,24 @@ void GFramework::ShowBGWnd(int nCmdShow)
 
 void GFramework::ShowMainWnd(int nCmdShow)
 {
+<<<<<<< HEAD
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, mhInstance, NULL);
     ShowWindow(hwndMain, nCmdShow);
+=======
+    //ShowWindow(hwndMain, nCmdShow);
+}
+
+void GFramework::ShowUIWnd(int nCmdShow)
+{
+    //ShowWindow(hwndUI, nCmdShow);
+}
+
+void GFramework::ShowWnd(int nCmdShow)
+{
+    ShowBGWnd(nCmdShow);
+    ShowMainWnd(nCmdShow);
+    ShowUIWnd(nCmdShow);
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
 }
 
 void GFramework::ShowUIWnd(int nCmdShow)
@@ -330,8 +385,13 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().y - FRAME_SPEED > 0)
             {
                 User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
+<<<<<<< HEAD
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
+=======
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+            
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                 InvalidateRect(hWnd, NULL, TRUE);
             }
             break;
@@ -340,8 +400,13 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().x - FRAME_SPEED > 0)
             {
                 User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
+<<<<<<< HEAD
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
+=======
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+        
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                 InvalidateRect(hWnd, NULL, TRUE);
             }
             break;
@@ -349,8 +414,13 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().y + FRAME_SPEED < GetSystemMetrics(SM_CYSCREEN) - 200 - User.GetWinSizeY())
             {
                 User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
+<<<<<<< HEAD
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
+=======
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+      
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                 InvalidateRect(hWnd, NULL, TRUE);
             }
             break;
@@ -358,7 +428,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().x + FRAME_SPEED < GetSystemMetrics(SM_CXSCREEN) - User.GetWinSizeX())
             {
                 User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
-                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                 InvalidateRect(hWnd, NULL, TRUE);
             }
             break;
@@ -427,6 +497,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 {
                     switch (gFramework.GetGameObject()[j][i].GetType() && GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
                     {
+<<<<<<< HEAD
                     case CAKE:
                         if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
                         User.SetScore(User.GetScore() + 30);
@@ -465,6 +536,77 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
                             User.SetScore(User.GetScore() + 100);
                             GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+=======
+                        if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW) 
+                        {
+                            switch (GameObject[j][i].GetType())
+                            {
+                            case CAKE:
+                                if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
+                                User.SetScore(User.GetScore() + 30);
+
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+                            case MEGAZINE:
+                                if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                                User.SetScore(User.GetScore() + 30);
+
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+                            case SCOPE:
+                                User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
+                                User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
+                                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                                rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+                                    User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+                                ClipCursor(&rectView);
+
+                                User.SetScore(User.GetScore() + 30);
+                                User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+
+                            case ZOMBIE:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 荤噶 贸府
+
+
+                                    User.SetScore(User.GetScore() + 100);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+
+                            case BEE:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 荤噶 贸府
+
+
+                                    User.SetScore(User.GetScore() + 200);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+
+                            case BOSS:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 荤噶 贸府
+
+
+                                    User.SetScore(User.GetScore() + 1000);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+                            }
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                         }
                         break;
 
@@ -512,25 +654,25 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 switch (Trigerframe++)
                 {
                 case 0:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
                     break;
                 case 1:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 2:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 3:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 4:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 5:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 6:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     Trigerframe = 0;
                     Triger = false;
                     KillTimer(hWnd, 3);
@@ -687,8 +829,13 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
         hBrush = CreateSolidBrush(RGB(148, 228, 241));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
+<<<<<<< HEAD
         Rectangle(hDC, 310, 65, 310 + User.GetHP() * 1.2, 95);
 
+=======
+        Rectangle(hDC, 310, 65, 310 +User.GetHP()* 12 / 10, 95);
+        
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
         //Score Text Set, TextOut
         User.SetScorestr();
         TextOut(hDC, 300, 230, User.GetScoreStr().c_str(), static_cast<int>(User.GetScoreStr().size()));
@@ -711,18 +858,24 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC, memdc, mem1dc;
+    HDC hDC, memdc;
 
     PAINTSTRUCT ps;
-    HBRUSH hBrush, oldhBrush;
-
+    
     static int frame = 0;
 
     switch (message)
     {
 
     case WM_CREATE:
+<<<<<<< HEAD
     {
+=======
+    { 
+        hwndMain = CreateWindowEx(WS_EX_CLIENTEDGE, L"MainWindow", L"Main", WS_CHILD | WS_VISIBLE, 0 , 0, 200, 200, hWnd, NULL, g_hInst, NULL);
+        hwndUI = CreateWindowEx(WS_EX_CLIENTEDGE, L"UIWindow", L"UI", WS_CHILD | WS_VISIBLE, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, hWnd, NULL, g_hInst, NULL);
+
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
         int Round = 0;
         //gFramework.CreateMonster(Round);
         SetTimer(hWnd, 1, 100, NULL);
@@ -769,9 +922,15 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 {
                     for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
                     {
+<<<<<<< HEAD
                         if (gFramework.GetGameObject()[j][i].GetType() != CAKE &&
                             gFramework.GetGameObject()[j][i].GetType() != MEGAZINE &&
                             gFramework.GetGameObject()[j][i].GetType() != SCOPE)
+=======
+                        if(gFramework.GetGameObject()[j][i].GetType() != CAKE &&
+                            gFramework.GetGameObject()[j][i].GetType() != MEGAZINE &&
+                                gFramework.GetGameObject()[j][i].GetType() != SCOPE )
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
                             gFramework.GetGameObject()[j][i].SetCoolTime(gFramework.GetGameObject()[j][i].GetCoolTime() - 1);
 
 
@@ -793,7 +952,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     {
         hDC = BeginPaint(hWnd, &ps);
         memdc = CreateCompatibleDC(hDC);
-
+        
         auto GameObject = gFramework.GetGameObject();
 
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 1 };
@@ -835,17 +994,15 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j] - 1; i > -1; --i) // ICount鳖瘤
             {
+<<<<<<< HEAD
                 /*if (gFramework.GetGameObject()[j] != nullptr)*/
                 if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW)GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+=======
+                if(GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
+                    GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+>>>>>>> b16d82398f180b04b317353607371b2a2e57c031
             }
         }
-
-        /*hBrush = CreateSolidBrush(RGB(255, 255, 255));
-        oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
-        Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-        SelectObject(hDC, hBrush);
-        DeleteObject(hBrush);
-        */
 
         DeleteDC(memdc);
 
