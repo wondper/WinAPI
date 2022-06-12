@@ -99,19 +99,31 @@ void GFramework::RegisterWnd()
 	RegisterClassEx(&mwcxUI);
 }
 
-void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
+void GFramework::ShowBGWnd(int nCmdShow)
 {
-    mhInstance = hInstance;
-    hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, hInstance, nullptr);
-
-    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN),300, NULL, NULL, hInstance, NULL);
-    hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
-
+    hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0,
+        GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, mhInstance, nullptr);
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
+}
 
-    ShowWindow(hwndUI, nCmdShow);
+void GFramework::ShowMainWnd(int nCmdShow)
+{
+    hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, mhInstance, NULL);
     ShowWindow(hwndMain, nCmdShow);
+}
+
+void GFramework::ShowUIWnd(int nCmdShow)
+{
+    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, NULL, NULL, mhInstance, NULL);
+    ShowWindow(hwndUI, nCmdShow);
+}
+
+void GFramework::ShowWnd(int nCmdShow)
+{
+    ShowBGWnd(nCmdShow);
+    ShowMainWnd(nCmdShow);
+    ShowUIWnd(nCmdShow);
 }
 
 
