@@ -109,14 +109,12 @@ void GFramework::ShowBGWnd(int nCmdShow)
 
 void GFramework::ShowMainWnd(int nCmdShow)
 {
-    hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, mhInstance, NULL);
-    ShowWindow(hwndMain, nCmdShow);
+    //ShowWindow(hwndMain, nCmdShow);
 }
 
 void GFramework::ShowUIWnd(int nCmdShow)
 {
-    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, NULL, NULL, mhInstance, NULL);
-    ShowWindow(hwndUI, nCmdShow);
+    //ShowWindow(hwndUI, nCmdShow);
 }
 
 void GFramework::ShowWnd(int nCmdShow)
@@ -333,7 +331,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().y - FRAME_SPEED > 0)
             {
                 User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
-                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
             
                 InvalidateRect(hWnd, NULL, TRUE);
             }
@@ -343,7 +341,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().x - FRAME_SPEED > 0)
             {
                 User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
-                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
         
                 InvalidateRect(hWnd, NULL, TRUE);
             }
@@ -352,7 +350,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().y + FRAME_SPEED < GetSystemMetrics(SM_CYSCREEN) -200 - User.GetWinSizeY())
             {
                 User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
-                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
       
                 InvalidateRect(hWnd, NULL, TRUE);
             }
@@ -361,7 +359,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             if (User.GetPosition().x + FRAME_SPEED < GetSystemMetrics(SM_CXSCREEN) - User.GetWinSizeX())
             {
                 User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
-                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                 InvalidateRect(hWnd, NULL, TRUE);
             }
             break;
@@ -518,25 +516,25 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 switch (Trigerframe++)
                 {
                 case 0:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
                     break;
                 case 1:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 2:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 3:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 4:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 5:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 6:
-                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     Trigerframe = 0;
                     Triger = false;
                     KillTimer(hWnd, 3);
@@ -728,6 +726,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     case WM_CREATE:
     { 
+        hwndMain = CreateWindowEx(WS_EX_CLIENTEDGE, L"MainWindow", L"Main", WS_CHILD | WS_VISIBLE, 0 , 0, 200, 200, hWnd, NULL, g_hInst, NULL);
+        hwndUI = CreateWindowEx(WS_EX_CLIENTEDGE, L"UIWindow", L"UI", WS_CHILD | WS_VISIBLE, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, hWnd, NULL, g_hInst, NULL);
+
         int Round = 0;
         //gFramework.CreateMonster(Round);
         SetTimer(hWnd, 1, 100, NULL);
