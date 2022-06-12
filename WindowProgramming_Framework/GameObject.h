@@ -57,6 +57,7 @@ public:
 
 	void SetBitmap(int* ResCode);
 	//임시커밋
+	//임시커밋2
 	HBITMAP* GetBitmap() { return mAppearanceBitmap; }
 };
 
