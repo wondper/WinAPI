@@ -18,7 +18,6 @@ GFramework::GFramework()
     gFramework.RegisterWnd();
 
     CreateMonster();
-
 }
 
 GFramework::~GFramework()
@@ -46,12 +45,6 @@ GFramework::~GFramework()
     for (int i = 0; i < 6; ++i)
         delete[] mGameObject[i];
     delete[] mGameObject;*/
-}
-
-void GFramework::Init(HWND hwnd, HINSTANCE gInst)
-{
-    hwndMain = hwnd;
-    mhInstance = gInst;
 }
 
 void GFramework::InitWCX(WINDOW wnd)
@@ -116,12 +109,6 @@ void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
-
-    //for (size_t i = 0; i < MAX_m; i++)
-    //{
-    //    ShowWindow(mhMonsterWnd[i], nCmdShow);
-    //}
-
 
     ShowWindow(hwndUI, nCmdShow);
     ShowWindow(hwndMain, nCmdShow);

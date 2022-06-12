@@ -87,7 +87,6 @@ public:
 	~GFramework();
 
 	void InitWCX(WINDOW wnd);
-	void Init(HWND hwnd, HINSTANCE gInst);
 
 	void RegisterWnd();
 	void ShowWnd(HINSTANCE hInstance, int nCmdShow);
