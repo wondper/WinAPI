@@ -308,7 +308,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     {
 
     case WM_CREATE:
-        GetClientRect(hWnd, &rectView);
+        //GetClientRect(hWnd, &rectView);
 
         AimBit = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_PLAY_AIM));
         GetObject(AimBit, sizeof(BITMAP), &bmp);
@@ -327,7 +327,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         case 'f':
             break;
 
-        case 'w':
+        /*case 'w':
             if (User.GetPosition().y - FRAME_SPEED > 0)
             {
                 User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
@@ -362,13 +362,17 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                 InvalidateRect(hWnd, NULL, TRUE);
             }
+            break;*/
+        default:
+            InvalidateRect(hwndUI, NULL, TRUE);
             break;
         }
-        rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+        /*rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
             User.GetPosition().x+User.GetWinSizeX() - 10, User.GetPosition().y+ User.GetWinSizeY() - 10 };
-        ClipCursor(&rectView);
+        ClipCursor(&rectView);*/
 
-        User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+        //User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+
         break;
 
 
@@ -447,7 +451,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             case SCOPE:
                                 User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
                                 User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
-                                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                                SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
                                 rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
                                     User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
@@ -504,7 +508,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             SetTimer(hwndMain,3,10,NULL);
         }
 
-        InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+        InvalidateRect(hWnd, NULL, TRUE); // UI핸들을 보냄.
+        //InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+
         break;
 
     case WM_TIMER:
@@ -516,25 +522,25 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 switch (Trigerframe++)
                 {
                 case 0:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
                     break;
                 case 1:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 2:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 3:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 4:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 5:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     break;
                 case 6:
-                    SetWindowPos(hwndBG, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
                     Trigerframe = 0;
                     Triger = false;
                     KillTimer(hWnd, 3);
@@ -720,6 +726,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     PAINTSTRUCT ps;
     
     static int frame = 0;
+    static RECT rectView; // 윈도우창 크기
+    static int Trigerframe = 0;
+    static bool Triger = false;
 
     switch (message)
     {
@@ -728,6 +737,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     { 
         hwndMain = CreateWindowEx(WS_EX_CLIENTEDGE, L"MainWindow", L"Main", WS_CHILD | WS_VISIBLE, 0 , 0, 200, 200, hWnd, NULL, g_hInst, NULL);
         hwndUI = CreateWindowEx(WS_EX_CLIENTEDGE, L"UIWindow", L"UI", WS_CHILD | WS_VISIBLE, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN), 300, hWnd, NULL, g_hInst, NULL);
+        GetClientRect(hWnd, &rectView);
 
         int Round = 0;
         //gFramework.CreateMonster(Round);
@@ -746,7 +756,65 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     }
     break;
+    case WM_CHAR:
+        switch (wParam)
+        {
+        case 'q': // 프로그램 종료
+            PostQuitMessage(0);
+            break;
 
+        case 'f':
+            break;
+
+        case 'w':
+            if (User.GetPosition().y - FRAME_SPEED > 0)
+            {
+                User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
+                SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                InvalidateRect(hwndMain, NULL, TRUE);
+            }
+            break;
+
+        case 'a':
+            if (User.GetPosition().x - FRAME_SPEED > 0)
+            {
+                User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
+                SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                InvalidateRect(hwndMain, NULL, TRUE);
+
+            }
+            break;
+        case 's':
+            if (User.GetPosition().y + FRAME_SPEED < GetSystemMetrics(SM_CYSCREEN) - 200 - User.GetWinSizeY())
+            {
+                User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
+                SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                InvalidateRect(hwndMain, NULL, TRUE);
+
+            }
+            break;
+        case 'd':
+            if (User.GetPosition().x + FRAME_SPEED < GetSystemMetrics(SM_CXSCREEN) - User.GetWinSizeX())
+            {
+                User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
+                SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                InvalidateRect(hwndMain, NULL, TRUE);
+
+            }
+            break;
+        }
+        rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+            User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+        ClipCursor(&rectView);
+
+        User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+
+        InvalidateRect(hwndUI, NULL, FALSE);
+
+        break;
     case WM_TIMER:
         switch (wParam)
         {
@@ -792,9 +860,171 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             }
             
             break;
+        case 3:
+            if (Triger)
+            {
+                switch (Trigerframe++)
+                {
+                case 0:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y + 5, User.GetWinSizeX() - 5, User.GetWinSizeY() + 5, NULL);
+                    break;
+                case 1:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    break;
+                case 2:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    break;
+                case 3:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x - 5, User.GetPosition().y - 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    break;
+                case 4:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    break;
+                case 5:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x + 5, User.GetPosition().y + 5, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    break;
+                case 6:
+                    SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+                    Trigerframe = 0;
+                    Triger = false;
+                    KillTimer(hWnd, 3);
+                    break;
+                }
+            }
+            InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+
+
+            break;
+        }
+        break;
+    case WM_LBUTTONDOWN:
+    {
+        {
+            User.DecreaseBulletCount();
+            int ICount[MAX_OBJECT_KIND];
+            int round = gFramework.GetRound();
+            switch (round)
+            {
+            case 1:
+            {
+                int Count[6] = { 3, 3, 2, STAGE_ONE_ZOMBIE, 0, 0 };
+                for (int i = 0; i < 6; ++i)
+                    ICount[i] = Count[i];
+            }
+            break;
+            case 2:
+            {
+                int Count[6] = { 3, 3, 2, STAGE_TWO_ZOMBIE, STAGE_TWO_BEE, 0 };
+                for (int i = 0; i < 6; ++i)
+                    ICount[i] = Count[i];
+            }
+            break;
+            case 3:
+            {
+                int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+                for (int i = 0; i < 6; ++i)
+                    ICount[i] = Count[i];
+            }
+            break;
+            default:
+            {
+                int Count[6] = { 3, 3, 2, 3, 3, 1 };
+                for (int i = 0; i < 6; ++i)
+                    ICount[i] = Count[i];
+            }
+            break;
+            }
+
+            for (size_t j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
+            {
+                for (size_t i = 0; i < ICount[j]; i++) {
+                    auto GameObject = gFramework.GetGameObject();
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , GameObject[j][i].GetPosition().x, GameObject[j][i].GetPosition().y,
+                        GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
+                        GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
+                    {
+                        if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
+                        {
+                            switch (GameObject[j][i].GetType())
+                            {
+                            case CAKE:
+                                if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
+                                User.SetScore(User.GetScore() + 30);
+
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+                            case MEGAZINE:
+                                if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                                User.SetScore(User.GetScore() + 30);
+
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+                            case SCOPE:
+                                User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
+                                User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
+                                SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                                rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+                                    User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+                                ClipCursor(&rectView);
+
+                                User.SetScore(User.GetScore() + 30);
+                                User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+
+                            case ZOMBIE:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 사망 처리
+
+
+                                    User.SetScore(User.GetScore() + 100);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+
+                            case BEE:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 사망 처리
+
+
+                                    User.SetScore(User.GetScore() + 200);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+
+                            case BOSS:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 사망 처리
+
+
+                                    User.SetScore(User.GetScore() + 1000);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Triger = true;
+            SetTimer(hWnd, 3, 10, NULL);
         }
 
-
+        InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+    }
+    break;
     case WM_PAINT:
     {
         hDC = BeginPaint(hWnd, &ps);
