@@ -1,22 +1,25 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(int *ResCode)
-	: mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState{0}
+GameObject::GameObject(int* ResCode)
+	: mType(-1), mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 },
+	mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState(0)
 {
-		random_device rd;
-		mt19937 mersenne(rd());
-		
-		BITMAP bmp;
-		SetBitmap(ResCode);
-		auto bitmap = GetBitmap();
-		GetObject(bitmap[0], sizeof(BITMAP), &bmp);
-		SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
+	for (int i = 0; i < 6; ++i)
+		mAppearanceBitmap[i] = NULL;
+	random_device rd;
+	mt19937 mersenne(rd());
+
+	BITMAP bmp;
+	SetBitmap(ResCode);
+	auto bitmap = GetBitmap();
+	GetObject(bitmap[0], sizeof(BITMAP), &bmp);
+	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
 
 	uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - mWidth);
 	mPosition.x = rand_X(mersenne);
 
-	uniform_int_distribution<> rand_Y(0, GetSystemMetrics(SM_CYSCREEN)- 300 - mHeight);
+	uniform_int_distribution<> rand_Y(0, GetSystemMetrics(SM_CYSCREEN) - 300 - mHeight);
 	mPosition.y = rand_Y(mersenne);
 
 }

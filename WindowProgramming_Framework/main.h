@@ -7,13 +7,13 @@
 #define MAX_LOADSTRING 100
 
 //For console
-#ifdef _DEBUG
-#ifdef UNICODE
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
-#else
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
-#endif
-#endif
+//#ifdef _DEBUG
+//#ifdef UNICODE
+//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") 
+//#else
+//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console") 
+//#endif
+//#endif
 // 전역 변수:
 
 constexpr int RectSide = 20;
@@ -28,6 +28,4 @@ LPCTSTR lpszWindowName = L"Window Program";
 GFramework gFramework;
 
 
-
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 

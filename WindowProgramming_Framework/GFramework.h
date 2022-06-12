@@ -90,10 +90,13 @@ public:
 	~GFramework();
 
 	void InitWCX(WINDOW wnd);
-	void Init(HWND hwnd, HINSTANCE gInst);
 
 	void RegisterWnd();
-	void ShowWnd(HINSTANCE hInstance, int nCmdShow);
+
+	void ShowBGWnd(int nCmdShow);
+	void ShowMainWnd(int nCmdShow);
+	void ShowUIWnd(int nCmdShow);
+	void ShowWnd(int nCmdShow);
 
 	void Reset();
 	void Update(const float fTime);
