@@ -49,7 +49,7 @@ GFramework::~GFramework()
 
 void GFramework::InitWCX(WINDOW wnd)
 {
-	WNDCLASSEX wcex;
+    WNDCLASSEX wcex{0};
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
 	//wcex.lpfnWndProc = WndProc;

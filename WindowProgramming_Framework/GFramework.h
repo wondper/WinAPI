@@ -74,9 +74,9 @@ private:
 	HINSTANCE mhInstance;
 	//.윈도우 핸들 변수
 	// 윈도우 클래스 변수
-	WNDCLASSEX mwcxMain;
-	WNDCLASSEX mwcxUI;
-	WNDCLASSEX mwcxBackGround;
+	WNDCLASSEX mwcxMain{ 0 };
+	WNDCLASSEX mwcxUI{ 0 };
+	WNDCLASSEX mwcxBackGround{ 0 };
 
 	WNDCLASSEX mwcxMonster;
 
