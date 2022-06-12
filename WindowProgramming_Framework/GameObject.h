@@ -56,7 +56,7 @@ public:
 	void SetPosition(const POINT& Pos) { mPosition = Pos; }
 
 	void SetBitmap(int* ResCode);
-
+	//ÀÓ½ÃÄ¿¹Ô
 	HBITMAP* GetBitmap() { return mAppearanceBitmap; }
 };
 
