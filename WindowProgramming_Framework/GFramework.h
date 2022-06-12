@@ -1,8 +1,10 @@
 #pragma once
+
 #include "stdafx.h"
 #include "Resource.h"
 #include "Player.h"
 #include "GameObject.h"
+
 #define stage 3 // 스테이지 개수 입니다
 #define MAX_m 10 // 최대 몬스터 생성 갯수입니다.
 

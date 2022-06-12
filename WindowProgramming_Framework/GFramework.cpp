@@ -428,72 +428,75 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
                         GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
                     {
-                        switch (gFramework.GetGameObject()[j][i].GetType() && GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
+                        if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW) 
                         {
-                        case CAKE:
-                            if(User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
-                            User.SetScore(User.GetScore() + 30);
-
-                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
-                            break;
-
-                        case MEGAZINE:
-                            if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
-                            User.SetScore(User.GetScore() + 30);
-
-                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
-                            break;
-
-                        case SCOPE:
-                            User.SetPosition(User.GetPosition().x - 15 , User.GetPosition().y - 5);
-                            User.SetWinSizeX(User.GetWinSizeX() +30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
-                            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
-
-                            rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
-                                User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
-                            ClipCursor(&rectView);
-
-                            User.SetScore(User.GetScore() + 30);
-                            User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
-                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
-                            break;
-
-
-                        case ZOMBIE:
-                            gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
-                            if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                            switch (GameObject[j][i].GetType())
                             {
-                                // 荤噶 贸府
+                            case CAKE:
+                                if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
+                                User.SetScore(User.GetScore() + 30);
 
-
-                                User.SetScore(User.GetScore() + 100);
                                 GameObject[j][i].SetState(MONSTER_NOT_DRAW);
-                            }
-                            break;
+                                break;
 
-                        case BEE:
-                            gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
-                            if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
-                            {
-                                // 荤噶 贸府
+                            case MEGAZINE:
+                                if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                                User.SetScore(User.GetScore() + 30);
 
-
-                                User.SetScore(User.GetScore() + 200);
                                 GameObject[j][i].SetState(MONSTER_NOT_DRAW);
-                            }
-                            break;
+                                break;
 
-                        case BOSS:
-                            gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
-                            if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
-                            {
-                                // 荤噶 贸府
+                            case SCOPE:
+                                User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
+                                User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
+                                SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
+                                rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+                                    User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+                                ClipCursor(&rectView);
 
-                                User.SetScore(User.GetScore() + 1000);
+                                User.SetScore(User.GetScore() + 30);
+                                User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
                                 GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                break;
+
+
+                            case ZOMBIE:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 荤噶 贸府
+
+
+                                    User.SetScore(User.GetScore() + 100);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+
+                            case BEE:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 荤噶 贸府
+
+
+                                    User.SetScore(User.GetScore() + 200);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
+
+                            case BOSS:
+                                gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
+                                if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
+                                {
+                                    // 荤噶 贸府
+
+
+                                    User.SetScore(User.GetScore() + 1000);
+                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                }
+                                break;
                             }
-                            break;
                         }
                     }
                 }
@@ -690,7 +693,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
         hBrush = CreateSolidBrush(RGB(148, 228, 241));
         oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
-        Rectangle(hDC, 310, 65, 310 +User.GetHP()* 1.2, 95);
+        Rectangle(hDC, 310, 65, 310 +User.GetHP()* 12 / 10, 95);
         
         //Score Text Set, TextOut
         User.SetScorestr();
@@ -714,11 +717,10 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
 LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    HDC hDC, memdc, mem1dc;
+    HDC hDC, memdc;
 
     PAINTSTRUCT ps;
-    HBRUSH hBrush, oldhBrush;
-
+    
     static int frame = 0;
 
     switch (message)
@@ -838,17 +840,10 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j]-1; i > -1; --i) // ICount鳖瘤
             {
-              /*if (gFramework.GetGameObject()[j] != nullptr)*/ 
-                if(GameObject[j][i].GetState() != MONSTER_NOT_DRAW)GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+                if(GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
+                    GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
             }
         }
-
-        /*hBrush = CreateSolidBrush(RGB(255, 255, 255));
-        oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
-        Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-        SelectObject(hDC, hBrush);
-        DeleteObject(hBrush);
-        */
 
         DeleteDC(memdc);
 

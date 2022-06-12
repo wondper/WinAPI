@@ -10,9 +10,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     gFramework.ShowWnd(nCmdShow);
 
-    //CTRL + V
-
-    // 기본 메시지 루프입니다:
     while (true)
     {
         if (::PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))

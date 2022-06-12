@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "resource.h"
+#include "Resource.h"
 
 enum class OBJECT_TYPE {CAKE, MAGAZINE, SCOPE, ZOMBIE, BAT, BOSS , END};
 
