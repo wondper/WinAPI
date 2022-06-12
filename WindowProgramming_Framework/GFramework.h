@@ -43,6 +43,7 @@
 #define MONSTER_ATTACK 1
 #define MONSTER_DEATH 2
 
+#define MONSTER_NOT_DRAW 9
 #define MONSTER_NONE 10
 
 
@@ -100,7 +101,7 @@ public:
 
 	GameObject** GetGameObject() { return mGameObject; }
 
-	void CreateMonster(int Round);
+	void CreateMonster();
 	void CreateItem();
 		
 	int GetRound() const { return mRound; }

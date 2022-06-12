@@ -37,8 +37,8 @@ public:
 	int GetType() const { return mType; }
 	void SetType(char type) { mType = type; }
 
-	//int GetState() const { return mState; }
-	// void SetState(char State) { mState = State; }
+	int GetState() const { return mState; }
+	 void SetState(char State) { mState = State; }
 
 
 	int GetBitMapAnim() const { return mBitMapAnim; }
