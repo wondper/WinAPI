@@ -77,9 +77,6 @@ private:
 
 	WNDCLASSEX mwcxMonster;
 
-
-	HBITMAP m_hBitmap;
-
 	GameObject** mGameObject;
 
 	int mRound = 0;

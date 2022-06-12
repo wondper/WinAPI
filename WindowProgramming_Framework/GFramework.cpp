@@ -2,7 +2,7 @@
 GFramework::GFramework()
 {
     
-	//mhInstance = g_hInst;
+	mhInstance = g_hInst;
     void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{OBJECT_TYPE::END}) *sizeof(GameObject*));
     mGameObject = static_cast<GameObject**>(raw_memory);
     auto GameobjectKindNum = static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END });
@@ -10,6 +10,15 @@ GFramework::GFramework()
     {
         new(&mGameObject[i]) GameObject*;
     }
+
+    InitWCX(WINDOW::BackGround);
+    InitWCX(WINDOW::Main);
+    InitWCX(WINDOW::UI);
+
+    gFramework.RegisterWnd();
+
+    CreateMonster(0);
+
 }
 
 GFramework::~GFramework()
@@ -92,17 +101,18 @@ void GFramework::InitWCX(WINDOW wnd)
 
 void GFramework::RegisterWnd()
 {
+    RegisterClassEx(&mwcxBackGround);
 	RegisterClassEx(&mwcxMain);
 	RegisterClassEx(&mwcxUI);
-	RegisterClassEx(&mwcxBackGround);
 }
 
 void GFramework::ShowWnd(HINSTANCE hInstance, int nCmdShow)
 {
     mhInstance = hInstance;
+    hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, hInstance, nullptr);
+
     hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 300, GetSystemMetrics(SM_CXSCREEN),300, NULL, NULL, hInstance, NULL);
     hwndMain = CreateWindow(L"MainWindow", L"Main", NULL, 0, 0, 200, 200, NULL, NULL, hInstance, NULL);
-    hwndBG = CreateWindowEx(WS_EX_LAYERED | WS_EX_TOOLWINDOW, L"BackGroundWindow", L"BackGround", WS_VISIBLE, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), nullptr, nullptr, hInstance, nullptr);
 
     SetLayeredWindowAttributes(hwndBG, RGB(0, 0, 0), 0, LWA_COLORKEY);
     ShowWindow(hwndBG, nCmdShow);
@@ -255,7 +265,7 @@ void GFramework::CreateMonster(int Round)
         ZombieSprite[4] = IDB_MONSTER_ZOMBIE5;
         ZombieSprite[5] = IDB_MONSTER_ZOMBIE6;
 
-        void* raw_memory = operator new[](RoundZombie * sizeof(Zombie));
+        raw_memory = operator new[](RoundZombie * sizeof(Zombie));
         mGameObject[3] = static_cast<Zombie*>(raw_memory);
         for (int i = 0; i < 3; ++i)
         {
@@ -753,7 +763,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     case WM_CREATE:
     { 
         int Round = 0;
-        gFramework.CreateMonster(Round);
+        //gFramework.CreateMonster(Round);
         SetTimer(hWnd, 1, 100, NULL);
         SetTimer(hWnd, 2, 1000, NULL);
         for (int j = 0; j < MAX_OBJECT_KIND; ++j)
@@ -798,8 +808,8 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 {
                     for (int i = 0; i < BITMAP_SPRITE_COUNT; ++i)
                     {
-                        if(gFramework.GetGameObject()[j][i].GetType() != CAKE ||
-                            gFramework.GetGameObject()[j][i].GetType() != MEGAZINE || 
+                        if(gFramework.GetGameObject()[j][i].GetType() != CAKE &&
+                            gFramework.GetGameObject()[j][i].GetType() != MEGAZINE &&
                                 gFramework.GetGameObject()[j][i].GetType() != SCOPE )
                             gFramework.GetGameObject()[j][i].SetCoolTime(gFramework.GetGameObject()[j][i].GetCoolTime() - 1);
 
@@ -822,7 +832,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     {
         hDC = BeginPaint(hWnd, &ps);
         memdc = CreateCompatibleDC(hDC);
-
+        
         auto GameObject = gFramework.GetGameObject();
        
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 1 };
@@ -864,7 +874,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j]-1; i > -1; --i) // ICount±îÁö
             {
-              /*if (gFramework.GetGameObject()[j] != nullptr)*/ GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+              if (gFramework.GetGameObject()[j] != nullptr) GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
             }
         }
 

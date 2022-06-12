@@ -9,7 +9,7 @@ extern HINSTANCE g_hInst;
 class GameObject
 {
 private:
-	char mType = -1;
+	char mType;
 	int mHP;
 
 	int mWidth;
@@ -19,7 +19,7 @@ private:
 	HBITMAP mAppearanceBitmap[6];
 	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
 
-	// int mState; // 몬스터 상태
+	char mState; // 몬스터 상태
 
 	int mCoolTime; // 공격 쿨타임
 public:

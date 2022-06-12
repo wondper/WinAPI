@@ -1,9 +1,12 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(int *ResCode)
-	: mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, mBitMapAnim{ 0 }, mCoolTime{15}
+GameObject::GameObject(int* ResCode)
+	: mType(-1),  mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, 
+	mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState(0)
 {
+	for (int i = 0; i < 6; ++i)
+		mAppearanceBitmap[i] = NULL;
 		random_device rd;
 		mt19937 mersenne(rd());
 		
