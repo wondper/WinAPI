@@ -3,9 +3,9 @@ GFramework::GFramework()
 {
     
 	mhInstance = g_hInst;
-    void* raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{OBJECT_TYPE::END}) *sizeof(GameObject*));
+    void* raw_memory = operator new[](6 *sizeof(GameObject*));
     mGameObject = static_cast<GameObject**>(raw_memory);
-    auto GameobjectKindNum = static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END });
+    auto GameobjectKindNum = 6;
     for (int i = 0; i < GameobjectKindNum; ++i)
     {
         new(&mGameObject[i]) GameObject*;
@@ -433,10 +433,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
                     GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
                 {
-                    switch (gFramework.GetGameObject()[j][i].GetType() && GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
+                    switch (gFramework.GetGameObject()[j][i].GetType() && GameObject[j][i].GetState() != OBJECT_DELETE)
                     {
 
-                        if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW) 
+                        if (GameObject[j][i].GetState() != OBJECT_DELETE) 
                         {
                             switch (GameObject[j][i].GetType())
                             {
@@ -444,14 +444,14 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                                 if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
                                 User.SetScore(User.GetScore() + 30);
 
-                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                GameObject[j][i].SetState(OBJECT_DELETE);
                                 break;
 
                             case MEGAZINE:
                                 if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
                                 User.SetScore(User.GetScore() + 30);
 
-                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                GameObject[j][i].SetState(OBJECT_DELETE);
                                 break;
 
                             case SCOPE:
@@ -465,7 +465,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
                                 User.SetScore(User.GetScore() + 30);
                                 User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
-                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                GameObject[j][i].SetState(OBJECT_DELETE);
                                 break;
 
 
@@ -477,7 +477,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                                     User.SetScore(User.GetScore() + 100);
-                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                    GameObject[j][i].SetState(OBJECT_DELETE);
                                 }
                                 break;
 
@@ -489,7 +489,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                                     User.SetScore(User.GetScore() + 200);
-                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                    GameObject[j][i].SetState(OBJECT_DELETE);
                                 }
                                 break;
 
@@ -501,7 +501,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                                     User.SetScore(User.GetScore() + 1000);
-                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                    GameObject[j][i].SetState(OBJECT_DELETE);
                                 }
                                 break;
                             }
@@ -516,7 +516,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                             User.SetScore(User.GetScore() + 200);
-                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                            GameObject[j][i].SetState(OBJECT_DELETE);
                         }
                         break;
 
@@ -528,7 +528,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
                             User.SetScore(User.GetScore() + 1000);
-                            GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                            GameObject[j][i].SetState(OBJECT_DELETE);
                         }
                         break;
                     }
@@ -643,8 +643,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
                     GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
                 {
-                    if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW)GameObject[j][i].DrawPlayerWindow(hDC, memdc, GameObject[j][i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
-                        User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY());
+                    if (GameObject[j][i].GetState() != OBJECT_DELETE)GameObject[j][i].DrawPlayerWindow(hDC, memdc, GameObject[j][i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                        User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), GameObject[j][i].GetState());
                 }
             }
         }
@@ -979,7 +979,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                         GameObject[j][i].GetPosition().x + GameObject[j][i].GetWidth(),
                         GameObject[j][i].GetPosition().y + GameObject[j][i].GetHeight()))
                     {
-                        if (GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
+                        if (GameObject[j][i].GetState() != OBJECT_DELETE)
                         {
                             switch (GameObject[j][i].GetType())
                             {
@@ -987,14 +987,14 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                                 if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
                                 User.SetScore(User.GetScore() + 30);
 
-                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                GameObject[j][i].SetState(OBJECT_DELETE);
                                 break;
 
                             case MEGAZINE:
                                 if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
                                 User.SetScore(User.GetScore() + 30);
 
-                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                GameObject[j][i].SetState(OBJECT_DELETE);
                                 break;
 
                             case SCOPE:
@@ -1008,7 +1008,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
                                 User.SetScore(User.GetScore() + 30);
                                 User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
-                                GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                GameObject[j][i].SetState(OBJECT_DELETE);
                                 break;
 
 
@@ -1020,7 +1020,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 
                                     User.SetScore(User.GetScore() + 100);
-                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                    GameObject[j][i].SetState(OBJECT_DELETE);
                                 }
                                 break;
 
@@ -1032,7 +1032,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 
                                     User.SetScore(User.GetScore() + 200);
-                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                    GameObject[j][i].SetState(OBJECT_DELETE);
                                 }
                                 break;
 
@@ -1044,7 +1044,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 
                                     User.SetScore(User.GetScore() + 1000);
-                                    GameObject[j][i].SetState(MONSTER_NOT_DRAW);
+                                    GameObject[j][i].SetState(OBJECT_DELETE);
                                 }
                                 break;
                             }
@@ -1107,8 +1107,8 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             for (int i = ICount[j] - 1; i > -1; --i) // ICount±îÁö
             {
 
-                if(GameObject[j][i].GetState() != MONSTER_NOT_DRAW)
-                    GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim());
+                if(GameObject[j][i].GetState() != OBJECT_DELETE)
+                    GameObject[j][i].DrawBitmap(hDC, memdc, GameObject[j][i].GetBitMapAnim(), GameObject[j][i].GetState());
             }
         }
 

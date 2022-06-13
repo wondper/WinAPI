@@ -2,21 +2,19 @@
 
 
 GameObject::GameObject(int* ResCode)
-
-	: mType(-1),  mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 }, 
+	: mType(-1), mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 },
 	mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState(0)
 {
 	for (int i = 0; i < 6; ++i)
 		mAppearanceBitmap[i] = NULL;
+	random_device rd;
+	mt19937 mersenne(rd());
 
-		random_device rd;
-		mt19937 mersenne(rd());
-		
-		BITMAP bmp;
-		SetBitmap(ResCode);
-		auto bitmap = GetBitmap();
-		GetObject(bitmap[0], sizeof(BITMAP), &bmp);
-		SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
+	BITMAP bmp;
+	SetBitmap(ResCode);
+	auto bitmap = GetBitmap();
+	GetObject(bitmap[0], sizeof(BITMAP), &bmp);
+	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
 
 	uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - mWidth);
 	mPosition.x = rand_X(mersenne);
@@ -31,34 +29,59 @@ void GameObject::PlaySound()
 	Beep(1, 10);
 }
 
-void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
-{
-	HBITMAP oldBit;
-	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]); 
-	TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0,255,0));
-	SelectObject(memdc, oldBit);
-}
-
-void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PTop, int PRight, int PBottom)
+void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
 	HBITMAP oldBit;
 	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
-	TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+
+	switch (mState)
+	{
+	case MONSTER_CREATE:
+		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	case MONSTER_ATTACK:
+		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	case MONSTER_DEATH:
+		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	}
+
+	SelectObject(memdc, oldBit);
+}
+
+void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PTop, int PRight, int PBottom, char mState)
+{
+	HBITMAP oldBit;
+	oldBit = (HBITMAP)SelectObject(memdc, mAppearanceBitmap[mBitMapAnim]);
+
+	switch (mState)
+	{
+	case MONSTER_CREATE:
+		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	case MONSTER_ATTACK:
+		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	case MONSTER_DEATH:
+		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	case OBJECT_NOT_DRAW:
+		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+	}
 	SelectObject(memdc, oldBit);
 }
 
 void GameObject::SetBitmap(int* ResCode)
 {
-	for(int i=0;i<6;++i)
+	for (int i = 0; i < 6; ++i)
 		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
 }
 
-
-
-
-Cake::Cake(int *ResCode) : GameObject(ResCode)
+Cake::Cake(int* ResCode) : GameObject(ResCode)
 {
-	SetType(0);
+	SetType(CAKE);
 }
 
 Cake::~Cake()
@@ -76,14 +99,14 @@ void Cake::Anim(char Action)
 
 }
 
-void Cake::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+void Cake::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
-	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim, mState);
 }
 
 Megazine::Megazine(int* ResCode) : GameObject(ResCode)
 {
-	SetType(1);
+	SetType(MEGAZINE);
 }
 
 Megazine::~Megazine()
@@ -101,15 +124,15 @@ void Megazine::Anim(char Action)
 
 }
 
-void Megazine::DrawBitmap(HDC hdc, HDC memdc,int mBitMapAnim)
+void Megazine::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
-	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim, mState);
 }
 
 
 Scope::Scope(int* ResCode) : GameObject(ResCode)
 {
-	SetType(2);
+	SetType(SCOPE);
 }
 
 Scope::~Scope()
@@ -127,9 +150,9 @@ void Scope::Anim(char Action)
 
 }
 
-void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
-	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim, mState);
 }
 
 
@@ -137,7 +160,8 @@ void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
 
 Zombie::Zombie(int* ResCode) : GameObject(ResCode)
 {
-	SetType(3);
+	SetType(ZOMBIE);
+	SetHP(5);
 }
 
 Zombie::~Zombie()
@@ -155,15 +179,16 @@ void Zombie::Anim(char Action)
 
 }
 
-void Zombie::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+void Zombie::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
-	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim, mState);
 }
 
 
 Bee::Bee(int* ResCode) : GameObject(ResCode)
 {
-	SetType(4);
+	SetType(BEE);
+	SetHP(3);
 }
 
 Bee::~Bee()
@@ -181,15 +206,16 @@ void Bee::Anim(char Action)
 
 }
 
-void Bee::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+void Bee::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
-	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim, mState);
 }
 
 
 Boss::Boss(int* ResCode) : GameObject(ResCode)
 {
-	SetType(5);
+	SetType(BOSS);
+	SetHP(10);
 }
 
 Boss::~Boss()
@@ -207,8 +233,8 @@ void Boss::Anim(char Action)
 
 }
 
-void Boss::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim)
+void Boss::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 {
-	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim);
+	GameObject::DrawBitmap(hdc, memdc, mBitMapAnim, mState);
 }
 
