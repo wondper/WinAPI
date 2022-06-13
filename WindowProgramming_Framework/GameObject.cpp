@@ -1,7 +1,15 @@
 #include "GameObject.h"
 
 
-GameObject::GameObject(int* ResCode)
+GameObject::GameObject()
+	: mType(-1), mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 },
+	mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState(0)
+{
+	for (int i = 0; i < 6; ++i)
+		mAppearanceBitmap[i] = NULL;
+}
+
+GameObject::GameObject(int ResCode[6])
 	: mType(-1), mHP{ 3 }, mPosition{ 0, 0 }, mWidth{ 0 }, mHeight{ 0 },
 	mBitMapAnim{ 0 }, mCoolTime{ 15 }, mState(0)
 {
@@ -11,7 +19,7 @@ GameObject::GameObject(int* ResCode)
 	mt19937 mersenne(rd());
 
 	BITMAP bmp;
-	SetBitmap(ResCode);
+	
 	auto bitmap = GetBitmap();
 	GetObject(bitmap[0], sizeof(BITMAP), &bmp);
 	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
@@ -22,6 +30,38 @@ GameObject::GameObject(int* ResCode)
 	uniform_int_distribution<> rand_Y(0, GetSystemMetrics(SM_CYSCREEN) - 300 - mHeight);
 	mPosition.y = rand_Y(mersenne);
 
+}
+
+void GameObject::Initialize()
+{
+
+
+
+	mType = -1;
+	mHP = 3;
+	mPosition.x = 0, mPosition.y = 0;
+	mWidth = 0;
+	mHeight = 0;
+	mBitMapAnim = 0;
+	mCoolTime = 15;
+	mState = 0;
+	for (int i = 0; i < 6; ++i)
+		mAppearanceBitmap[i] = NULL;
+
+	random_device rd;
+	mt19937 mersenne(rd());
+
+	BITMAP bmp;
+
+	auto bitmap = GetBitmap();
+	GetObject(bitmap[0], sizeof(BITMAP), &bmp);
+	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
+
+	uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - mWidth);
+	mPosition.x = rand_X(mersenne);
+
+	uniform_int_distribution<> rand_Y(0, GetSystemMetrics(SM_CYSCREEN) - 300 - mHeight);
+	mPosition.y = rand_Y(mersenne);
 }
 
 void GameObject::PlaySound()
@@ -73,15 +113,22 @@ void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft
 	SelectObject(memdc, oldBit);
 }
 
-void GameObject::SetBitmap(int* ResCode)
+void GameObject::SetBitmap(int ResCode[6])
 {
 	for (int i = 0; i < 6; ++i)
 		mAppearanceBitmap[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
 }
 
-Cake::Cake(int* ResCode) : GameObject(ResCode)
+Cake::Cake() 
+{
+	
+}
+
+Cake::Cake(int ResCode[6]) : GameObject(ResCode)
 {
 	SetType(CAKE);
+	for (int i = 0; i < 6; ++i)
+		GetBitmap()[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(ResCode[i]));
 }
 
 Cake::~Cake()
@@ -96,6 +143,38 @@ void Cake::PlaySound()
 
 void Cake::Anim(char Action)
 {
+
+}
+
+void Cake::Initialize()
+{
+	SetType(CAKE);
+	SetHP(3);
+	
+	SetBitMapAnim(0);
+	SetCoolTime(15);
+	SetState(MONSTER_CREATE);
+
+	HBITMAP BitSprite[6];
+	for (int i = 0; i < 6; ++i)
+	{
+		BitSprite[i] = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_ITEM_CAKE));
+		SetBitmapIndex(i, BitSprite[i]);
+	}
+
+	random_device rd;
+	mt19937 mersenne(rd());
+
+	BITMAP bmp;
+
+	auto bitmap = GetBitmap();
+	GetObject(bitmap[0], sizeof(BITMAP), &bmp);
+	SetBitmapFrame(bmp.bmWidth, bmp.bmHeight);
+
+	uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - GetWidth());
+	uniform_int_distribution<> rand_Y(0, GetSystemMetrics(SM_CYSCREEN) - 300 - GetHeight());
+
+	SetPosition(rand_X(mersenne), rand_Y(mersenne));
 
 }
 

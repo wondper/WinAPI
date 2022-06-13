@@ -1,15 +1,11 @@
 #include "GFramework.h"
 GFramework::GFramework()
 {
-    CreateObject();
-
-
     InitWCX(WINDOW::BackGround);
     InitWCX(WINDOW::Main);
     InitWCX(WINDOW::UI);
 
     gFramework.RegisterWnd();
-
 }
 
 GFramework::~GFramework()
@@ -37,6 +33,22 @@ GFramework::~GFramework()
     for (int i = 0; i < 6; ++i)
         delete[] mGameObject[i];
     delete[] mGameObject;*/
+}
+
+void GFramework::Init()
+{
+    for (int i = 0; i < 6; ++i)
+    {
+        mCake[i].Initialize();
+        mMegazine[i].Initialize();
+        mScope[i].Initialize();
+        mZombie[i].Initialize();
+        mBee[i].Initialize();
+        mBoss[i].Initialize();
+    }
+    CreateObject();
+
+    //Round Set
 }
 
 void GFramework::InitWCX(WINDOW wnd)
@@ -180,7 +192,7 @@ void GFramework::CreateObject()
 
     for (size_t i = 0; i < 6; i++)
     {
-        mCake[i] = Cake::Cake(Sprite);
+        mCake[i].SetBitmap(Sprite);
     }
 
     for (size_t i = 0; i < 6; i++)
@@ -626,7 +638,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetMegazine()[i].GetPosition().x + gFramework.GetMegazine()[i].GetWidth(),
                         gFramework.GetMegazine()[i].GetPosition().y + gFramework.GetMegazine()[i].GetHeight()))
                     {
-                        if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)gFramework.GetMegazine()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetMegazine()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                        if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)
+                            gFramework.GetMegazine()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetMegazine()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetMegazine()[i].GetState());
                     }
 
@@ -637,7 +650,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetScope()[i].GetPosition().x + gFramework.GetScope()[i].GetWidth(),
                         gFramework.GetScope()[i].GetPosition().y + gFramework.GetScope()[i].GetHeight()))
                     {
-                        if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE)gFramework.GetScope()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetScope()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                        if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE)
+                            gFramework.GetScope()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetScope()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetScope()[i].GetState());
                     }
                     break;

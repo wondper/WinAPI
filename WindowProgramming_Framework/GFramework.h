@@ -62,6 +62,8 @@ public:
 
 	void ShowWnd(int nCmdShow);
 
+	void Init();
+
 	void Reset();
 	void Update(const float fTime);
 	void Draw(HDC hdc);

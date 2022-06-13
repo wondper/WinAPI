@@ -23,10 +23,10 @@ private:
 
 	int mWeapon;
 
-	HDC mPlayerMemDC;
-	HBITMAP mAimBitmap; // 윈도우창 조준구 이미지 비트맵
+	//HDC mPlayerMemDC;
+	//HBITMAP mAimBitmap; // 윈도우창 조준구 이미지 비트맵
 
-	RECT mAimRect;
+	RECT mAimRect{0, 0, 0, 0};
 
 
 	//bool Triger = false;
@@ -67,7 +67,7 @@ public:
 	int GetWeapon() const { return mWeapon; }
 	void SetWeapon(int weapon) { mWeapon = weapon; }
 
-	const RECT& GetRect() const { return mAimRect; }
+	//const RECT& GetRect() const { return mAimRect; }
 	void SetRect(int left, int top, int right, int bottom) { mAimRect.left = left; mAimRect.top = top; mAimRect.right = right; mAimRect.bottom = bottom; }
 
 	void SetGameOver() { mIsGameOver = true; }

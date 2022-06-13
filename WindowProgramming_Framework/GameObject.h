@@ -21,14 +21,20 @@ private:
 
 	int mCoolTime; // 공격 쿨타임
 public:
-	GameObject() {}
+	GameObject();
 	GameObject(int ResCode[6]);
 	virtual ~GameObject() {};
+
+
 
 	virtual void PlaySound();
 	virtual void Anim(char Action) {}; // Type에 따라 다른 애니메이션 설정.
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
 	virtual void DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft, int PRight, int PTop, int PBottom, char mState);
+
+	virtual void Initialize();
+
+	void SetBitmapIndex(int i, HBITMAP bit) { mAppearanceBitmap[i] = bit; }
 
 	int GetHP() const { return mHP; }
 	void SetHP(int hp) { mHP = hp; }
@@ -41,7 +47,7 @@ public:
 
 
 	int GetBitMapAnim() const { return mBitMapAnim; }
-	void SetmBitMapAnim(int BitMapAnim) { mBitMapAnim = BitMapAnim; }
+	void SetBitMapAnim(int BitMapAnim) { mBitMapAnim = BitMapAnim; }
 
 	int GetWidth() const { return mWidth; }
 	int GetHeight() const { return mHeight; }
@@ -51,10 +57,10 @@ public:
 	void SetCoolTime(int CoolTime) { mCoolTime = CoolTime; }
 
 
-	POINT GetPosition() const { return mPosition; }
-	void SetPosition(const POINT& Pos) { mPosition = Pos; }
+	POINT GetPosition() { return mPosition; }
+	void SetPosition(int PosX, int PosY) { mPosition.x = PosX; mPosition.y = PosY; }
 
-	void SetBitmap(int* ResCode);
+	void SetBitmap(int ResCode[6]);
 	HBITMAP* GetBitmap() { return mAppearanceBitmap; }
 };
 
@@ -63,9 +69,10 @@ class Cake : public GameObject
 private:
 
 public:
-	Cake() : GameObject() {}
-	Cake(int* ResCode);
+	Cake();
+	Cake(int ResCode[6]);
 	virtual ~Cake();
+	virtual void Initialize();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
