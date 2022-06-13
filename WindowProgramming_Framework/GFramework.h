@@ -4,8 +4,6 @@
 #include "Player.h"
 #include "GameObject.h"
 
-
-
 static HBITMAP BG_MAP;
 
 static HWND hwndMain;
@@ -47,6 +45,7 @@ private:
 	Boss mBoss[6];
 
 	int mRound = 0;
+	int mMonsterCount = 0;
 
 public:
 	GFramework();
@@ -76,9 +75,13 @@ public:
 	int GetRound() const { return mRound; }
 	void SetRound(int round) { mRound = round; }
 
+	int GetMonsterCount() const { return mMonsterCount; }
+	void SetMonsterCount(int MonsterCount) { mMonsterCount = MonsterCount; }
+
 	Cake* GetCake() { return mCake; }
 	Megazine* GetMegazine() { return mMegazine; }
 	Scope* GetScope() { return mScope; }
+
 	Zombie* GetZombie() { return mZombie; }
 	Bee* GetBee() { return mBee; }
 	Boss* GetBoss() { return mBoss; }

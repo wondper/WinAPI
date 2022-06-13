@@ -10,29 +10,6 @@ GFramework::GFramework()
 
 GFramework::~GFramework()
 {
-    /*void* raw_memory; raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END }) * sizeof(GameObject*));
-
-
-    for (int i = 6 - 1; i >= 0; --i) {
-        switch (mRound)
-        {
-        case 0:
-            raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END }) * sizeof(Cake*));
-            mGameObject[i].~GameObject();
-            break;
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        }
-        }
-        operator delete[](raw_memory);
-
-    for (int i = 0; i < 6; ++i)
-        delete[] mGameObject[i];
-    delete[] mGameObject;*/
 }
 
 void GFramework::Init()
@@ -86,12 +63,6 @@ void GFramework::InitWCX(WINDOW wnd)
         wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
         mwcxBackGround = wcex;
         break;
-        /*case WINDOW::Monster:
-            wcex.lpfnWndProc = MonsterWndProc;
-            wcex.lpszClassName = L"MonsterGroundWindow";
-            wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-            mwcxBackGround = wcex;
-            break;*/
     }
 
 }
@@ -183,7 +154,6 @@ void GFramework::MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam)
 void GFramework::CreateObject()
 {
     int Sprite[6];
-
 
     for (size_t i = 0; i < 6; i++)
     {
@@ -409,7 +379,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             case CAKE:
                 for (size_t i = 0; i < ICount[j]; i++)
                 {
-
                     if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
                         , gFramework.GetCake()[i].GetPosition().x, gFramework.GetCake()[i].GetPosition().y,
                         gFramework.GetCake()[i].GetPosition().x + gFramework.GetCake()[i].GetWidth(),
@@ -417,99 +386,121 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE)
                         {
-
+                            User.SetHP(User.GetHP() + 10);
+                            gFramework.GetCake()[i].SetState(OBJECT_DELETE);
+                           
                         }
                     }
 
-                    /*
-                   {
-                       if (gFramework.GetGameObject()[j][i].GetState() != OBJECT_DELETE)
-                       {
-                           switch (gFramework.GetGameObject()[j][i].GetType())
-                           {
-                           case CAKE:
-                               if (User.GetHP() < 700)User.SetHP(User.GetHP() + 10);
-                               User.SetScore(User.GetScore() + 30);
+                }
 
-                               GameObject[j][i].SetState(OBJECT_DELETE);
-                               break;
+                break;
+            case MEGAZINE:
+                for (size_t i = 0; i < ICount[j]; i++)
+                {
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , gFramework.GetMegazine()[i].GetPosition().x, gFramework.GetMegazine()[i].GetPosition().y,
+                        gFramework.GetMegazine()[i].GetPosition().x + gFramework.GetMegazine()[i].GetWidth(),
+                        gFramework.GetMegazine()[i].GetPosition().y + gFramework.GetMegazine()[i].GetHeight()))
+                    {
+                        if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)
+                        {
+                            if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                            User.SetScore(User.GetScore() + 30);
 
-                           case MEGAZINE:
-                               if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
-                               User.SetScore(User.GetScore() + 30);
-
-                               GameObject[j][i].SetState(OBJECT_DELETE);
-                               break;
-
-                           case SCOPE:
-                               User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
-                               User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
-                               SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
-
-                               rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
-                                   User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
-                               ClipCursor(&rectView);
-
-                               User.SetScore(User.GetScore() + 30);
-                               User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
-                               GameObject[j][i].SetState(OBJECT_DELETE);
-                               break;
-
-
-                           case ZOMBIE:
-                               gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
-                               if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
-                               {
-                                   // 사망 처리
-
-
-                                   User.SetScore(User.GetScore() + 100);
-                                   GameObject[j][i].SetState(OBJECT_DELETE);
-                               }
-                               break;
-
-                           case BEE:
-                               gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
-                               if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
-                               {
-                                   // 사망 처리
-
-
-                                   User.SetScore(User.GetScore() + 200);
-                                   GameObject[j][i].SetState(OBJECT_DELETE);
-                               }
-                               break;
-
-                           case BOSS:
-                               gFramework.GetGameObject()[j][i].SetHP(gFramework.GetGameObject()[j][i].GetHP() - 1);
-                               if (gFramework.GetGameObject()[j][i].GetHP() <= 0)
-                               {
-                                   // 사망 처리
-
-
-                                   User.SetScore(User.GetScore() + 1000);
-                                   GameObject[j][i].SetState(OBJECT_DELETE);
-                               }
-                               break;
-                           }
-                       }
-                   }*/
+                            gFramework.GetMegazine()[i].SetState(OBJECT_DELETE);
+                        }
+                    }
                 }
                 break;
 
-            case MEGAZINE:
-                break;
-
             case SCOPE:
+                for (size_t i = 0; i < ICount[j]; i++)
+                {
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , gFramework.GetScope()[i].GetPosition().x, gFramework.GetScope()[i].GetPosition().y,
+                        gFramework.GetScope()[i].GetPosition().x + gFramework.GetScope()[i].GetWidth(),
+                        gFramework.GetScope()[i].GetPosition().y + gFramework.GetScope()[i].GetHeight()))
+                    {
+                        if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE)
+                        {
+                            User.SetPosition(User.GetPosition().x - 15, User.GetPosition().y - 5);
+                            User.SetWinSizeX(User.GetWinSizeX() + 30);   User.SetWinSizeY(User.GetWinSizeY() + 10);
+                            SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+
+                            rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+                                User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+                            ClipCursor(&rectView);
+
+                            User.SetScore(User.GetScore() + 30);
+                            User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
+                            gFramework.GetScope()[i].SetState(OBJECT_DELETE);
+                        }
+                    }
+                }
                 break;
 
             case ZOMBIE:
+                for (size_t i = 0; i < ICount[j]; i++)
+                {
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , gFramework.GetZombie()[i].GetPosition().x, gFramework.GetZombie()[i].GetPosition().y,
+                        gFramework.GetZombie()[i].GetPosition().x + gFramework.GetZombie()[i].GetWidth(),
+                        gFramework.GetZombie()[i].GetPosition().y + gFramework.GetZombie()[i].GetHeight()))
+                    {
+                        if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE)
+                        {
+                            gFramework.GetZombie()[i].SetHP(gFramework.GetZombie()[i].GetHP() - 1);
+
+                            if (gFramework.GetZombie()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
+                                gFramework.GetZombie()[i].SetState(MONSTER_HIT);
+                            else  // HP 가 0이면 DELETE상태 처리
+                                gFramework.GetZombie()[i].SetState(OBJECT_DELETE);
+                        }
+                    }
+                }
                 break;
 
             case BEE:
+                for (size_t i = 0; i < ICount[j]; i++)
+                {
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , gFramework.GetBee()[i].GetPosition().x, gFramework.GetBee()[i].GetPosition().y,
+                        gFramework.GetBee()[i].GetPosition().x + gFramework.GetBee()[i].GetWidth(),
+                        gFramework.GetBee()[i].GetPosition().y + gFramework.GetBee()[i].GetHeight()))
+                    {
+                        if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE)
+                        {
+                            gFramework.GetBee()[i].SetHP(gFramework.GetBee()[i].GetHP() - 1);
+
+                            if (gFramework.GetBee()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
+                                gFramework.GetBee()[i].SetState(MONSTER_HIT);
+                            else  // HP 가 0이면 DELETE상태 처리
+                                gFramework.GetBee()[i].SetState(OBJECT_DELETE);
+                        }
+                    }
+                }
                 break;
 
             case BOSS:
+                for (size_t i = 0; i < ICount[j]; i++)
+                {
+                    if (MouseCollisionCheck(User.GetPosition().x + LOWORD(lParam), User.GetPosition().y + HIWORD(lParam)
+                        , gFramework.GetBoss()[i].GetPosition().x, gFramework.GetBoss()[i].GetPosition().y,
+                        gFramework.GetBoss()[i].GetPosition().x + gFramework.GetBoss()[i].GetWidth(),
+                        gFramework.GetBoss()[i].GetPosition().y + gFramework.GetBoss()[i].GetHeight()))
+                    {
+                        if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE)
+                        {
+                            gFramework.GetBoss()[i].SetHP(gFramework.GetBoss()[i].GetHP() - 1);
+
+                            if (gFramework.GetBoss()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
+                                gFramework.GetBoss()[i].SetState(MONSTER_HIT);
+                            else  // HP 가 0이면 DELETE상태 처리
+                                gFramework.GetBoss()[i].SetState(OBJECT_DELETE);
+                        }
+                    }
+                }
                 break;
             }
 
@@ -627,7 +618,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetCake()[i].GetPosition().x + gFramework.GetCake()[i].GetWidth(),
                         gFramework.GetCake()[i].GetPosition().y + gFramework.GetCake()[i].GetHeight()))
                     {
-                        if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE)gFramework.GetCake()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetCake()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                        if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE)
+                            gFramework.GetCake()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetCake()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetCake()[i].GetState());
                     }
                     break;
@@ -711,10 +703,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
     case WM_DESTROY:
-        //     wndCount--;
-       // if (wndCount == 0) {
         PostQuitMessage(0);
-        // }
+      
         return 0;
 
     }
@@ -817,7 +807,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     case WM_CREATE:
     {
         int Round = 0;
-        //gFramework.CreateMonster(Round);
         SetTimer(hWnd, 1, 100, NULL);
         SetTimer(hWnd, 2, 1000, NULL);
         for (int j = 0; j < MAX_OBJECT_KIND; ++j)
@@ -894,9 +883,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
             for (int i = ICount[j] - 1; i > -1; --i) // ICount까지
             {
-
                 switch (j)
                 {
+
                 case CAKE:
                     if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE && gFramework.GetCake()[i].GetState() != OBJECT_NOT_DRAW)
                     {
@@ -919,9 +908,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                     break;
 
                 case ZOMBIE:
-                    if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE && gFramework.GetCake()[i].GetState() != OBJECT_NOT_DRAW)
+                    if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE && gFramework.GetZombie()[i].GetState() != OBJECT_NOT_DRAW)
                     {
-                        gFramework.GetCake()[i].DrawBitmap(hDC, memdc, gFramework.GetCake()[i].GetBitMapAnim(), gFramework.GetCake()[i].GetState());
+                        gFramework.GetZombie()[i].DrawBitmap(hDC, memdc, gFramework.GetZombie()[i].GetBitMapAnim(), gFramework.GetZombie()[i].GetState());
                     }
                     break;
 
@@ -938,20 +927,10 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                         gFramework.GetScope()[i].DrawBitmap(hDC, memdc, gFramework.GetScope()[i].GetBitMapAnim(), gFramework.GetScope()[i].GetState());
                     }
                     break;
-
-
-
                 }
 
             }
         }
-
-        /*hBrush = CreateSolidBrush(RGB(255, 255, 255));
-        oldhBrush = (HBRUSH)SelectObject(hDC, hBrush);
-        Rectangle(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
-        SelectObject(hDC, hBrush);
-        DeleteObject(hBrush);
-        */
 
         DeleteDC(memdc);
 
@@ -961,10 +940,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
 
     case WM_DESTROY:
-        //wndCount--;
-        //if (wndCount == 0) {
         PostQuitMessage(0);
-        //}
         return 0;
         break;
     }

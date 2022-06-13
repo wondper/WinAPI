@@ -58,9 +58,10 @@ using namespace std;
 #define MAX_OBJECT_KIND 6
 
 
-#define MONSTER_CREATE 0
+#define OBJECT_CREATE 0
 #define MONSTER_ATTACK 1
-#define MONSTER_DEATH 2
+#define MONSTER_HIT 2
+#define MONSTER_DEATH 3
 
 #define OBJECT_NOT_DRAW 8
 #define OBJECT_DELETE 9

@@ -2,7 +2,7 @@
 
 Player::Player()
 	: mHP{ 500 },  mWinFrameSpeed{20}, mBullet{ 10 }, mScore{ 1000 },
-	mWeapon{ 1 }, mBulletStr{ 0 }, mScoreStr{ 0 }, mPosition{ POINT{0,0} }
+	mWeapon{ 1 }, mBulletStr{ 0 }, mScoreStr{ 0 }, mPosition{ POINT{500,500} }
 {
 }
 
