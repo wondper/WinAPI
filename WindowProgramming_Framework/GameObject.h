@@ -81,6 +81,7 @@ public:
 class Megazine : public GameObject
 {
 private:
+
 public:
 	Megazine();
 	Megazine(int ResCode[6]);
@@ -96,7 +97,7 @@ class Scope : public GameObject
 private:
 public:
 	Scope();
-	Scope(int* ResCode);
+	Scope(int ResCode[6]);
 	virtual ~Scope();
 	virtual void Initialize();
 	virtual void PlaySound();
@@ -110,7 +111,7 @@ class Zombie : public GameObject
 private:
 public:
 	Zombie();
-	Zombie(int* ResCode);
+	Zombie(int ResCode[6]);
 	virtual ~Zombie();
 	virtual void Initialize();
 	virtual void PlaySound();
@@ -123,7 +124,7 @@ class Bee : public GameObject
 private:
 public:
 	Bee();
-	Bee(int* ResCode);
+	Bee(int ResCode[6]);
 	virtual ~Bee();
 	virtual void Initialize();
 	virtual void PlaySound();
@@ -136,7 +137,7 @@ class Boss : public GameObject
 private:
 public:
 	Boss();
-	Boss(int* ResCode);
+	Boss(int ResCode[6]);
 	virtual ~Boss();
 	virtual void Initialize();
 	virtual void PlaySound();

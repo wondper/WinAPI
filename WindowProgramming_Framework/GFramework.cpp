@@ -172,7 +172,7 @@ void GFramework::CreateObject()
 
     for (size_t i = 0; i < 6; i++)
     {
-        mMegazine[i] = Megazine::Megazine(Sprite);
+        mMegazine[i].SetBitmap(Sprite);
     }
 
     for (size_t i = 0; i < 6; i++)
@@ -182,7 +182,7 @@ void GFramework::CreateObject()
 
     for (size_t i = 0; i < 6; i++)
     {
-        mScope[i] = Scope::Scope(Sprite);
+        mScope[i].SetBitmap(Sprite);
     }
 
 
@@ -195,7 +195,7 @@ void GFramework::CreateObject()
 
     for (size_t i = 0; i < 6; i++)
     {
-        mZombie[i] = Zombie::Zombie(Sprite);
+        mZombie[i].SetBitmap(Sprite);
     }
 
     Sprite[0] = IDB_MONSTER_BEE1;
@@ -207,7 +207,7 @@ void GFramework::CreateObject()
 
     for (size_t i = 0; i < 6; i++)
     {
-        mBee[i] = Bee::Bee(Sprite);
+        mBee[i].SetBitmap(Sprite);
     }
 
     Sprite[0] = IDB_MONSTER_BOSS1;
@@ -219,7 +219,7 @@ void GFramework::CreateObject()
 
     for (size_t i = 0; i < 6; i++)
     {
-        mBoss[i] = Boss::Boss(Sprite);
+        mBoss[i].SetBitmap(Sprite);
     }
 
 }
@@ -510,6 +510,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         Triger = true;
         SetTimer(hwndMain, 3, 10, NULL);
     }
+
+    InvalidateRect(hwndBG, NULL, TRUE); // UI핸들을 보냄.
     InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
     break;
 
@@ -605,11 +607,11 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-        for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + gFramework.GetRound(); ++j)
-        {
-            for (size_t i = 0; i < ICount[j]; i++)
-            {
-                switch (j)
+         for (int j = MAX_OBJECT_KIND - 1; j > -1; --j)  // 전부 돎
+         {
+             for (int i = ICount[j] - 1; i > -1; --i) // ICount까지
+             {
+                 switch (j)
                 {
                 case CAKE:
 
@@ -650,12 +652,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
                 case ZOMBIE:
                     if (BoxCollisionCheck(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(),
-                        gFramework.GetMegazine()[i].GetPosition().x, gFramework.GetMegazine()[i].GetPosition().y,
-                        gFramework.GetMegazine()[i].GetPosition().x + gFramework.GetMegazine()[i].GetWidth(),
-                        gFramework.GetMegazine()[i].GetPosition().y + gFramework.GetMegazine()[i].GetHeight()))
+                        gFramework.GetZombie()[i].GetPosition().x, gFramework.GetZombie()[i].GetPosition().y,
+                        gFramework.GetZombie()[i].GetPosition().x + gFramework.GetZombie()[i].GetWidth(),
+                        gFramework.GetZombie()[i].GetPosition().y + gFramework.GetZombie()[i].GetHeight()))
                     {
-                        if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)gFramework.GetMegazine()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetMegazine()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
-                            User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetMegazine()[i].GetState());
+                        if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE)gFramework.GetZombie()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetZombie()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetZombie()[i].GetState());
                     }
                     break;
 
@@ -822,9 +824,9 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         {
         case 1:
             // 몬스터 애니메이션 틱
-            for (int j = 0; j < MAX_OBJECT_KIND; ++j)
+            for (int j = MAX_OBJECT_KIND - 1; j > -1; --j)  // 전부 돎
             {
-
+          
             }
             InvalidateRect(hWnd, NULL, TRUE);
             InvalidateRect(hwndMain, NULL, TRUE);
@@ -915,16 +917,16 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                     break;
 
                 case BEE:
-                    if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE && gFramework.GetMegazine()[i].GetState() != OBJECT_NOT_DRAW)
+                    if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE && gFramework.GetBee()[i].GetState() != OBJECT_NOT_DRAW)
                     {
-                        gFramework.GetMegazine()[i].DrawBitmap(hDC, memdc, gFramework.GetMegazine()[i].GetBitMapAnim(), gFramework.GetMegazine()[i].GetState());
+                        gFramework.GetBee()[i].DrawBitmap(hDC, memdc, gFramework.GetBee()[i].GetBitMapAnim(), gFramework.GetBee()[i].GetState());
                     }
                     break;
 
                 case BOSS:
-                    if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE && gFramework.GetScope()[i].GetState() != OBJECT_NOT_DRAW)
+                    if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE && gFramework.GetBoss()[i].GetState() != OBJECT_NOT_DRAW)
                     {
-                        gFramework.GetScope()[i].DrawBitmap(hDC, memdc, gFramework.GetScope()[i].GetBitMapAnim(), gFramework.GetScope()[i].GetState());
+                        gFramework.GetBoss()[i].DrawBitmap(hDC, memdc, gFramework.GetBoss()[i].GetBitMapAnim(), gFramework.GetBoss()[i].GetState());
                     }
                     break;
                 }
