@@ -156,8 +156,6 @@ void Scope::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 }
 
 
-
-
 Zombie::Zombie(int* ResCode) : GameObject(ResCode)
 {
 	SetType(ZOMBIE);

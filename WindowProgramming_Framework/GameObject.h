@@ -1,13 +1,14 @@
 #pragma once
 #include "stdafx.h"
-#include "Resource.h"
+#include "resource.h"
 
 extern HINSTANCE g_hInst;
 
 class GameObject
 {
 private:
-	char mType;
+	char mType = -1;
+	char mState; // 몬스터 상태
 	int mHP;
 
 	int mWidth;
@@ -17,12 +18,12 @@ private:
 	HBITMAP mAppearanceBitmap[6];
 	int mBitMapAnim; // 애니메이션을 위한 비트맵 선택 인자값
 
-	char mState; // 몬스터 상태
 
 	int mCoolTime; // 공격 쿨타임
 public:
+	GameObject() {}
 	GameObject(int ResCode[6]);
-	virtual ~GameObject(){};
+	virtual ~GameObject() {};
 
 	virtual void PlaySound();
 	virtual void Anim(char Action) {}; // Type에 따라 다른 애니메이션 설정.
@@ -36,7 +37,7 @@ public:
 	void SetType(char type) { mType = type; }
 
 	int GetState() const { return mState; }
-	 void SetState(char State) { mState = State; }
+	void SetState(char State) { mState = State; }
 
 
 	int GetBitMapAnim() const { return mBitMapAnim; }
@@ -46,7 +47,7 @@ public:
 	int GetHeight() const { return mHeight; }
 	void SetBitmapFrame(int width, int height) { mWidth = width; mHeight = height; }
 
-	int GetCoolTime()  const{ return mCoolTime; }
+	int GetCoolTime()  const { return mCoolTime; }
 	void SetCoolTime(int CoolTime) { mCoolTime = CoolTime; }
 
 
@@ -54,8 +55,6 @@ public:
 	void SetPosition(const POINT& Pos) { mPosition = Pos; }
 
 	void SetBitmap(int* ResCode);
-	//임시커밋
-	//임시커밋2
 	HBITMAP* GetBitmap() { return mAppearanceBitmap; }
 };
 
@@ -64,6 +63,7 @@ class Cake : public GameObject
 private:
 
 public:
+	Cake() : GameObject() {}
 	Cake(int* ResCode);
 	virtual ~Cake();
 	virtual void PlaySound();
@@ -77,6 +77,7 @@ class Megazine : public GameObject
 {
 private:
 public:
+	Megazine() : GameObject() {}
 	Megazine(int* ResCode);
 	virtual ~Megazine();
 	virtual void PlaySound();
@@ -88,6 +89,7 @@ class Scope : public GameObject
 {
 private:
 public:
+	Scope() : GameObject() {}
 	Scope(int* ResCode);
 	virtual ~Scope();
 	virtual void PlaySound();
@@ -100,6 +102,7 @@ class Zombie : public GameObject
 {
 private:
 public:
+	Zombie() : GameObject() {}
 	Zombie(int* ResCode);
 	virtual ~Zombie();
 	virtual void PlaySound();
@@ -111,6 +114,7 @@ class Bee : public GameObject
 {
 private:
 public:
+	Bee() : GameObject() {}
 	Bee(int* ResCode);
 	virtual ~Bee();
 	virtual void PlaySound();
@@ -122,6 +126,7 @@ class Boss : public GameObject
 {
 private:
 public:
+	Boss() : GameObject() {}
 	Boss(int* ResCode);
 	virtual ~Boss();
 	virtual void PlaySound();

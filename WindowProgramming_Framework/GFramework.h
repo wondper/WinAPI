@@ -1,9 +1,10 @@
 #pragma once
-
 #include "stdafx.h"
 #include "Resource.h"
 #include "Player.h"
 #include "GameObject.h"
+
+
 
 static HBITMAP BG_MAP;
 
@@ -30,13 +31,20 @@ private:
 	HINSTANCE mhInstance;
 	//.윈도우 핸들 변수
 	// 윈도우 클래스 변수
-	WNDCLASSEX mwcxMain{ 0 };
-	WNDCLASSEX mwcxUI{ 0 };
-	WNDCLASSEX mwcxBackGround{ 0 };
+	WNDCLASSEX mwcxMain;
+	WNDCLASSEX mwcxUI;
+	WNDCLASSEX mwcxBackGround;
 
 	WNDCLASSEX mwcxMonster;
 
-	GameObject** mGameObject;
+	HBITMAP m_hBitmap;
+
+	Cake mCake[6];
+	Megazine mMegazine[6];
+	Scope mScope[6];
+	Zombie mZombie[6];
+	Bee mBee[6];
+	Boss mBoss[6];
 
 	int mRound = 0;
 
@@ -58,21 +66,20 @@ public:
 	void Update(const float fTime);
 	void Draw(HDC hdc);
 	void KeyboardProcess(UINT iMessage, WPARAM wParam, LPARAM lParam);
-	void MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam);	
+	void MouseProcess(UINT iMessage, WPARAM wParam, LPARAM lParam);
 	void SwitchScene(int SceneNum);
 
-	GameObject** GetGameObject() { return mGameObject; }
+	void CreateObject();
 
-	void CreateMonster();
-	void CreateItem();
-		
 	int GetRound() const { return mRound; }
 	void SetRound(int round) { mRound = round; }
-	//Create Item
 
-	// Create Monster
-
-	// 
+	Cake* GetCake() { return mCake; }
+	Megazine* GetMegazine() { return mMegazine; }
+	Scope* GetScope() { return mScope; }
+	Zombie* GetZombie() { return mZombie; }
+	Bee* GetBee() { return mBee; }
+	Boss* GetBoss() { return mBoss; }
 };
 
 extern GFramework gFramework;
