@@ -316,8 +316,8 @@ void GFramework::SetStage(int round)
         User.SetPosition(0, 0);
         User.SetWinSizeX(GetSystemMetrics(SM_CXSCREEN));   User.SetWinSizeY(GetSystemMetrics(SM_CYSCREEN));
         SetWindowPos(hwndMain, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) - 300, NULL);
-        MessageBox(hwndBG, L"Stage 3 Clear!", L"트로이 목마 바이러스를 격파하였습니다!", NULL);
-        MessageBox(hwndBG, L"종료시 Q를 눌러주세요", L"Your Clear!", NULL);
+        MessageBox(hwndBG, L"Stage 3 Clear! \n트로이 목마 바이러스를 격파하였습니다!", L"Your Clear", NULL);
+        exit(0);
         return;
     }
     else if (round == 3)
@@ -591,6 +591,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                                 User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
                             ClipCursor(&rectView);
 
+                            // 스코프가 켜지면 hBit1도 값 초기화
+                            hDC = BeginPaint(hWnd, &ps);
+                            hBit1 = CreateCompatibleBitmap(hDC, User.GetWinSizeX(), User.GetWinSizeY());
+
                             User.SetScore(User.GetScore() + 30);
                             User.SetRect(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + AIMSIZEX, User.GetPosition().y + AIMSIZEY);
                             gFramework.GetScope()[i].SetState(OBJECT_DELETE);
@@ -796,7 +800,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         gFramework.Draw(hDC);
         if (hBit1 == NULL)
         { //--- hBit1을 hdc와 호환되게 만들어준다.
-            hBit1 = CreateCompatibleBitmap(hDC, WINSIZEX, WINSIZEY);
+            hBit1 = CreateCompatibleBitmap(hDC, User.GetWinSizeX(), User.GetWinSizeY());
         }
 
         mem1dc = CreateCompatibleDC(hDC);
@@ -929,12 +933,17 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         TransparentBlt(mem1dc, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4,
             AimWidth / 2, AimHeight / 2, mem2dc, 0, 0, 134, 134, RGB(0, 255, 0));
 
-        //--- hBit1에는 배경과 텍스트가 출력된 비트맵이 저장되어 있다. 이 비트맵을 mem1dc에 선택
+
+
+
         oldBit1 = (HBITMAP)SelectObject(mem1dc, hBit1);
-
-
-
-        BitBlt(hDC, 0, 0, WINSIZEX, WINSIZEY, mem1dc, 0, 0, SRCCOPY);
+         if(round <=3)BitBlt(hDC, 0, 0, User.GetWinSizeX(), User.GetWinSizeY(), mem1dc, 0, 0, SRCCOPY);
+         else
+         {
+             oldBit1 = (HBITMAP)SelectObject(mem1dc, BG_MAP);
+             StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), mem1dc, User.GetPosition().x, User.GetPosition().y,
+                 GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
+         }
 
         SelectObject(mem2dc, oldBit2); DeleteDC(mem2dc);
         SelectObject(mem1dc, oldBit1); DeleteDC(mem1dc);
@@ -1307,20 +1316,20 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                             if (gFramework.GetZombie()[i].GetCoolTime() <= 0 && gFramework.GetZombie()[i].GetState() != MONSTER_DEATH)
                             {
                                 gFramework.GetZombie()[i].SetState(MONSTER_ATTACK);
-                                User.SetHP(User.GetHP() - 25);
-                                SetTimer(hwndUI, 1, 70, NULL); // UI 진동
+                                User.SetHP(User.GetHP() - 50);
+                                SetTimer(hwndUI, 1, 60, NULL); // UI 진동
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-                                    User.SetHP(500);
-                                    User.SetBullet(10);
-                                    MessageBox(hwndBG, L"Game Over", L"게임 오버가 되었습니다", NULL);
-                                    MessageBox(hwndBG, L"Game Over", L"스코어가 떨어지고 이어서 시작합니다", NULL);
                                     if (User.GetScore() > 500)User.SetScore(User.GetScore() - 500);
                                     else User.SetScore(0);
-                                   
+                                    User.SetHP(500);
+                                    User.SetBullet(10);
+                                    MessageBox(hwndBG, L"게임 오버가 되었습니다 \n 스코어가 떨어지고 이어서 시작합니다", L"Game Over", NULL);
+                                    
+
+                                    InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 }
 
-                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 gFramework.GetZombie()[i].SetCoolTime(8); // 8초마다 한번
                             }
 
@@ -1334,20 +1343,20 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                             if (gFramework.GetBee()[i].GetCoolTime() <= 0 && gFramework.GetBee()[i].GetState() != MONSTER_DEATH)
                             {
                                 gFramework.GetBee()[i].SetState(MONSTER_ATTACK);
-                                User.SetHP(User.GetHP() - 20);
+                                User.SetHP(User.GetHP() - 30);
                                 SetTimer(hwndUI, 1, 70, NULL); // UI 진동
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-                                    User.SetHP(500);
-                                    User.SetBullet(10);
-                                    MessageBox(hwndBG, L"Game Over", L"게임 오버가 되었습니다", NULL);
-                                    MessageBox(hwndBG, L"Game Over", L"스코어가 떨어지고 이어서 시작합니다", NULL);
                                     if (User.GetScore() > 500)User.SetScore(User.GetScore() - 500);
                                     else User.SetScore(0);
-                                  
-                                }
-                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+                                    User.SetHP(500);
+                                    User.SetBullet(10);
+                                    MessageBox(hwndBG, L"게임 오버가 되었습니다 \n 스코어가 떨어지고 이어서 시작합니다", L"Game Over", NULL);
+                                    
 
+                                    InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+
+                                }
                                 gFramework.GetBee()[i].SetCoolTime(5); // 5초마다 한번
                             }
                         }
@@ -1364,16 +1373,16 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                                 SetTimer(hwndUI, 1, 70, NULL); // UI 진동
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-                                    User.SetHP(500);
-                                    User.SetBullet(10);
-                                    MessageBox(hwndBG, L"Game Over", L"게임 오버가 되었습니다", NULL);
-                                    MessageBox(hwndBG, L"Game Over", L"스코어가 떨어지고 이어서 시작합니다", NULL);
                                     if (User.GetScore() > 500)User.SetScore(User.GetScore() - 500);
                                     else User.SetScore(0);
+                                    User.SetHP(500);
+                                    User.SetBullet(10);
+                                    MessageBox(hwndBG, L"게임 오버가 되었습니다 \n 스코어가 떨어지고 이어서 시작합니다", L"Game Over", NULL);
                                     
+
+                                    InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 }
 
-                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 gFramework.GetBoss()[i].SetCoolTime(15); 
                             }
                         }
