@@ -32,6 +32,8 @@
 *.la
 *.a
 *.lib
+!fmod_vc.lib
+
 
 # Executables
 *.exe

@@ -11,12 +11,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     gFramework.Init();
 
     // 시작할때 코드
-    /*
-    whlie()
-    {
-
-    }
-    */
+    //HWND hWnd;
+    /*whlie()
+    {*/
+        MessageBox(hwndBG, L"GameStart", L"게임 시작", NULL);
+    //}
+    
 
 
     gFramework.ShowWnd(nCmdShow);
