@@ -300,10 +300,22 @@ void GFramework::SetStage(int round)
     if (round > 3)
     {
         SetRound(round);
-       MessageBox(hwndBG, L"Stage 3 Clear!", L"트로이 목마 바이러스를 격파하였습니다!", NULL);
-       KillTimer(hwndBG, 4); 
-       KillTimer(hwndBG, 2);
-       KillTimer(hwndBG, 1);
+        KillTimer(hwndUI, 1);
+        KillTimer(hwndBG, 4);
+        KillTimer(hwndBG, 2);
+        KillTimer(hwndBG, 1);
+        for (int i = 0; i < 6; ++i)
+        {
+            mCake[i].SetState(OBJECT_DELETE);
+            mMegazine[i].SetState(OBJECT_DELETE);
+            mScope[i].SetState(OBJECT_DELETE);
+            mZombie[i].SetState(OBJECT_DELETE);
+            mBee[i].SetState(OBJECT_DELETE);
+            mBoss[i].SetState(OBJECT_DELETE);
+        }
+        SetWindowPos(hwndMain, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) - 250, NULL);
+        MessageBox(hwndBG, L"Stage 3 Clear!", L"트로이 목마 바이러스를 격파하였습니다!", NULL);
+        MessageBox(hwndBG, L"Your Clear!", L"종료시 Q를 눌러주세요", NULL);
         return;
     }
     else if (round == 3)
@@ -452,8 +464,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     case WM_MOUSEMOVE:
     {
-        AimPosition = { LOWORD(lParam) ,HIWORD(lParam) };
-        InvalidateRect(hWnd, NULL, TRUE);
+        int round = gFramework.GetRound();
+        if (round <= 3)
+        {
+            AimPosition = { LOWORD(lParam) ,HIWORD(lParam) };
+            InvalidateRect(hWnd, NULL, TRUE);
+        }
     }
     break;
 
@@ -635,7 +651,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                                 gFramework.GetBee()[i].SetPosition(rand_X(mersenne), gFramework.GetBee()[i].GetPosition().y);
 
                                 gFramework.GetBee()[i].SetState(MONSTER_HIT);
-                                gFramework.GetBee()[i].SetBitMapAnim(0);
+                                gFramework.GetBee()[i].SetBitMapAnim(0); 
+                                break;
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
@@ -668,6 +685,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                                 gFramework.GetSound()[4].Play(1.0f, 0);
                                 gFramework.GetBoss()[i].SetState(MONSTER_HIT);
                                 gFramework.GetBoss()[i].SetBitMapAnim(0);
+                                break;
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
@@ -883,14 +901,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
         SelectObject(memdc, AimBit);
         TransparentBlt(hDC, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4, AimWidth / 2, AimHeight / 2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
-        if (round > 3)
-        {
-            KillTimer(hWnd, 1);
-            SelectObject(memdc, BG_MAP);
-            StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, 0,0,
-                GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
-            SetWindowPos(hWnd, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)- 250, NULL);
-        }
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
         return 0;
