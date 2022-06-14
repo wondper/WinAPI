@@ -22,9 +22,10 @@
 *.so
 *.dylib
 *.dll
+!fmod.dll
 
 # FMOD*lib
-!FMOD/*lib
+!FMOD/lib*
 
 # Fortran module files
 *.mod
