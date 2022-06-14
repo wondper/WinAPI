@@ -20,7 +20,7 @@
 
 # Compiled Dynamic libraries
 *.so
-*.dylib
+
 *.dll
 !fmod.dll
 
@@ -35,7 +35,6 @@
 *.lai
 *.la
 *.a
-*.lib
 !fmod_vc.lib
 
 
