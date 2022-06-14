@@ -5,8 +5,6 @@
 #include "GameObject.h"
 #include "Sound.h"
 
-
-
 static HBITMAP BG_MAP;
 
 static HWND hwndMain;
@@ -47,7 +45,8 @@ private:
 	Bee mBee[6];
 	Boss mBoss[6];
 
-	int mRound = 0;
+	int mRound = 1;
+	int mMonsterCount = 0;
 
 	Sound mSound[SOUND_NUM];
 
@@ -79,9 +78,13 @@ public:
 	int GetRound() const { return mRound; }
 	void SetRound(int round) { mRound = round; }
 
+	int GetMonsterCount() const { return mMonsterCount; }
+	void SetMonsterCount(int MonsterCount) { mMonsterCount = MonsterCount; }
+
 	Cake* GetCake() { return mCake; }
 	Megazine* GetMegazine() { return mMegazine; }
 	Scope* GetScope() { return mScope; }
+
 	Zombie* GetZombie() { return mZombie; }
 	Bee* GetBee() { return mBee; }
 	Boss* GetBoss() { return mBoss; }

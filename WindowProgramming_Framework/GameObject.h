@@ -25,8 +25,6 @@ public:
 	GameObject(int ResCode[6]);
 	virtual ~GameObject() {};
 
-
-
 	virtual void PlaySound();
 	virtual void Anim(char Action) {}; // Type에 따라 다른 애니메이션 설정.
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
@@ -79,14 +77,16 @@ public:
 
 };
 
-//
+
 class Megazine : public GameObject
 {
 private:
+
 public:
-	Megazine() : GameObject() {}
-	Megazine(int* ResCode);
+	Megazine();
+	Megazine(int ResCode[6]);
 	virtual ~Megazine();
+	virtual void Initialize();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
@@ -96,9 +96,10 @@ class Scope : public GameObject
 {
 private:
 public:
-	Scope() : GameObject() {}
-	Scope(int* ResCode);
+	Scope();
+	Scope(int ResCode[6]);
 	virtual ~Scope();
+	virtual void Initialize();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
@@ -109,9 +110,10 @@ class Zombie : public GameObject
 {
 private:
 public:
-	Zombie() : GameObject() {}
-	Zombie(int* ResCode);
+	Zombie();
+	Zombie(int ResCode[6]);
 	virtual ~Zombie();
+	virtual void Initialize();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
@@ -121,9 +123,10 @@ class Bee : public GameObject
 {
 private:
 public:
-	Bee() : GameObject() {}
-	Bee(int* ResCode);
+	Bee();
+	Bee(int ResCode[6]);
 	virtual ~Bee();
+	virtual void Initialize();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
@@ -133,9 +136,10 @@ class Boss : public GameObject
 {
 private:
 public:
-	Boss() : GameObject() {}
-	Boss(int* ResCode);
+	Boss();
+	Boss(int ResCode[6]);
 	virtual ~Boss();
+	virtual void Initialize();
 	virtual void PlaySound();
 	virtual void Anim(char Action);
 	virtual void DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState);
