@@ -5,27 +5,27 @@ GFramework::GFramework()
     InitWCX(WINDOW::Main);
     InitWCX(WINDOW::UI);
 
-    const char* SoundList[4]{ "../SoundResource/Shot.wav" , "../SoundResource/Shot.wav" , "../SoundResource/Shot.wav" , "../SoundResource/Shot.wav" };
+    const char* SoundList[4]{ "SoundResource/Shot.wav" , "SoundResource/Shot.wav" , "SoundResource/Shot.wav" , "SoundResource/Shot.wav" };
     FMOD_MODE mode[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
     mSound[0].InitSound(SoundList, mode);
 
-    const char* SoundList2[4]{ "../SoundResource/Cake.wav" , "../SoundResource/Megazine.mp3" , "../SoundResource/Scope.wav" , "../SoundResource/Scope.wav" };
+    const char* SoundList2[4]{ "SoundResource/Cake.wav" , "SoundResource/Megazine.mp3" , "SoundResource/Scope.wav" , "SoundResource/Scope.wav" };
     FMOD_MODE mode2[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
     mSound[1].InitSound(SoundList2, mode2);
 
-    const char* SoundList3[4]{ "../SoundResource/Zombie.wav" , "../SoundResource/ZombieDead.wav" , "../SoundResource/ZombieAttack.wav" , "../SoundResource/Zombie.wav" };
+    const char* SoundList3[4]{ "SoundResource/Zombie.wav" , "SoundResource/ZombieDead.wav" , "SoundResource/ZombieAttack.wav" , "SoundResource/Zombie.wav" };
     FMOD_MODE mode3[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
     mSound[2].InitSound(SoundList3, mode3);
 
-    const char* SoundList4[4]{ "../SoundResource/Bee.mp3" , "../SoundResource/BeeDead.mp3" , "../SoundResource/BeeAttack.wav" , "../SoundResource/Bee.mp3" };
+    const char* SoundList4[4]{ "SoundResource/Bee.mp3" , "SoundResource/BeeDead.mp3" , "SoundResource/BeeAttack.wav" , "SoundResource/Bee.mp3" };
     FMOD_MODE mode4[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
     mSound[3].InitSound(SoundList4, mode4);
 
-    const char* SoundList5[4]{ "../SoundResource / Boss.wav" , "../SoundResource/BossDead.wav" , "../SoundResource/BossAttack.wav" , "../SoundResource/Boss.wav" };
+    const char* SoundList5[4]{ "SoundResource / Boss.wav" , "SoundResource/BossDead.wav" , "SoundResource/BossAttack.wav" , "SoundResource/Boss.wav" };
     FMOD_MODE mode5[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
     mSound[4].InitSound(SoundList5, mode5);
 
-    const char* SoundList6[4]{ "../SoundResource/BG1.wav" , "../SoundResource/BG2.wav" , "../SoundResource/BG3.wav" , "../SoundResource/BG1.wav" };
+    const char* SoundList6[4]{ "SoundResource/BG1.wav" , "SoundResource/BG2.wav" , "SoundResource/BG3.wav" , "SoundResource/BG1.wav" };
     FMOD_MODE mode6[4]{ FMOD_LOOP_NORMAL, FMOD_LOOP_NORMAL , FMOD_LOOP_NORMAL , FMOD_LOOP_NORMAL };
     mSound[5].InitSound(SoundList6, mode6);
 
