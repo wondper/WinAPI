@@ -20,11 +20,12 @@
 
 # Compiled Dynamic libraries
 *.so
-*.dylib
+
 *.dll
+!fmod.dll
 
 # FMOD*lib
-!FMOD/*lib
+!FMOD/lib*
 
 # Fortran module files
 *.mod
@@ -34,7 +35,6 @@
 *.lai
 *.la
 *.a
-*.lib
 !fmod_vc.lib
 
 
