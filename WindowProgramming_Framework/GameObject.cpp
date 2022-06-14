@@ -73,19 +73,27 @@ void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 
 	switch (mState)
 	{
-	case OBJECT_CREATE:// 오브젝트 생성시
-		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+	case OBJECT_CREATE: // 오브젝트 생성시
+		TransparentBlt(hdc, mPosition.x, mPosition.y , mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 	case MONSTER_ATTACK:// 몬스터가 공격시
-		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth , mHeight, RGB(0, 255, 0));
+		if (mBitMapAnim < 3)
+			TransparentBlt(hdc, mPosition.x - (30 * mBitMapAnim), mPosition.y - (30 * mBitMapAnim),
+				mWidth + (30 * mBitMapAnim), mHeight + (30 * mBitMapAnim), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		else
+			TransparentBlt(hdc, mPosition.x - (30 * (6 - mBitMapAnim)), mPosition.y - (30 * (6 - mBitMapAnim)),
+				mWidth + (30 * (6 - mBitMapAnim)), mHeight + (30 * (6 - mBitMapAnim)), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
-	case MONSTER_HIT:// 몬스터가 공격을 받았을시
-		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
-		break;
-	case MONSTER_DEATH:// 몬스터가 사망했을시
-		TransparentBlt(hdc, mPosition.x, mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 
+	case MONSTER_HIT:// 몬스터가 공격을 받았을시 깜빡깜빡
+		if (mBitMapAnim % 2 == 1)
+			TransparentBlt(hdc, mPosition.x , mPosition.y, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
+	case MONSTER_DEATH:// 몬스터가 사망시
+		TransparentBlt(hdc, mPosition.x , mPosition.y+ (100 * mBitMapAnim), mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+
+
 	}
 
 	SelectObject(memdc, oldBit);
@@ -102,13 +110,23 @@ void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft
 		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 	case MONSTER_ATTACK:// 몬스터가 공격시
-		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		if (mBitMapAnim < 3)
+			TransparentBlt(hdc, mPosition.x - PLeft - (30 * mBitMapAnim), mPosition.y - PTop - (30 * mBitMapAnim),
+				mWidth + (30 * mBitMapAnim), mHeight + (30 * mBitMapAnim), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		else
+			TransparentBlt(hdc, mPosition.x - PLeft - (30 * (6 - mBitMapAnim)), mPosition.y - PTop - (30 * (6 - mBitMapAnim)),
+				mWidth + (30 * (6 - mBitMapAnim)), mHeight + (30 * (6 - mBitMapAnim)), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 
-	case MONSTER_HIT:// 몬스터가 공격을 받았을시
+	case MONSTER_HIT:// 몬스터가 공격을 받았을시 깜빡깜빡
+		if(mBitMapAnim%2  == 1)
 		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 	case MONSTER_DEATH:// 몬스터가 사망시
+		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop + (100 * mBitMapAnim), mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
+		break;
+
+	default:
 		TransparentBlt(hdc, mPosition.x - PLeft, mPosition.y - PTop, mWidth, mHeight, memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 	

@@ -44,7 +44,7 @@ private:
 	Bee mBee[6];
 	Boss mBoss[6];
 
-	int mRound = 0;
+	int mRound = 1;
 	int mMonsterCount = 0;
 
 public:
