@@ -100,8 +100,9 @@ void GFramework::ShowUIWnd(int nCmdShow)
 void GFramework::ShowWnd(int nCmdShow)
 {
     ShowBGWnd(nCmdShow);
-    ShowMainWnd(nCmdShow);
     ShowUIWnd(nCmdShow);
+    ShowMainWnd(nCmdShow);
+
 }
 
 
@@ -271,6 +272,11 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         AimWidth = bmp.bmWidth;
         AimHeight = bmp.bmHeight;
         BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG1_STAGE));
+
+        rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
+           User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
+        ClipCursor(&rectView);
+
         SetTimer(hWnd, 4, 3000, NULL); // 3초마다 탄알 1개 충전
         return 0;
     case WM_CHAR:
