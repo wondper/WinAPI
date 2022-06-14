@@ -20,6 +20,9 @@
 #include<string>
 #include<random>
 #include<ctime>
+
+//Sound
+#include<fmod.h>
 using namespace std;
 
 //Game

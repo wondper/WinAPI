@@ -5,6 +5,8 @@ GFramework::GFramework()
     InitWCX(WINDOW::Main);
     InitWCX(WINDOW::UI);
 
+    mSound.InitSound("../SoundResource/Shot.wav", FMOD_DEFAULT);
+
     gFramework.RegisterWnd();
 }
 
@@ -335,6 +337,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_LBUTTONDOWN:
     {
         User.DecreaseBulletCount();
+        gFramework.GetSound().Play();
         int ICount[MAX_OBJECT_KIND];
         int round = gFramework.GetRound();
         switch (round)

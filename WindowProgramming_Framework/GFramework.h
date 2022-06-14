@@ -3,6 +3,7 @@
 #include "Resource.h"
 #include "Player.h"
 #include "GameObject.h"
+#include "Sound.h"
 
 static HBITMAP BG_MAP;
 
@@ -47,6 +48,8 @@ private:
 	int mRound = 1;
 	int mMonsterCount = 0;
 
+	Sound mSound;
+
 public:
 	GFramework();
 	~GFramework();
@@ -85,6 +88,8 @@ public:
 	Zombie* GetZombie() { return mZombie; }
 	Bee* GetBee() { return mBee; }
 	Boss* GetBoss() { return mBoss; }
+	
+	Sound& GetSound() { return mSound; }
 };
 
 extern GFramework gFramework;
