@@ -2,8 +2,10 @@
 #include "stdafx.h"
 
 constexpr int FRAME_SPEED = 20;
-constexpr int WINSIZE_WIDEX = 400;
-constexpr int WINSIZE_WIDHY = 400;
+constexpr int WINSIZE_WIDEX = 240;
+constexpr int WINSIZE_WIDHY = 220;
+constexpr int WINSIZEX = 200;
+constexpr int WINSIZEY = 200;
 constexpr int AIMSIZEX = 40;
 constexpr int AIMSIZEY = 40;
 
@@ -15,8 +17,8 @@ private:
 	int mHP;
 	int mWinFrameSpeed ;
 
-	int mWinSizeX = 200;
-	int mWinSizeY = 200;
+	int mWinSizeX = WINSIZEX;
+	int mWinSizeY = WINSIZEY;
 
 	int mBullet;
 	int mScore;
@@ -36,6 +38,9 @@ private:
 
 	std::wstring mBulletStr;
 	std::wstring mScoreStr;
+
+	int mFrameXWideSize = 40;
+	int mFrameYWideSize = 20;
 public:
 	Player();
 	virtual ~Player();
@@ -50,6 +55,8 @@ public:
 
 	void DecreaseBulletCount() { --mBullet; }
 
+	int GetFrameXWideSize() { return mFrameXWideSize; }
+	int GetFrameYWideSize() { return mFrameYWideSize; }
 
 	int GetWinSizeX() const { return mWinSizeX; }
 	void SetWinSizeX(int WinSizeX) { mWinSizeX = WinSizeX; }
