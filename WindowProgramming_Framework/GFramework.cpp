@@ -10,6 +10,7 @@ GFramework::GFramework()
     gFramework.RegisterWnd();
 }
 
+
 GFramework::~GFramework()
 {
     /*void* raw_memory; raw_memory = operator new[](static_cast<int>(OBJECT_TYPE{ OBJECT_TYPE::END }) * sizeof(GameObject*));
