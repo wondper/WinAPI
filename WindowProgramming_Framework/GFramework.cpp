@@ -315,7 +315,7 @@ void GFramework::SetStage(int round)
         }
         SetWindowPos(hwndMain, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) - 250, NULL);
         MessageBox(hwndBG, L"Stage 3 Clear!", L"트로이 목마 바이러스를 격파하였습니다!", NULL);
-        MessageBox(hwndBG, L"Your Clear!", L"종료시 Q를 눌러주세요", NULL);
+        MessageBox(hwndBG, L"종료시 Q를 눌러주세요", L"Your Clear!", NULL);
         return;
     }
     else if (round == 3)
