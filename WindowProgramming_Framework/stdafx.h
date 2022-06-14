@@ -75,4 +75,4 @@ using namespace std;
 #define OBJECT_DELETE 9
 #define MONSTER_NONE 10
 
-#define SOUND_NUM 10
+#define SOUND_NUM 6

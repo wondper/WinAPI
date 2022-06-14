@@ -16,11 +16,31 @@ extern HINSTANCE g_hInst;
 
 static Player User;
 
+enum class SOUND_CATEGORY {
+	SHOT = 0,
+	GetCake,
+	GetMegazine,
+	GetScope,
+	HitZombie,
+	ZombieDead,
+	ZombieAttack,
+	HitBee,
+	BeeDead,
+	BeeAttack,
+	HitBoss,
+	BossDead,
+	BossAttack,
+	BossAction,
+	Stage1BG,
+	Stage2BG,
+	Stage3BG
+};
+
 enum class WINDOW {
 	Main = 0,
 	UI,
 	BackGround,
-	Monster,
+	Monster
 };
 
 
@@ -77,7 +97,7 @@ public:
 	void CreateObject();
 
 	int GetRound() const { return mRound; }
-	void SetRound(int round) { mRound = round; }
+	void SetRound(int round);
 
 	int GetMonsterCount() const { return mMonsterCount; }
 	void DecreaseMonsterCount() { --mMonsterCount; }

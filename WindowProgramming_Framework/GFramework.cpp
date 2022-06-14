@@ -5,10 +5,31 @@ GFramework::GFramework()
     InitWCX(WINDOW::Main);
     InitWCX(WINDOW::UI);
 
-    mSound[0].InitSound("../SoundResource/Shot.wav", FMOD_DEFAULT);
+    const char* SoundList[4]{ "../SoundResource/Shot.wav" , "../SoundResource/Shot.wav" , "../SoundResource/Shot.wav" , "../SoundResource/Shot.wav" };
+    FMOD_MODE mode[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
+    mSound[0].InitSound(SoundList, mode);
+
+    const char* SoundList2[4]{ "../SoundResource/Cake.wav" , "../SoundResource/Megazine.mp3" , "../SoundResource/Scope.wav" , "../SoundResource/Scope.wav" };
+    FMOD_MODE mode2[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
+    mSound[1].InitSound(SoundList2, mode2);
+
+    const char* SoundList3[4]{ "../SoundResource/Zombie.wav" , "../SoundResource/ZombieDead.wav" , "../SoundResource/ZombieAttack.wav" , "../SoundResource/Zombie.wav" };
+    FMOD_MODE mode3[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
+    mSound[2].InitSound(SoundList3, mode3);
+
+    const char* SoundList4[4]{ "../SoundResource/Bee.mp3" , "../SoundResource/BeeDead.mp3" , "../SoundResource/BeeAttack.wav" , "../SoundResource/Bee.mp3" };
+    FMOD_MODE mode4[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
+    mSound[3].InitSound(SoundList4, mode4);
+
+    const char* SoundList5[4]{ "../SoundResource / Boss.wav" , "../SoundResource/BossDead.wav" , "../SoundResource/BossAttack.wav" , "../SoundResource/Boss.wav" };
+    FMOD_MODE mode5[4]{ FMOD_DEFAULT, FMOD_DEFAULT , FMOD_DEFAULT , FMOD_DEFAULT };
+    mSound[4].InitSound(SoundList5, mode5);
+
+    const char* SoundList6[4]{ "../SoundResource/BG1.wav" , "../SoundResource/BG2.wav" , "../SoundResource/BG3.wav" , "../SoundResource/BG1.wav" };
+    FMOD_MODE mode6[4]{ FMOD_LOOP_NORMAL, FMOD_LOOP_NORMAL , FMOD_LOOP_NORMAL , FMOD_LOOP_NORMAL };
+    mSound[5].InitSound(SoundList6, mode6);
 
     gFramework.RegisterWnd();
-
 }
 
 
@@ -34,6 +55,7 @@ void GFramework::Init()
         SetMonsterCount(0);
         break;
     }
+
     for (int i = 0; i < 6; ++i)
     {
         mCake[i].Initialize();
@@ -43,6 +65,7 @@ void GFramework::Init()
         mBee[i].Initialize();
         mBoss[i].Initialize();
     }
+
     CreateObject();
 
     //Round Set
@@ -258,6 +281,22 @@ bool BoxCollisionCheck(int Box1Left, int Box1Top, int Box1Right, int Box1Bottom,
     else return false;
 }
 
+void GFramework::SetRound(int round)
+{
+    mRound = round;
+    switch (round)
+    {
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    default:
+        break;
+    }
+}
+
 void GFramework::SetStage(int round)
 {
     if (round > 3)
@@ -286,6 +325,9 @@ void GFramework::SetStage(int round)
         }
         MessageBox(hwndBG, L"Stage 2 Clear!", L"스테이지 2 종료", NULL);
         SetTimer(hwndBG, 2, 1000, NULL); //
+        GetSound()[5].Stop(1);
+        GetSound()[5].Play(1.0f, 2);
+
     }
     else if (round == 2)
     {
@@ -307,6 +349,8 @@ void GFramework::SetStage(int round)
         }
         MessageBox(hwndBG, L"Stage 1 Clear!", L"스테이지 1 종료", NULL);
         SetTimer(hwndBG, 2, 1000, NULL); //
+        GetSound()[5].Stop(0);
+        GetSound()[5].Play(1.0f, 1);
     }
     else
     {
@@ -348,8 +392,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
            User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
         ClipCursor(&rectView);
-
         SetTimer(hWnd, 4, 3000, NULL); // 3초마다 탄알 1개 충전
+        gFramework.GetSound()[5].Play(1.0f, 0);
         return 0;
     case WM_CHAR:
         switch (wParam)
@@ -417,7 +461,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     {
         if (User.GetBullet() > 0)
             User.DecreaseBulletCount();
-        gFramework.GetSound()[0].Play();
+        gFramework.GetSound()[0].Play(0.2f, 0);
+        //gFramework.GetSound()[5].Play(1.0f, 0);
         int ICount[MAX_OBJECT_KIND];
         int round = gFramework.GetRound();
         switch (round)
@@ -468,6 +513,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE)
                         {
+                            gFramework.GetSound()[1].Play(1.0f, 0);
                             User.SetHP(User.GetHP() + 100);
                             gFramework.GetCake()[i].SetState(OBJECT_DELETE);
                            
@@ -487,6 +533,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)
                         {
+                            gFramework.GetSound()[1].Play(1.0f, 1);
                             if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
                             User.SetScore(User.GetScore() + 30);
 
@@ -506,6 +553,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE)
                         {
+                            gFramework.GetSound()[1].Play(1.0f, 2);
                             User.SetPosition(User.GetPosition().x - 20, User.GetPosition().y - 10);
                             User.SetWinSizeX(User.GetWinSizeX() + User.GetFrameXWideSize());   User.SetWinSizeY(User.GetWinSizeY() + User.GetFrameYWideSize());
                             SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
@@ -534,6 +582,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE)
                         {
+                            gFramework.GetSound()[2].Play(1.0f, 0);
                             gFramework.GetZombie()[i].SetHP(gFramework.GetZombie()[i].GetHP() - 1);
 
                             if (gFramework.GetZombie()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
@@ -543,6 +592,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
+                                gFramework.GetSound()[2].Play(1.0f, 1);
                                 gFramework.DecreaseMonsterCount();
                                 /*std::wstring MCount{ std::to_wstring(gFramework.GetMonsterCount()) };
                                 std::wstring text{ L"Monster Count : " };
@@ -568,6 +618,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE)
                         {
+                            gFramework.GetSound()[3].Play(1.0f, 0);
                             gFramework.GetBee()[i].SetHP(gFramework.GetBee()[i].GetHP() - 1);
 
                             if (gFramework.GetBee()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
@@ -578,6 +629,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
+                                gFramework.GetSound()[3].Play(1.0f, 1);
                                 gFramework.DecreaseMonsterCount();
                                 gFramework.GetBee()[i].SetState(MONSTER_DEATH);
                                 gFramework.GetBee()[i].SetBitMapAnim(0);
@@ -603,12 +655,13 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
                             if (gFramework.GetBoss()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
                             {
-
+                                gFramework.GetSound()[4].Play(1.0f, 0);
                                 gFramework.GetBoss()[i].SetState(MONSTER_HIT);
                                 gFramework.GetBoss()[i].SetBitMapAnim(0);
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
+                                gFramework.GetSound()[4].Play(1.0f, 1);
                                 gFramework.DecreaseMonsterCount();
                                 gFramework.GetBoss()[i].SetState(MONSTER_DEATH);
                                 gFramework.GetBoss()[i].SetBitMapAnim(0);
@@ -928,7 +981,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     case WM_CREATE:
     {
-        int Round = 0;
+        gFramework.SetRound(1);
         SetTimer(hWnd, 1, 100, NULL);
         SetTimer(hWnd, 2, 1000, NULL); //
 

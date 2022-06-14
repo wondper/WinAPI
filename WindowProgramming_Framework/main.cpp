@@ -24,6 +24,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     while (true)
     {
+       /* for (int i = 0; i < SOUND_NUM; ++i)
+            gFramework.GetSound()[i].Update();*/
         if (::PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
         {
             if (Message.message == WM_QUIT) break;
