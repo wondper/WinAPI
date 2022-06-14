@@ -83,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\FMOD\inc;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\FMOD;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\FMOD\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
