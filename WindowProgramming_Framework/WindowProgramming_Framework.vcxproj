@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Administrator\Documents\WinAPI\FMOD\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Administrator\Documents\WinAPI\FMOD\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\FMOD;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\FMOD\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
