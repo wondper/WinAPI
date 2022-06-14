@@ -29,6 +29,11 @@ using namespace std;
 #define stage 3 // 스테이지 개수 입니다
 #define MAX_m 10 // 최대 몬스터 생성 갯수입니다.
 
+#define STAGE_ONE_MONSTERCOUNT 3
+#define STAGE_TWO_MONSTERCOUNT 6
+#define STAGE_THREE_MONSTERCOUNT 13
+
+
 #define STAGE_ONE_ZOMBIE 3 // 최대 몬스터 생성 갯수입니다.
 
 #define STAGE_TWO_ZOMBIE 3
