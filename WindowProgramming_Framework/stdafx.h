@@ -31,7 +31,7 @@ using namespace std;
 
 #define STAGE_ONE_MONSTERCOUNT 3
 #define STAGE_TWO_MONSTERCOUNT 6
-#define STAGE_THREE_MONSTERCOUNT 13
+#define STAGE_THREE_MONSTERCOUNT 7
 
 
 #define STAGE_ONE_ZOMBIE 3 // 최대 몬스터 생성 갯수입니다.
@@ -39,8 +39,8 @@ using namespace std;
 #define STAGE_TWO_ZOMBIE 3
 #define STAGE_TWO_BEE 3
 
-#define STAGE_THREE_ZOMBIE 6
-#define STAGE_THREE_BEE 6
+#define STAGE_THREE_ZOMBIE 2
+#define STAGE_THREE_BEE 2
 
 #define CAKE 0
 #define MEGAZINE 1
