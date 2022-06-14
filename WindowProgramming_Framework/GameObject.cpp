@@ -78,10 +78,10 @@ void GameObject::DrawBitmap(HDC hdc, HDC memdc, int mBitMapAnim, char mState)
 		break;
 	case MONSTER_ATTACK:// 몬스터가 공격시
 		if (mBitMapAnim < 3)
-			TransparentBlt(hdc, mPosition.x - (30 * mBitMapAnim), mPosition.y - (30 * mBitMapAnim),
+			TransparentBlt(hdc, mPosition.x - (50 * mBitMapAnim), mPosition.y - (50 * mBitMapAnim),
 				mWidth + (30 * mBitMapAnim), mHeight + (30 * mBitMapAnim), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		else
-			TransparentBlt(hdc, mPosition.x - (30 * (6 - mBitMapAnim)), mPosition.y - (30 * (6 - mBitMapAnim)),
+			TransparentBlt(hdc, mPosition.x - (50 * (6 - mBitMapAnim)), mPosition.y - (50 * (6 - mBitMapAnim)),
 				mWidth + (30 * (6 - mBitMapAnim)), mHeight + (30 * (6 - mBitMapAnim)), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 
@@ -111,10 +111,10 @@ void GameObject::DrawPlayerWindow(HDC hdc, HDC memdc, int mBitMapAnim, int PLeft
 		break;
 	case MONSTER_ATTACK:// 몬스터가 공격시
 		if (mBitMapAnim < 3)
-			TransparentBlt(hdc, mPosition.x - PLeft - (30 * mBitMapAnim), mPosition.y - PTop - (30 * mBitMapAnim),
+			TransparentBlt(hdc, mPosition.x - PLeft - (50 * mBitMapAnim), mPosition.y - PTop - (50 * mBitMapAnim),
 				mWidth + (30 * mBitMapAnim), mHeight + (30 * mBitMapAnim), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		else
-			TransparentBlt(hdc, mPosition.x - PLeft - (30 * (6 - mBitMapAnim)), mPosition.y - PTop - (30 * (6 - mBitMapAnim)),
+			TransparentBlt(hdc, mPosition.x - PLeft - (50 * (6 - mBitMapAnim)), mPosition.y - PTop - (50 * (6 - mBitMapAnim)),
 				mWidth + (30 * (6 - mBitMapAnim)), mHeight + (30 * (6 - mBitMapAnim)), memdc, 0, 0, mWidth, mHeight, RGB(0, 255, 0));
 		break;
 
@@ -368,10 +368,10 @@ void Zombie::Anim(char Action)
 void Zombie::Initialize()
 {
 	SetType(ZOMBIE);
-	SetHP(3);
+	SetHP(4);
 
 	SetBitMapAnim(0);
-	SetCoolTime(15);
+	SetCoolTime(10);
 	SetState(OBJECT_CREATE);
 
 	HBITMAP BitSprite[6];
@@ -439,10 +439,10 @@ void Bee::Anim(char Action)
 void Bee::Initialize()
 {
 	SetType(ZOMBIE);
-	SetHP(3);
+	SetHP(2);
 
 	SetBitMapAnim(0);
-	SetCoolTime(15);
+	SetCoolTime(8);
 	SetState(OBJECT_CREATE);
 
 	HBITMAP BitSprite[6];
@@ -514,7 +514,7 @@ void Boss::Initialize()
 	SetHP(BOSSHP);
 
 	SetBitMapAnim(0);
-	SetCoolTime(15);
+	SetCoolTime(20);
 	SetState(OBJECT_CREATE);
 
 	HBITMAP BitSprite[6];

@@ -110,8 +110,6 @@ void GFramework::InitWCX(WINDOW wnd)
 
 }
 
-
-
 void GFramework::RegisterWnd()
 {
     RegisterClassEx(&mwcxBackGround);
@@ -135,7 +133,7 @@ void GFramework::ShowMainWnd(int nCmdShow)
 
 void GFramework::ShowUIWnd(int nCmdShow)
 {
-    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 0, GetSystemMetrics(SM_CYSCREEN) - 250, GetSystemMetrics(SM_CXSCREEN), 250, NULL, NULL, mhInstance, NULL);
+    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 100, GetSystemMetrics(SM_CYSCREEN) - 250, 1200, 250, NULL, NULL, mhInstance, NULL);
     ShowWindow(hwndUI, nCmdShow);
 }
 
@@ -302,7 +300,10 @@ void GFramework::SetStage(int round)
     if (round > 3)
     {
         SetRound(round);
-        MessageBox(hwndBG, L"GameClear", L"게임 종료", NULL);
+       MessageBox(hwndBG, L"Stage 3 Clear!", L"트로이 목마 바이러스를 격파하였습니다!", NULL);
+       KillTimer(hwndBG, 4); 
+       KillTimer(hwndBG, 2);
+       KillTimer(hwndBG, 1);
         return;
     }
     else if (round == 3)
@@ -310,9 +311,9 @@ void GFramework::SetStage(int round)
         SetRound(round);
         BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG3_STAGE));
         User.SetHP(500);
-        User.SetWinSizeX(WINSIZEX);   User.SetWinSizeY(WINSIZEY);
+    //    User.SetWinSizeX(WINSIZEX);   User.SetWinSizeY(WINSIZEY);
         User.SetBullet(10);
-        User.SetPosition(0, 0);
+   //     User.SetPosition(0, 0);
         Init();
         for (int i = 0; i < 6; ++i)
         {
@@ -324,19 +325,21 @@ void GFramework::SetStage(int round)
             mBoss[i].SetState(OBJECT_CREATE);
         }
         MessageBox(hwndBG, L"Stage 2 Clear!", L"스테이지 2 종료", NULL);
-        SetTimer(hwndBG, 2, 1000, NULL); //
         GetSound()[5].Stop(1);
         GetSound()[5].Play(1.0f, 2);
 
+
+       SetTimer(hwndBG, 4, 1000, NULL); // 보스 몬스터 생성 타이머
+       SetTimer(hwndBG, 2, 1000, NULL);
     }
     else if (round == 2)
     {
         SetRound(round);
         BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG2_STAGE));
         User.SetHP(500);
-        User.SetWinSizeX(WINSIZEX);   User.SetWinSizeY(WINSIZEY);
+  //      User.SetWinSizeX(WINSIZEX);   User.SetWinSizeY(WINSIZEY);
         User.SetBullet(10);
-        User.SetPosition(0, 0);
+  //      User.SetPosition(0, 0);
         Init();
         for (int i = 0; i < 6; ++i)
         {
@@ -352,10 +355,9 @@ void GFramework::SetStage(int round)
         GetSound()[5].Stop(0);
         GetSound()[5].Play(1.0f, 1);
     }
-    else
-    {
 
-    }
+    InvalidateRect(hwndBG, NULL, TRUE);
+    InvalidateRect(hwndUI, NULL, TRUE);
 }
 
 
@@ -395,14 +397,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         SetTimer(hWnd, 4, 3000, NULL); // 3초마다 탄알 1개 충전
         gFramework.GetSound()[5].Play(1.0f, 0);
         return 0;
+
     case WM_CHAR:
         switch (wParam)
         {
         case 'q': // 프로그램 종료
             PostQuitMessage(0);
-            break;
-
-        case 'f':
             break;
 
         case 'w':
@@ -483,7 +483,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         break;
         case 3:
         {
-            int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+         int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
             for (int i = 0; i < 6; ++i)
                 ICount[i] = Count[i];
         }
@@ -534,7 +534,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)
                         {
                             gFramework.GetSound()[1].Play(1.0f, 1);
-                            if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 2);
+                            if (User.GetBullet() < 10)User.SetBullet(User.GetBullet() + 6);
+                            else User.SetBullet(10);
+
                             User.SetScore(User.GetScore() + 30);
 
                             gFramework.GetMegazine()[i].SetState(OBJECT_DELETE);
@@ -588,7 +590,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             if (gFramework.GetZombie()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
                             { 
                                 gFramework.GetZombie()[i].SetState(MONSTER_HIT);
-                                gFramework.GetZombie()[i].SetBitMapAnim(0);
+                                gFramework.GetZombie()[i].SetBitMapAnim(0);  
+                                break;
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
@@ -602,10 +605,12 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                                 gFramework.GetZombie()[i].SetBitMapAnim(0);
                             }
                         }
+                     
                     }
                 }
                 break;
 
+                
             case BEE:
                 if (User.GetBullet() <= 0)
                     break;
@@ -623,6 +628,11 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
                             if (gFramework.GetBee()[i].GetHP() > 0) // HP 가 남아있으면 HIT 상태 처리
                             {
+                                // 벌 이동 구현
+                                random_device rd;
+                                mt19937 mersenne(rd());
+                                uniform_int_distribution<> rand_X(0, GetSystemMetrics(SM_CXSCREEN) - 300);
+                                gFramework.GetBee()[i].SetPosition(rand_X(mersenne), gFramework.GetBee()[i].GetPosition().y);
 
                                 gFramework.GetBee()[i].SetState(MONSTER_HIT);
                                 gFramework.GetBee()[i].SetBitMapAnim(0);
@@ -675,17 +685,28 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
         }
 
-        if (gFramework.GetMonsterCount() == 0)
+        if (gFramework.GetRound() + 1 < 4)
         {
-            //NextRound
-            gFramework.SetStage(gFramework.GetRound() + 1);
+            if (gFramework.GetMonsterCount() == 0)
+                gFramework.SetStage(gFramework.GetRound() + 1);
+            
         }
+        else
+        {
+            if(gFramework.GetBoss()[0].GetState() == MONSTER_DEATH) // 보스 사망시
+                gFramework.SetStage(gFramework.GetRound() + 1);
+        }
+        
+        
+
+
+       
 
         Triger = true;
         SetTimer(hwndMain, 3, 10, NULL);
     }
 
-    InvalidateRect(hwndBG, NULL, TRUE); // UI핸들을 보냄.
+    InvalidateRect(hwndBG, NULL, TRUE); 
     InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
     break;
 
@@ -723,16 +744,13 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     break;
                 }
             }
-            InvalidateRect(hwndMain, NULL, TRUE); // UI핸들을 보냄.
-
+            InvalidateRect(hwndMain, NULL, TRUE);
             break;
 
         case 4:
             if (User.GetBullet() < 9)
                 User.SetBullet(User.GetBullet() + 1);
             InvalidateRect(hwndUI, NULL, TRUE); 
-
-
             break;
         }
 
@@ -752,7 +770,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         {
         case 1:
         {
-            int Count[6] = { 3, 3, 2, STAGE_ONE_ZOMBIE, 0, 0 };
+            int Count[6] = { 2, 3, 3, STAGE_ONE_ZOMBIE, 0, 0 };
             for (int i = 0; i < 6; ++i)
                 ICount[i] = Count[i];
         }
@@ -766,7 +784,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         break;
         case 3:
         {
-            int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+            int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
             for (int i = 0; i < 6; ++i)
                 ICount[i] = Count[i];
         }
@@ -787,7 +805,6 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                  switch (j)
                 {
                 case CAKE:
-
                     if (BoxCollisionCheck(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(),
                         gFramework.GetCake()[i].GetPosition().x, gFramework.GetCake()[i].GetPosition().y,
                         gFramework.GetCake()[i].GetPosition().x + gFramework.GetCake()[i].GetWidth(),
@@ -810,8 +827,8 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetMegazine()[i].GetState());
                     }
                     break;
-                case SCOPE:
 
+                case SCOPE:
                     if (BoxCollisionCheck(User.GetPosition().x, User.GetPosition().y, User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(),
                         gFramework.GetScope()[i].GetPosition().x, gFramework.GetScope()[i].GetPosition().y,
                         gFramework.GetScope()[i].GetPosition().x + gFramework.GetScope()[i].GetWidth(),
@@ -866,8 +883,14 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
         SelectObject(memdc, AimBit);
         TransparentBlt(hDC, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4, AimWidth / 2, AimHeight / 2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
-
-
+        if (round > 3)
+        {
+            KillTimer(hWnd, 1);
+            SelectObject(memdc, BG_MAP);
+            StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, 0,0,
+                GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
+            SetWindowPos(hWnd, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)- 250, NULL);
+        }
         DeleteDC(memdc);
         EndPaint(hWnd, &ps);
         return 0;
@@ -895,6 +918,8 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
     static HBITMAP mBitMap_BackGround;
     static HBITMAP oldBit;
 
+    static int UIHitFraem = false;
+
     switch (message) {
 
     case WM_CREATE:
@@ -921,6 +946,49 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 
         }
         break;
+
+    case WM_TIMER:
+        switch (wParam)
+        {
+        case 1:
+               switch (UIHitFraem++)
+                {
+                case 0:
+                    //   
+                    SetWindowPos(hWnd, NULL, 100 - 10, GetSystemMetrics(SM_CYSCREEN) - 250 - 5, 1200 - 10, 250 - 5, NULL);
+                    break;
+                case 1:
+                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 250, 1200 + 5, 250, NULL);
+                    break;
+                case 2:
+                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 250 + 5, 1200 + 5, 250 + 5, NULL);
+                    break;
+                case 3:
+                    SetWindowPos(hWnd, NULL, 100 - 5, GetSystemMetrics(SM_CYSCREEN) - 250 + 5, 1200 + 5, 250 + 5, NULL);
+                    break;
+                case 4:
+                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 250 - 5, 1200 + 5, 250 - 5, NULL);
+                    break;
+                case 5:
+                    SetWindowPos(hWnd, NULL, 100 - 5, GetSystemMetrics(SM_CYSCREEN) - 250 + 5, 1200 - 5, 250 + 5, NULL);
+                    break;
+                case 6:
+                    SetWindowPos(hWnd, NULL, 100, GetSystemMetrics(SM_CYSCREEN) - 250, 1200, 250, NULL);
+                    UIHitFraem = 0;
+                    KillTimer(hWnd, 1);
+                    break;
+                }
+            SetWindowPos(hwndMain, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
+            break;
+        }
+
+
+
+        break;
+
+
+
+
 
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
@@ -973,9 +1041,13 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
     static int CreateTime = 0;
 
+    static int BossToCreate = 0;
+
+    int randMonster = 0;
     int ICount[MAX_OBJECT_KIND];
     int round = gFramework.GetRound();
     static int answer;
+
     switch (message)
     {
 
@@ -986,8 +1058,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         SetTimer(hWnd, 2, 1000, NULL); //
 
         SetTimer(hWnd, 3, 1000, NULL); // 쿨타임 감소틱
-     
-
     }
     break;
 
@@ -1013,7 +1083,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             break;
             case 3:
             {
-                int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+                int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
                 for (int i = 0; i < 6; ++i)
                     ICount[i] = Count[i];
             }
@@ -1062,8 +1132,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
 
         case 2:
             CreateTime++;
-            // 게임 시작시 오브젝트 등장 틱
-            // 2초후 사라짐
+            // 게임 시작시 오브젝트 등장 틱 2초후 사라짐
             if (CreateTime)
             {
                 switch (round)
@@ -1084,7 +1153,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 break;
                 case 3:
                 {
-                    int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+                 int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
                     for (int i = 0; i < 6; ++i)
                         ICount[i] = Count[i];
                 }
@@ -1097,6 +1166,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 }
                 break;
                 }
+
                 for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
                 {
                     for (int i = ICount[j] - 1; i > -1; --i) // ICount까지
@@ -1104,42 +1174,42 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                         switch (j)
                         {
                         case CAKE:
-                            if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE && gFramework.GetCake()[i].GetState() != OBJECT_NOT_DRAW)
+                            if (gFramework.GetCake()[i].GetState() != OBJECT_NOT_DRAW && gFramework.GetCake()[i].GetState() != OBJECT_DELETE)
                             {
                                 gFramework.GetCake()[i].SetState(OBJECT_NOT_DRAW);
                             }
                             break;
 
                         case MEGAZINE:
-                            if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE && gFramework.GetMegazine()[i].GetState() != OBJECT_NOT_DRAW)
+                            if (gFramework.GetMegazine()[i].GetState() != OBJECT_NOT_DRAW && gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)
                             {
                                 gFramework.GetMegazine()[i].SetState(OBJECT_NOT_DRAW);
                             }
                             break;
 
                         case SCOPE:
-                            if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE && gFramework.GetScope()[i].GetState() != OBJECT_NOT_DRAW)
+                            if (gFramework.GetScope()[i].GetState() != OBJECT_NOT_DRAW && gFramework.GetScope()[i].GetState() != OBJECT_DELETE)
                             {
                                 gFramework.GetScope()[i].SetState(OBJECT_NOT_DRAW);
                             }
                             break;
 
                         case ZOMBIE:
-                            if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE && gFramework.GetZombie()[i].GetState() != OBJECT_NOT_DRAW)
+                            if (gFramework.GetZombie()[i].GetState() != OBJECT_NOT_DRAW && gFramework.GetZombie()[i].GetState() != OBJECT_DELETE)
                             {
                                 gFramework.GetZombie()[i].SetState(OBJECT_NOT_DRAW);
                             }
                             break;
 
                         case BEE:
-                            if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE && gFramework.GetBee()[i].GetState() != OBJECT_NOT_DRAW)
+                            if (gFramework.GetBee()[i].GetState() != OBJECT_NOT_DRAW && gFramework.GetBee()[i].GetState() != OBJECT_DELETE)
                             {
                                 gFramework.GetBee()[i].SetState(OBJECT_NOT_DRAW);
                             }
                             break;
 
                         case BOSS:
-                            if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE && gFramework.GetBoss()[i].GetState() != OBJECT_NOT_DRAW)
+                            if (gFramework.GetBoss()[i].GetState() != OBJECT_NOT_DRAW && gFramework.GetBoss()[i].GetState() != OBJECT_DELETE)
                             {
                                 gFramework.GetBoss()[i].SetState(OBJECT_NOT_DRAW);
                             }
@@ -1152,8 +1222,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 KillTimer(hWnd, 2);
             }
             break;
-
-
 
         case 3:
             switch (round)
@@ -1174,7 +1242,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             break;
             case 3:
             {
-                int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+             int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
                 for (int i = 0; i < 6; ++i)
                     ICount[i] = Count[i];
             }
@@ -1188,7 +1256,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             break;
             }
             // 몬스터 공격 쿨타임 감소 틱
-            for (int j = 0; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
+            for (int j = ZOMBIE; j < STAGE_FIXED_OBJECT_KIND + round; ++j)
             {
                 for (int i = ICount[j] - 1; i > -1; --i) // ICount까지
                 {
@@ -1198,13 +1266,17 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                         if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE)
                         {
                             gFramework.GetZombie()[i].SetCoolTime(gFramework.GetZombie()[i].GetCoolTime()-1);
-                            if (gFramework.GetZombie()[i].GetCoolTime() <= 0)
+                            if (gFramework.GetZombie()[i].GetCoolTime() <= 0 && gFramework.GetZombie()[i].GetState() != MONSTER_DEATH)
                             {
                                 gFramework.GetZombie()[i].SetState(MONSTER_ATTACK);
-                                User.SetHP(User.GetHP() - 30);
+                                User.SetHP(User.GetHP() - 25);
+                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+                                SetTimer(hwndUI, 1, 70, NULL); // UI 진동
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-
+                                    MessageBox(hwndBG, L"Game Over", L"게임 오버", NULL);
+                                    KillTimer(hWnd, 2);
+                                    KillTimer(hWnd, 4);
                                 }
 
                                 gFramework.GetZombie()[i].SetCoolTime(8); // 8초마다 한번
@@ -1217,13 +1289,17 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                         if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE )
                         {
                             gFramework.GetBee()[i].SetCoolTime(gFramework.GetBee()[i].GetCoolTime() - 1);
-                            if (gFramework.GetBee()[i].GetCoolTime() <= 0)
+                            if (gFramework.GetBee()[i].GetCoolTime() <= 0 && gFramework.GetBee()[i].GetState() != MONSTER_DEATH)
                             {
                                 gFramework.GetBee()[i].SetState(MONSTER_ATTACK);
-                                User.SetHP(User.GetHP() - 30);
+                                User.SetHP(User.GetHP() - 20);
+                                SetTimer(hwndUI, 1, 70, NULL); // UI 진동
+                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-
+                                    MessageBox(hwndBG, L"Game Over", L"게임 오버", NULL);
+                                    KillTimer(hWnd, 2);
+                                    KillTimer(hWnd, 4);
                                 }
 
                                 gFramework.GetBee()[i].SetCoolTime(5); // 5초마다 한번
@@ -1232,19 +1308,23 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                         break;
 
                     case BOSS:
-                        if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE)
+                        if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE )
                         {
                             gFramework.GetBoss()[i].SetCoolTime(gFramework.GetBoss()[i].GetCoolTime() - 1);
-                            if (gFramework.GetBoss()[i].GetCoolTime() <= 0)
+                            if (gFramework.GetBoss()[i].GetCoolTime() <= 0 && gFramework.GetBoss()[i].GetState() != MONSTER_DEATH)
                             {
                                 gFramework.GetBoss()[i].SetState(MONSTER_ATTACK);
-                                User.SetHP(User.GetHP() - 30);
+                                User.SetHP(User.GetHP() - 100);
+                                SetTimer(hwndUI, 1, 70, NULL); // UI 진동
+                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-
+                                    MessageBox(hwndBG, L"Game Over", L"게임 오버", NULL);
+                                    KillTimer(hWnd, 2);
+                                    KillTimer(hWnd, 4);
                                 }
 
-                                gFramework.GetBoss()[i].SetCoolTime(10); 
+                                gFramework.GetBoss()[i].SetCoolTime(20); 
                             }
                         }
                         break;
@@ -1254,7 +1334,53 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
             }
             InvalidateRect(hWnd, NULL, TRUE);
             InvalidateRect(hwndMain, NULL, TRUE);
+            break;
 
+        case 4: // 라운드 3일때 시작 보스가 몬스터 생성
+            {
+                BossToCreate++;
+
+                if (BossToCreate > 10)
+                {
+                 int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+                    for (int i = 0; i < 6; ++i)
+                        ICount[i] = Count[i];
+
+                    
+                        randMonster = rand()%2;
+                        for (int i = ICount[randMonster + 3] - 1; i > -1; --i) // ICount까지
+                        {
+                            switch (randMonster + 3)
+                            {
+                            case ZOMBIE:
+                                if (gFramework.GetZombie()[i].GetState() == OBJECT_DELETE)
+                                {
+                                    gFramework.GetZombie()[i].Initialize();
+                                    gFramework.GetZombie()[i].SetState(OBJECT_CREATE);
+                                    BossToCreate = 0;
+                                    break;
+                                }
+                                break;
+
+                            case BEE:
+                                if (gFramework.GetBee()[i].GetState() == OBJECT_DELETE)
+                                {
+                                    gFramework.GetBee()[i].Initialize();
+                                    gFramework.GetBee()[i].SetState(OBJECT_CREATE);
+                                    BossToCreate = 0;
+                                    break;
+                                }
+                                break;
+                        
+
+
+                        }
+                    }
+
+                }
+
+
+            }
             break;
         }
 
@@ -1264,7 +1390,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         hDC = BeginPaint(hWnd, &ps);
         memdc = CreateCompatibleDC(hDC);
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 1 };
-        int round = 0;
 
         switch (round)
         {
@@ -1284,7 +1409,7 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
         break;
         case 3:
         {
-            int Count[6] = { 3, 3, 2, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
+         int Count[6] = { 3, 5, 3, STAGE_THREE_ZOMBIE, STAGE_THREE_BEE, 1 };
             for (int i = 0; i < 6; ++i)
                 ICount[i] = Count[i];
         }
@@ -1354,6 +1479,23 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                     if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE && gFramework.GetBee()[i].GetState() != OBJECT_NOT_DRAW)
                     {
                         gFramework.GetBee()[i].DrawBitmap(hDC, memdc, gFramework.GetBee()[i].GetBitMapAnim(), gFramework.GetBee()[i].GetState());
+                        if (gFramework.GetBee()[i].GetBitMapAnim() >= 5)
+                        {
+                            switch (gFramework.GetBee()[i].GetState())
+                            {
+                            case MONSTER_ATTACK:
+                                gFramework.GetBee()[i].SetState(OBJECT_NOT_DRAW);
+                                break;
+
+                            case MONSTER_HIT:
+                                gFramework.GetBee()[i].SetState(OBJECT_NOT_DRAW);
+                                break;
+
+                            case MONSTER_DEATH:
+                                gFramework.GetBee()[i].SetState(OBJECT_DELETE);
+                                break;
+                            }
+                        }
                     }
                     break;
 
@@ -1361,6 +1503,23 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                     if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE && gFramework.GetBoss()[i].GetState() != OBJECT_NOT_DRAW)
                     {
                         gFramework.GetBoss()[i].DrawBitmap(hDC, memdc, gFramework.GetBoss()[i].GetBitMapAnim(), gFramework.GetBoss()[i].GetState());
+                        if (gFramework.GetBoss()[i].GetBitMapAnim() >= 5)
+                        {
+                            switch (gFramework.GetBoss()[i].GetState())
+                            {
+                            case MONSTER_ATTACK:
+                                gFramework.GetBoss()[i].SetState(OBJECT_NOT_DRAW);
+                                break;
+
+                            case MONSTER_HIT:
+                                gFramework.GetBoss()[i].SetState(OBJECT_NOT_DRAW);
+                                break;
+
+                            case MONSTER_DEATH:
+                                gFramework.GetBoss()[i].SetState(OBJECT_DELETE);
+                                break;
+                            }
+                        }
                     }
                     break;
                 }
