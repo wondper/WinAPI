@@ -133,7 +133,7 @@ void GFramework::ShowMainWnd(int nCmdShow)
 
 void GFramework::ShowUIWnd(int nCmdShow)
 {
-    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 100, GetSystemMetrics(SM_CYSCREEN) - 250, 1200, 250, NULL, NULL, mhInstance, NULL);
+    hwndUI = CreateWindow(L"UIWindow", L"UI", NULL, 100, GetSystemMetrics(SM_CYSCREEN) - 300, 1200, 300, NULL, NULL, mhInstance, NULL);
     ShowWindow(hwndUI, nCmdShow);
 }
 
@@ -313,7 +313,9 @@ void GFramework::SetStage(int round)
             mBee[i].SetState(OBJECT_DELETE);
             mBoss[i].SetState(OBJECT_DELETE);
         }
-        SetWindowPos(hwndMain, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) - 250, NULL);
+        User.SetPosition(0, 0);
+        User.SetWinSizeX(GetSystemMetrics(SM_CXSCREEN));   User.SetWinSizeY(GetSystemMetrics(SM_CYSCREEN));
+        SetWindowPos(hwndMain, NULL, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) - 300, NULL);
         MessageBox(hwndBG, L"Stage 3 Clear!", L"트로이 목마 바이러스를 격파하였습니다!", NULL);
         MessageBox(hwndBG, L"종료시 Q를 눌러주세요", L"Your Clear!", NULL);
         return;
@@ -376,9 +378,11 @@ void GFramework::SetStage(int round)
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hDC, memdc;
+
     static RECT rectView; // 윈도우창 크기
 
     static HBITMAP AimBit; // 조준점 비트맵 이미지
+     HBITMAP AimOldBit; // 조준점 비트맵 이미지
     static HDC AimDC; // 조준점 DC
 
     static int Trigerframe = 0;
@@ -391,6 +395,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
     BITMAP bmp;
 
+    HDC mem1dc, mem2dc;
+    static HBITMAP hBit1;
+    HBITMAP oldBit1, oldBit2;
+
     switch (message)
     {
 
@@ -402,12 +410,14 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         AimWidth = bmp.bmWidth;
         AimHeight = bmp.bmHeight;
         BG_MAP = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BG1_STAGE));
-
         rectView = { User.GetPosition().x + 10, User.GetPosition().y + 40,
            User.GetPosition().x + User.GetWinSizeX() - 10, User.GetPosition().y + User.GetWinSizeY() - 10 };
         ClipCursor(&rectView);
+        SetTimer(hWnd, 1, 10, NULL); // 메인 윈도우 업데이트 틱
         SetTimer(hWnd, 4, 3000, NULL); // 3초마다 탄알 1개 충전
         gFramework.GetSound()[5].Play(1.0f, 0);
+
+
         return 0;
 
     case WM_CHAR:
@@ -423,7 +433,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 User.SetPositionY(User.GetPosition().y - FRAME_SPEED);
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
-                InvalidateRect(hWnd, NULL, TRUE);
+                InvalidateRect(hWnd, NULL, false);
             }
             break;
 
@@ -433,7 +443,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 User.SetPositionX(User.GetPosition().x - FRAME_SPEED);
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
-                InvalidateRect(hWnd, NULL, TRUE);
+                InvalidateRect(hWnd, NULL, false);
             }
             break;
         case 's':
@@ -442,7 +452,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 User.SetPositionY(User.GetPosition().y + FRAME_SPEED);
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
 
-                InvalidateRect(hWnd, NULL, TRUE);
+                InvalidateRect(hWnd, NULL, false);
             }
             break;
         case 'd':
@@ -450,7 +460,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             {
                 User.SetPositionX(User.GetPosition().x + FRAME_SPEED);
                 SetWindowPos(hWnd, NULL, User.GetPosition().x, User.GetPosition().y, User.GetWinSizeX(), User.GetWinSizeY(), NULL);
-                InvalidateRect(hWnd, NULL, TRUE);
+                InvalidateRect(hWnd, NULL, false);
             }
             break;
         }
@@ -468,7 +478,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
         if (round <= 3)
         {
             AimPosition = { LOWORD(lParam) ,HIWORD(lParam) };
-            InvalidateRect(hWnd, NULL, TRUE);
+            InvalidateRect(hWnd, NULL, false);
         }
     }
     break;
@@ -529,6 +539,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     {
                         if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE)
                         {
+                            User.SetScore(User.GetScore() + 30);
                             gFramework.GetSound()[1].Play(1.0f, 0);
                             User.SetHP(User.GetHP() + 100);
                             gFramework.GetCake()[i].SetState(OBJECT_DELETE);
@@ -611,6 +622,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
+                                User.SetScore(User.GetScore() + 80);
                                 gFramework.GetSound()[2].Play(1.0f, 1);
                                 gFramework.DecreaseMonsterCount();
                                 /*std::wstring MCount{ std::to_wstring(gFramework.GetMonsterCount()) };
@@ -656,6 +668,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                             }
                             else  // HP 가 0이면 DELETE상태 처리
                             {
+                                User.SetScore(User.GetScore() + 100);
                                 gFramework.GetSound()[3].Play(1.0f, 1);
                                 gFramework.DecreaseMonsterCount();
                                 gFramework.GetBee()[i].SetState(MONSTER_DEATH);
@@ -731,6 +744,10 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     case WM_TIMER:
         switch (wParam)
         {
+        case 1:
+            InvalidateRect(hWnd, NULL, false);
+            break;
+
         case 3:
             if (Triger)
             {
@@ -762,7 +779,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                     break;
                 }
             }
-            InvalidateRect(hwndMain, NULL, TRUE);
+            InvalidateRect(hWnd, NULL, false);
             break;
 
         case 4:
@@ -777,9 +794,18 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     {
         hDC = BeginPaint(hWnd, &ps);
         gFramework.Draw(hDC);
-        memdc = CreateCompatibleDC(hDC);
-        SelectObject(memdc, BG_MAP);
-        StretchBlt(hDC, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), memdc, User.GetPosition().x, User.GetPosition().y,
+        if (hBit1 == NULL)
+        { //--- hBit1을 hdc와 호환되게 만들어준다.
+            hBit1 = CreateCompatibleBitmap(hDC, WINSIZEX, WINSIZEY);
+        }
+
+        mem1dc = CreateCompatibleDC(hDC);
+        mem2dc = CreateCompatibleDC(mem1dc);
+
+        oldBit1 = (HBITMAP)SelectObject(mem1dc, hBit1); //--- mem1dc에는 hBit1
+        oldBit2 = (HBITMAP)SelectObject(mem2dc, BG_MAP); //--- mem2dc에는 hBit2: hBit2에는 배경 그림이 저장되어 있음
+
+        StretchBlt(mem1dc, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), mem2dc, User.GetPosition().x, User.GetPosition().y,
             GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SRCCOPY);
 
         int ICount[MAX_OBJECT_KIND] = { 3, 3, 2, 3, 3, 3 };
@@ -829,7 +855,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetCake()[i].GetPosition().y + gFramework.GetCake()[i].GetHeight()))
                     {
                         if (gFramework.GetCake()[i].GetState() != OBJECT_DELETE)
-                            gFramework.GetCake()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetCake()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            gFramework.GetCake()[i].DrawPlayerWindow(mem1dc, mem2dc, gFramework.GetCake()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetCake()[i].GetState());
                     }
                     break;
@@ -841,7 +867,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetMegazine()[i].GetPosition().y + gFramework.GetMegazine()[i].GetHeight()))
                     {
                         if (gFramework.GetMegazine()[i].GetState() != OBJECT_DELETE)
-                            gFramework.GetMegazine()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetMegazine()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            gFramework.GetMegazine()[i].DrawPlayerWindow(mem1dc, mem2dc, gFramework.GetMegazine()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetMegazine()[i].GetState());
                     }
                     break;
@@ -853,7 +879,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetScope()[i].GetPosition().y + gFramework.GetScope()[i].GetHeight()))
                     {
                         if (gFramework.GetScope()[i].GetState() != OBJECT_DELETE)
-                            gFramework.GetScope()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetScope()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            gFramework.GetScope()[i].DrawPlayerWindow(mem1dc, mem2dc, gFramework.GetScope()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetScope()[i].GetState());
                     }
                     break;
@@ -865,7 +891,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetZombie()[i].GetPosition().y + gFramework.GetZombie()[i].GetHeight()))
                     {
                         if (gFramework.GetZombie()[i].GetState() != OBJECT_DELETE)
-                            gFramework.GetZombie()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetZombie()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            gFramework.GetZombie()[i].DrawPlayerWindow(mem1dc, mem2dc, gFramework.GetZombie()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetZombie()[i].GetState());
                     }
                     break;
@@ -877,7 +903,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetBee()[i].GetPosition().y + gFramework.GetBee()[i].GetHeight()))
                     {
                         if (gFramework.GetBee()[i].GetState() != OBJECT_DELETE)
-                            gFramework.GetBee()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetBee()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            gFramework.GetBee()[i].DrawPlayerWindow(mem1dc, mem2dc, gFramework.GetBee()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetBee()[i].GetState());
                     }
                     break;
@@ -889,7 +915,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                         gFramework.GetBoss()[i].GetPosition().y + gFramework.GetBoss()[i].GetHeight()))
                     {
                         if (gFramework.GetBoss()[i].GetState() != OBJECT_DELETE)
-                            gFramework.GetBoss()[i].DrawPlayerWindow(hDC, memdc, gFramework.GetBoss()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
+                            gFramework.GetBoss()[i].DrawPlayerWindow(mem1dc, mem2dc, gFramework.GetBoss()[i].GetBitMapAnim(), User.GetPosition().x, User.GetPosition().y,
                             User.GetPosition().x + User.GetWinSizeX(), User.GetPosition().y + User.GetWinSizeY(), gFramework.GetBoss()[i].GetState());
                     }
                     break;
@@ -899,9 +925,19 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
             }
         }
 
-        SelectObject(memdc, AimBit);
-        TransparentBlt(hDC, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4, AimWidth / 2, AimHeight / 2, memdc, 0, 0, 134, 134, RGB(0, 255, 0));
-        DeleteDC(memdc);
+         AimOldBit = (HBITMAP)SelectObject(mem2dc, AimBit);
+        TransparentBlt(mem1dc, AimPosition.x - AimWidth / 4, AimPosition.y - AimHeight / 4,
+            AimWidth / 2, AimHeight / 2, mem2dc, 0, 0, 134, 134, RGB(0, 255, 0));
+
+        //--- hBit1에는 배경과 텍스트가 출력된 비트맵이 저장되어 있다. 이 비트맵을 mem1dc에 선택
+        oldBit1 = (HBITMAP)SelectObject(mem1dc, hBit1);
+
+
+
+        BitBlt(hDC, 0, 0, WINSIZEX, WINSIZEY, mem1dc, 0, 0, SRCCOPY);
+
+        SelectObject(mem2dc, oldBit2); DeleteDC(mem2dc);
+        SelectObject(mem1dc, oldBit1); DeleteDC(mem1dc);
         EndPaint(hWnd, &ps);
         return 0;
     }
@@ -965,25 +1001,25 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
                 {
                 case 0:
                     //   
-                    SetWindowPos(hWnd, NULL, 100 - 10, GetSystemMetrics(SM_CYSCREEN) - 250 - 5, 1200 - 10, 250 - 5, NULL);
+                    SetWindowPos(hWnd, NULL, 100 - 10, GetSystemMetrics(SM_CYSCREEN) - 300 - 5, 1200 - 10, 300 - 5, NULL);
                     break;
                 case 1:
-                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 250, 1200 + 5, 250, NULL);
+                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 300, 1200 + 5, 300, NULL);
                     break;
                 case 2:
-                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 250 + 5, 1200 + 5, 250 + 5, NULL);
+                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 300 + 5, 1200 + 5, 300 + 5, NULL);
                     break;
                 case 3:
-                    SetWindowPos(hWnd, NULL, 100 - 5, GetSystemMetrics(SM_CYSCREEN) - 250 + 5, 1200 + 5, 250 + 5, NULL);
+                    SetWindowPos(hWnd, NULL, 100 - 5, GetSystemMetrics(SM_CYSCREEN) - 300 + 5, 1200 + 5, 300 + 5, NULL);
                     break;
                 case 4:
-                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 250 - 5, 1200 + 5, 250 - 5, NULL);
+                    SetWindowPos(hWnd, NULL, 100 + 5, GetSystemMetrics(SM_CYSCREEN) - 300 - 5, 1200 + 5, 300 - 5, NULL);
                     break;
                 case 5:
-                    SetWindowPos(hWnd, NULL, 100 - 5, GetSystemMetrics(SM_CYSCREEN) - 250 + 5, 1200 - 5, 250 + 5, NULL);
+                    SetWindowPos(hWnd, NULL, 100 - 5, GetSystemMetrics(SM_CYSCREEN) - 300 + 5, 1200 - 5, 300 + 5, NULL);
                     break;
                 case 6:
-                    SetWindowPos(hWnd, NULL, 100, GetSystemMetrics(SM_CYSCREEN) - 250, 1200, 250, NULL);
+                    SetWindowPos(hWnd, NULL, 100, GetSystemMetrics(SM_CYSCREEN) - 300, 1200, 300, NULL);
                     UIHitFraem = 0;
                     KillTimer(hWnd, 1);
                     break;
@@ -992,13 +1028,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
             break;
         }
 
-
-
         break;
-
-
-
-
 
     case WM_PAINT:
         hDC = BeginPaint(hWnd, &ps);
@@ -1050,7 +1080,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     HBRUSH hBrush, oldhBrush;
 
     static int CreateTime = 0;
-
     static int BossToCreate = 0;
 
     int randMonster = 0;
@@ -1137,7 +1166,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 }
             }
             InvalidateRect(hWnd, NULL, TRUE);
-            InvalidateRect(hwndMain, NULL, TRUE);
             break;
 
         case 2:
@@ -1280,15 +1308,19 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                             {
                                 gFramework.GetZombie()[i].SetState(MONSTER_ATTACK);
                                 User.SetHP(User.GetHP() - 25);
-                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 SetTimer(hwndUI, 1, 70, NULL); // UI 진동
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-                                    MessageBox(hwndBG, L"Game Over", L"게임 오버", NULL);
-                                    KillTimer(hWnd, 2);
-                                    KillTimer(hWnd, 4);
+                                    User.SetHP(500);
+                                    User.SetBullet(10);
+                                    MessageBox(hwndBG, L"Game Over", L"게임 오버가 되었습니다", NULL);
+                                    MessageBox(hwndBG, L"Game Over", L"스코어가 떨어지고 이어서 시작합니다", NULL);
+                                    if (User.GetScore() > 500)User.SetScore(User.GetScore() - 500);
+                                    else User.SetScore(0);
+                                   
                                 }
 
+                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 gFramework.GetZombie()[i].SetCoolTime(8); // 8초마다 한번
                             }
 
@@ -1304,13 +1336,17 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                                 gFramework.GetBee()[i].SetState(MONSTER_ATTACK);
                                 User.SetHP(User.GetHP() - 20);
                                 SetTimer(hwndUI, 1, 70, NULL); // UI 진동
-                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-                                    MessageBox(hwndBG, L"Game Over", L"게임 오버", NULL);
-                                    KillTimer(hWnd, 2);
-                                    KillTimer(hWnd, 4);
+                                    User.SetHP(500);
+                                    User.SetBullet(10);
+                                    MessageBox(hwndBG, L"Game Over", L"게임 오버가 되었습니다", NULL);
+                                    MessageBox(hwndBG, L"Game Over", L"스코어가 떨어지고 이어서 시작합니다", NULL);
+                                    if (User.GetScore() > 500)User.SetScore(User.GetScore() - 500);
+                                    else User.SetScore(0);
+                                  
                                 }
+                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
 
                                 gFramework.GetBee()[i].SetCoolTime(5); // 5초마다 한번
                             }
@@ -1326,15 +1362,19 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                                 gFramework.GetBoss()[i].SetState(MONSTER_ATTACK);
                                 User.SetHP(User.GetHP() - 100);
                                 SetTimer(hwndUI, 1, 70, NULL); // UI 진동
-                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
                                 if (User.GetHP() <= 0) // 플레이어 사망시
                                 {
-                                    MessageBox(hwndBG, L"Game Over", L"게임 오버", NULL);
-                                    KillTimer(hWnd, 2);
-                                    KillTimer(hWnd, 4);
+                                    User.SetHP(500);
+                                    User.SetBullet(10);
+                                    MessageBox(hwndBG, L"Game Over", L"게임 오버가 되었습니다", NULL);
+                                    MessageBox(hwndBG, L"Game Over", L"스코어가 떨어지고 이어서 시작합니다", NULL);
+                                    if (User.GetScore() > 500)User.SetScore(User.GetScore() - 500);
+                                    else User.SetScore(0);
+                                    
                                 }
 
-                                gFramework.GetBoss()[i].SetCoolTime(20); 
+                                InvalidateRect(hwndUI, NULL, TRUE); // UI핸들을 보냄.
+                                gFramework.GetBoss()[i].SetCoolTime(15); 
                             }
                         }
                         break;
@@ -1343,7 +1383,6 @@ LRESULT CALLBACK BackGroundWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
                 }
             }
             InvalidateRect(hWnd, NULL, TRUE);
-            InvalidateRect(hwndMain, NULL, TRUE);
             break;
 
         case 4: // 라운드 3일때 시작 보스가 몬스터 생성
