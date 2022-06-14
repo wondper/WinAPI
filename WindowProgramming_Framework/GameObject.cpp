@@ -511,7 +511,7 @@ void Boss::Anim(char Action)
 void Boss::Initialize()
 {
 	SetType(ZOMBIE);
-	SetHP(10);
+	SetHP(BOSSHP);
 
 	SetBitMapAnim(0);
 	SetCoolTime(15);

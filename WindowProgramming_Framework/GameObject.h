@@ -4,6 +4,8 @@
 
 extern HINSTANCE g_hInst;
 
+#define BOSSHP 5
+
 class GameObject
 {
 private:
