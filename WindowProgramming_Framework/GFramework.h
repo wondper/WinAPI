@@ -49,7 +49,7 @@ private:
 
 	int mRound = 0;
 
-	Sound mSound;
+	Sound mSound[SOUND_NUM];
 
 public:
 	GFramework();
@@ -86,7 +86,7 @@ public:
 	Bee* GetBee() { return mBee; }
 	Boss* GetBoss() { return mBoss; }
 	
-	Sound& GetSound() { return mSound; }
+	Sound* GetSound() { return mSound; }
 };
 
 extern GFramework gFramework;

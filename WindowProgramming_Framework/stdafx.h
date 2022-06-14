@@ -68,3 +68,5 @@ using namespace std;
 #define OBJECT_NOT_DRAW 8
 #define OBJECT_DELETE 9
 #define MONSTER_NONE 10
+
+#define SOUND_NUM 10
