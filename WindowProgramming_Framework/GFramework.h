@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Sound.h"
 
+
 static HBITMAP BG_MAP;
 
 static HWND hwndMain;
@@ -79,6 +80,7 @@ public:
 	void SetRound(int round) { mRound = round; }
 
 	int GetMonsterCount() const { return mMonsterCount; }
+	void DecreaseMonsterCount() { --mMonsterCount; }
 	void SetMonsterCount(int MonsterCount) { mMonsterCount = MonsterCount; }
 
 	Cake* GetCake() { return mCake; }
@@ -90,6 +92,8 @@ public:
 	Boss* GetBoss() { return mBoss; }
 	
 	Sound* GetSound() { return mSound; }
+
+	void SetStage(int round);
 };
 
 extern GFramework gFramework;
